@@ -6,6 +6,7 @@ import {
   ServicesSection, 
   PortfolioSection, 
   WhyChooseUsSection, 
+  FeaturesSection,
   ProcessSection, 
   TestimonialsSection, 
   CTASection 
@@ -27,23 +28,42 @@ const Home = () => {
     <Layout>
       <SEOHead
         title={language === 'bn' 
-          ? 'ডোমেইন, হোস্টিং এবং ওয়েব ডেভেলপমেন্ট সেবা' 
-          : 'Domain, Hosting & Web Development Services'}
+          ? 'Digiwebdex - বাংলাদেশের সেরা ডিজিটাল এজেন্সি | ডোমেইন, হোস্টিং, ওয়েব ডেভেলপমেন্ট' 
+          : 'Digiwebdex - Bangladesh\'s Premier Digital Agency | Domain, Hosting, Web Development'}
         description={language === 'bn'
-          ? 'বাংলাদেশের সেরা ডোমেইন রেজিস্ট্রেশন, ওয়েব হোস্টিং, ওয়েব ডেভেলপমেন্ট এবং ডিজিটাল মার্কেটিং সেবা। সাশ্রয়ী মূল্যে সেরা সার্ভিস।'
-          : 'Best domain registration, web hosting, web development, and digital marketing services in Bangladesh. Best prices guaranteed.'}
-        keywords={['domain', 'hosting', 'web development', 'digital marketing', 'Bangladesh', 'Dhaka']}
+          ? 'Digiwebdex - বাংলাদেশের সেরা ডোমেইন রেজিস্ট্রেশন, ওয়েব হোস্টিং, ওয়েব ডেভেলপমেন্ট, সফটওয়্যার ডেভেলপমেন্ট এবং ডিজিটাল মার্কেটিং সেবা। সাশ্রয়ী মূল্যে প্রিমিয়াম সার্ভিস।'
+          : 'Digiwebdex - Best domain registration, web hosting, web development, software development, and digital marketing services in Bangladesh. Premium services at affordable prices.'}
+        keywords={['domain', 'hosting', 'web development', 'software development', 'digital marketing', 'Bangladesh', 'Dhaka', 'Digiwebdex', 'ডোমেইন', 'হোস্টিং', 'ওয়েব ডেভেলপমেন্ট']}
       />
       <SchemaMarkup schema={orgSchema} id="organization-schema" />
       <SchemaMarkup schema={localBusinessSchema} id="local-business-schema" />
       <AffiliateTracker />
+      
+      {/* Hero with stats and domain search */}
       <HeroSection />
+      
+      {/* Trust indicators */}
       <TrustSection />
+      
+      {/* 4 Main Services Grid */}
       <ServicesSection />
-      <PortfolioSection />
+      
+      {/* Why Choose Us - 8 benefits */}
       <WhyChooseUsSection />
+      
+      {/* Portfolio Carousel */}
+      <PortfolioSection />
+      
+      {/* Feature Benefits List */}
+      <FeaturesSection />
+      
+      {/* Work Process Steps */}
       <ProcessSection />
+      
+      {/* Testimonials Slider */}
       <TestimonialsSection />
+      
+      {/* Strong Final CTA */}
       <CTASection />
     </Layout>
   );
