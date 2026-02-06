@@ -30,6 +30,7 @@ import PaymentSubmit from "./pages/dashboard/PaymentSubmit";
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminPaymentVerification from "./pages/admin/AdminPaymentVerification";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const LanguageRoutes = () => {
           
           {/* Bangla - Protected Admin Routes */}
           <Route path="/bn/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/bn/admin/analytics" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminAnalytics /></ProtectedRoute>} />
           <Route path="/bn/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
@@ -87,6 +89,7 @@ const LanguageRoutes = () => {
           
           {/* English - Protected Admin Routes */}
           <Route path="/en/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/en/admin/analytics" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminAnalytics /></ProtectedRoute>} />
           <Route path="/en/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
