@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { Database, Json } from '@/integrations/supabase/types';
+import { notificationService } from './notificationService';
 
 type Order = Database['public']['Tables']['orders']['Row'];
 type OrderInsert = Database['public']['Tables']['orders']['Insert'];
@@ -33,7 +34,7 @@ export interface OrderWithDetails extends Order {
 }
 
 class OrderService {
-  async createOrder(params: CreateOrderParams, userId: string): Promise<{ data: Order | null; error: Error | null }> {
+  async createOrder(params: CreateOrderParams, userId: string, userEmail?: string): Promise<{ data: Order | null; error: Error | null }> {
     try {
       // Generate order number
       const { data: orderNumber } = await supabase.rpc('generate_order_number');
@@ -75,6 +76,15 @@ class OrderService {
 
       // Create invoice for the order
       await this.createInvoiceForOrder(order);
+
+      // Trigger notification for order created
+      if (userEmail) {
+        await notificationService.triggerEvent('ORDER_CREATED', userId, userEmail, {
+          order_number: order.order_number,
+          total: order.total,
+          customer_name: userEmail,
+        });
+      }
 
       return { data: order, error: null };
     } catch (err) {
