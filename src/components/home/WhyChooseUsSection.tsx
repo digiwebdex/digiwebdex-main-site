@@ -1,14 +1,14 @@
 import React from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { 
-  Zap, 
   Shield, 
-  Headphones, 
-  DollarSign, 
+  Zap, 
+  Clock, 
+  Users, 
   Award, 
-  Clock,
-  RefreshCw,
-  Users
+  Headphones, 
+  TrendingUp, 
+  Lock 
 } from 'lucide-react';
 
 export function WhyChooseUsSection() {
@@ -17,114 +17,143 @@ export function WhyChooseUsSection() {
   const benefits = [
     {
       icon: Zap,
-      title: language === 'bn' ? 'অটোমেশন ফার্স্ট' : 'Automation First',
+      title: language === 'bn' ? 'লাইটনিং ফাস্ট' : 'Lightning Fast',
       description: language === 'bn' 
-        ? 'স্বয়ংক্রিয় সিস্টেমে কাজ দ্রুত ও নির্ভুল' 
-        : 'Automated systems for fast & accurate delivery',
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10',
+        ? 'অপটিমাইজড সার্ভার এবং CDN দিয়ে সুপার ফাস্ট লোডিং' 
+        : 'Super fast loading with optimized servers and CDN',
+      color: 'from-yellow-500 to-orange-500',
     },
     {
       icon: Shield,
-      title: language === 'bn' ? 'সর্বোচ্চ নিরাপত্তা' : 'Maximum Security',
-      description: language === 'bn' 
-        ? 'SSL, ফায়ারওয়াল ও ম্যালওয়্যার প্রোটেকশন' 
-        : 'SSL, Firewall & Malware Protection',
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
+      title: language === 'bn' ? 'এন্টারপ্রাইজ সিকিউরিটি' : 'Enterprise Security',
+      description: language === 'bn'
+        ? 'SSL, ফায়ারওয়াল এবং DDoS প্রটেকশন বিল্ট-ইন'
+        : 'Built-in SSL, firewall and DDoS protection',
+      color: 'from-green-500 to-emerald-500',
+    },
+    {
+      icon: Clock,
+      title: language === 'bn' ? '৯৯.৯% আপটাইম' : '99.9% Uptime',
+      description: language === 'bn'
+        ? 'গ্যারান্টেড আপটাইম যাতে আপনার সাইট সবসময় অনলাইন থাকে'
+        : 'Guaranteed uptime to keep your site always online',
+      color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Headphones,
       title: language === 'bn' ? '২৪/৭ সাপোর্ট' : '24/7 Support',
-      description: language === 'bn' 
-        ? 'যেকোনো সমস্যায় সবসময় পাশে আছি' 
-        : 'Always here to help with any issues',
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
+      description: language === 'bn'
+        ? 'বাংলায় এক্সপার্ট টেকনিক্যাল সাপোর্ট যেকোনো সময়'
+        : 'Expert technical support in Bengali anytime',
+      color: 'from-purple-500 to-violet-500',
     },
     {
-      icon: DollarSign,
-      title: language === 'bn' ? 'সাশ্রয়ী মূল্য' : 'Affordable Pricing',
-      description: language === 'bn' 
-        ? 'বাজেট ফ্রেন্ডলি দামে প্রিমিয়াম সার্ভিস' 
-        : 'Premium services at budget-friendly prices',
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10',
+      icon: TrendingUp,
+      title: language === 'bn' ? 'স্কেলেবল সলিউশন' : 'Scalable Solutions',
+      description: language === 'bn'
+        ? 'আপনার ব্যবসার সাথে বৃদ্ধি পায় এমন ফ্লেক্সিবল প্ল্যান'
+        : 'Flexible plans that grow with your business',
+      color: 'from-pink-500 to-rose-500',
     },
     {
       icon: Award,
-      title: language === 'bn' ? 'মানসম্মত কাজ' : 'Quality Work',
-      description: language === 'bn' 
-        ? 'আন্তর্জাতিক মানের কাজের গ্যারান্টি' 
-        : 'Guaranteed international quality standards',
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
-    },
-    {
-      icon: Clock,
-      title: language === 'bn' ? 'সময়মতো ডেলিভারি' : 'On-Time Delivery',
-      description: language === 'bn' 
-        ? 'ডেডলাইন মেনে কাজ সম্পন্ন করি' 
-        : 'We complete work meeting deadlines',
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
-    },
-    {
-      icon: RefreshCw,
-      title: language === 'bn' ? 'ফ্রি রিভিশন' : 'Free Revisions',
-      description: language === 'bn' 
-        ? 'সন্তুষ্ট না হলে বিনামূল্যে পরিবর্তন' 
-        : 'Free changes until you are satisfied',
-      color: 'text-pink-500',
-      bgColor: 'bg-pink-500/10',
+      title: language === 'bn' ? '১০+ বছরের অভিজ্ঞতা' : '10+ Years Experience',
+      description: language === 'bn'
+        ? 'দীর্ঘ অভিজ্ঞতার সাথে প্রমাণিত ট্র্যাক রেকর্ড'
+        : 'Proven track record with extensive experience',
+      color: 'from-amber-500 to-yellow-500',
     },
     {
       icon: Users,
-      title: language === 'bn' ? 'অভিজ্ঞ টিম' : 'Expert Team',
-      description: language === 'bn' 
-        ? '৫+ বছরের অভিজ্ঞ প্রফেশনাল টিম' 
-        : '5+ years experienced professional team',
-      color: 'text-cyan-500',
-      bgColor: 'bg-cyan-500/10',
+      title: language === 'bn' ? 'ডেডিকেটেড টিম' : 'Dedicated Team',
+      description: language === 'bn'
+        ? 'আপনার প্রজেক্টের জন্য নিবেদিত এক্সপার্ট টিম'
+        : 'Expert team dedicated to your project',
+      color: 'from-indigo-500 to-blue-500',
+    },
+    {
+      icon: Lock,
+      title: language === 'bn' ? 'ডাটা প্রাইভেসি' : 'Data Privacy',
+      description: language === 'bn'
+        ? 'আপনার ডাটা সুরক্ষিত এবং সম্পূর্ণ প্রাইভেট'
+        : 'Your data is secure and completely private',
+      color: 'from-teal-500 to-green-500',
     },
   ];
 
   return (
-    <section className="section-padding bg-background" id="why-us">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            {language === 'bn' ? '✨ কেন আমরা?' : '✨ Why Us?'}
-          </span>
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            {language === 'bn' ? 'Digiwebdex কেন বেছে নেবেন?' : 'Why Choose Digiwebdex?'}
+    <section className="section-padding bg-secondary/30 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.02)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
+      </div>
+
+      <div className="container-custom relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
+            <span>🏆</span>
+            {language === 'bn' ? 'কেন আমরা' : 'Why Choose Us'}
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-slide-up">
+            {language === 'bn' ? (
+              <>আমাদের সাথে কাজ করার <span className="gradient-text">৮টি কারণ</span></>
+            ) : (
+              <><span className="gradient-text">8 Reasons</span> to Work With Us</>
+            )}
           </h2>
-          <p className="mt-4 text-muted-foreground text-lg">
-            {language === 'bn' 
-              ? 'আমরা শুধু সেবা দেই না, আপনার সাফল্যের অংশীদার হই' 
-              : 'We don\'t just provide services, we become your success partner'}
+          <p className="text-lg text-muted-foreground animate-slide-up delay-100">
+            {language === 'bn'
+              ? 'বাংলাদেশের হাজারো ব্যবসায়ী আমাদের বিশ্বাস করেন'
+              : 'Thousands of businesses in Bangladesh trust us'}
           </p>
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="group p-6 rounded-2xl bg-card border border-transparent hover:border-primary/20 hover:shadow-lg transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 50}ms` }}
+              className="group animate-slide-up"
+              style={{ animationDelay: `${index * 75 + 150}ms` }}
             >
-              {/* Icon */}
-              <div className={`h-14 w-14 rounded-xl ${benefit.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                <benefit.icon className={`h-7 w-7 ${benefit.color}`} />
-              </div>
+              <div className="h-full glass-card p-6 text-center hover:border-primary/30 transition-all duration-500">
+                {/* Icon */}
+                <div className={`w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br ${benefit.color} p-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                  <benefit.icon className="w-full h-full text-white" />
+                </div>
 
-              {/* Content */}
-              <h3 className="font-bold text-lg mb-2">{benefit.title}</h3>
-              <p className="text-muted-foreground text-sm">{benefit.description}</p>
+                {/* Content */}
+                <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+                  {benefit.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {benefit.description}
+                </p>
+              </div>
             </div>
           ))}
+        </div>
+
+        {/* Trust Badge */}
+        <div className="mt-16 text-center animate-slide-up delay-700">
+          <div className="inline-flex items-center gap-4 px-8 py-4 rounded-2xl glass-card">
+            <div className="flex -space-x-3">
+              {['😊', '🎉', '💼', '🚀'].map((emoji, i) => (
+                <span key={i} className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg border-2 border-background">
+                  {emoji}
+                </span>
+              ))}
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-foreground">
+                {language === 'bn' ? '৫০০+ সন্তুষ্ট ক্লায়েন্ট' : '500+ Satisfied Clients'}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {language === 'bn' ? 'বাংলাদেশ জুড়ে' : 'Across Bangladesh'}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
