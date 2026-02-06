@@ -64,11 +64,21 @@ class PaymentService {
     }
   }
 
-  // SSLCommerz Integration Structure
+  // SSLCommerz Integration - INACTIVE (Structure ready for future activation)
+  // To activate: Configure API keys in admin settings and enable integration
+  private sslcommerzEnabled = false;
+
   async initiateSSLCommerzPayment(payment: Payment): Promise<{ redirectUrl: string | null; error: Error | null }> {
+    // Gateway is currently disabled - return informative error
+    if (!this.sslcommerzEnabled) {
+      return { 
+        redirectUrl: null, 
+        error: new Error('SSLCommerz gateway is currently disabled. Please use manual payment methods (bKash Personal or Bank Transfer).') 
+      };
+    }
+
     try {
-      // This would typically call an edge function that handles SSLCommerz API
-      // For now, return structure for implementation
+      // Structure ready for future implementation
       const paymentData = {
         store_id: 'your_store_id', // From secrets
         store_passwd: 'your_store_password', // From secrets
@@ -79,27 +89,32 @@ class PaymentService {
         fail_url: `${window.location.origin}/payment/fail`,
         cancel_url: `${window.location.origin}/payment/cancel`,
         ipn_url: `${window.location.origin}/api/payment/ipn`,
-        // Additional fields would be added here
       };
 
       console.log('SSLCommerz payment data:', paymentData);
-
-      // Return placeholder - actual implementation would call edge function
-      return { 
-        redirectUrl: null, 
-        error: new Error('SSLCommerz integration requires API keys. Please configure in admin settings.') 
-      };
+      return { redirectUrl: null, error: new Error('SSLCommerz integration not yet configured.') };
     } catch (err) {
       return { redirectUrl: null, error: err as Error };
     }
   }
 
-  // bKash Integration Structure
+  // bKash API Integration - INACTIVE (Structure ready for future activation)
+  // To activate: Configure API keys in admin settings and enable integration
+  private bkashApiEnabled = false;
+
   async initiateBKashPayment(payment: Payment): Promise<{ paymentId: string | null; error: Error | null }> {
+    // Gateway is currently disabled - return informative error
+    if (!this.bkashApiEnabled) {
+      return { 
+        paymentId: null, 
+        error: new Error('bKash API gateway is currently disabled. Please use bKash Personal (manual payment) instead.') 
+      };
+    }
+
     try {
-      // bKash Checkout API structure
+      // Structure ready for future implementation
       const bkashData = {
-        mode: '0011', // Checkout
+        mode: '0011',
         payerReference: payment.user_id,
         callbackURL: `${window.location.origin}/payment/bkash/callback`,
         amount: payment.amount.toString(),
@@ -109,38 +124,55 @@ class PaymentService {
       };
 
       console.log('bKash payment data:', bkashData);
-
-      return { 
-        paymentId: null, 
-        error: new Error('bKash integration requires API keys. Please configure in admin settings.') 
-      };
+      return { paymentId: null, error: new Error('bKash API integration not yet configured.') };
     } catch (err) {
       return { paymentId: null, error: err as Error };
     }
   }
 
-  // Nagad Integration Structure
+  // Nagad API Integration - INACTIVE (Structure ready for future activation)
+  // To activate: Configure API keys in admin settings and enable integration
+  private nagadEnabled = false;
+
   async initiateNagadPayment(payment: Payment): Promise<{ redirectUrl: string | null; error: Error | null }> {
+    // Gateway is currently disabled - return informative error
+    if (!this.nagadEnabled) {
+      return { 
+        redirectUrl: null, 
+        error: new Error('Nagad gateway is currently disabled. Please use manual payment methods (bKash Personal or Bank Transfer).') 
+      };
+    }
+
     try {
-      // Nagad Merchant API structure
+      // Structure ready for future implementation
       const nagadData = {
-        merchantId: 'your_merchant_id', // From secrets
+        merchantId: 'your_merchant_id',
         orderId: payment.transaction_id,
-        currencyCode: '050', // BDT
+        currencyCode: '050',
         amount: payment.amount.toString(),
         challenge: 'generated_challenge',
         callBackUrl: `${window.location.origin}/payment/nagad/callback`,
       };
 
       console.log('Nagad payment data:', nagadData);
-
-      return { 
-        redirectUrl: null, 
-        error: new Error('Nagad integration requires API keys. Please configure in admin settings.') 
-      };
+      return { redirectUrl: null, error: new Error('Nagad integration not yet configured.') };
     } catch (err) {
       return { redirectUrl: null, error: err as Error };
     }
+  }
+
+  // Check if any API gateway is enabled
+  isApiGatewayEnabled(): boolean {
+    return this.sslcommerzEnabled || this.bkashApiEnabled || this.nagadEnabled;
+  }
+
+  // Get available payment methods (for UI)
+  getAvailablePaymentMethods(): string[] {
+    const methods: string[] = ['bkash_personal', 'bank_transfer']; // Manual methods always available
+    if (this.sslcommerzEnabled) methods.push('sslcommerz');
+    if (this.bkashApiEnabled) methods.push('bkash');
+    if (this.nagadEnabled) methods.push('nagad');
+    return methods;
   }
 
   // Bank Transfer - Manual Payment
