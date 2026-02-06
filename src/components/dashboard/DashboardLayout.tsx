@@ -15,6 +15,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -70,6 +71,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       label: language === 'bn' ? 'প্রোফাইল' : 'Profile', 
       icon: User, 
       href: `${basePath}/dashboard/profile` 
+    },
+    { 
+      label: language === 'bn' ? 'অ্যাফিলিয়েট' : 'Affiliate', 
+      icon: Users, 
+      href: `${basePath}/dashboard/affiliate` 
     },
   ];
 
