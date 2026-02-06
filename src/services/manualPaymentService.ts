@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { notificationService } from './notificationService';
 
 export type ManualPaymentMethod = 'bkash_personal' | 'bank_transfer';
 export type ManualPaymentStatus = 'pending' | 'approved' | 'rejected';
@@ -198,7 +199,7 @@ class ManualPaymentService {
     return data as ManualPayment[];
   }
 
-  async approvePayment(paymentId: string, adminId: string): Promise<{ error: Error | null }> {
+  async approvePayment(paymentId: string, adminId: string, userEmail?: string): Promise<{ error: Error | null }> {
     try {
       // Get payment details
       const payment = await this.getPaymentById(paymentId);
@@ -217,16 +218,21 @@ class ManualPaymentService {
       if (updateError) throw updateError;
 
       const now = new Date().toISOString();
+      let orderNumber = '';
 
       // Update order status if linked
       if (payment.order_id) {
-        await supabase
+        const { data: order } = await supabase
           .from('orders')
           .update({ 
             status: 'paid', 
             paid_at: now 
           })
-          .eq('id', payment.order_id);
+          .eq('id', payment.order_id)
+          .select('order_number')
+          .single();
+        
+        if (order) orderNumber = order.order_number;
       }
 
       // Update invoice status if linked
@@ -238,6 +244,15 @@ class ManualPaymentService {
             paid_at: now 
           })
           .eq('id', payment.invoice_id);
+      }
+
+      // Trigger payment success notification
+      if (userEmail) {
+        await notificationService.triggerEvent('PAYMENT_SUCCESS', payment.user_id, userEmail, {
+          order_number: orderNumber,
+          amount: payment.amount,
+          transaction_id: payment.transaction_id,
+        });
       }
 
       return { error: null };
