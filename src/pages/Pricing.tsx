@@ -1,0 +1,249 @@
+import React from 'react';
+import { useLanguage } from '@/lib/i18n';
+import { useAuth } from '@/lib/auth';
+import { Layout } from '@/components/layout/Layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+interface PricingPlan {
+  id: string;
+  name: { en: string; bn: string };
+  description: { en: string; bn: string };
+  price: number;
+  billingCycle: { en: string; bn: string };
+  features: { en: string[]; bn: string[] };
+  isPopular?: boolean;
+  serviceType: string;
+}
+
+const pricingPlans: PricingPlan[] = [
+  {
+    id: 'hosting-basic',
+    name: { en: 'Basic Hosting', bn: 'বেসিক হোস্টিং' },
+    description: { en: 'Perfect for personal websites', bn: 'ব্যক্তিগত ওয়েবসাইটের জন্য উপযুক্ত' },
+    price: 1500,
+    billingCycle: { en: '/year', bn: '/বছর' },
+    serviceType: 'hosting',
+    features: {
+      en: ['5 GB SSD Storage', '50 GB Bandwidth', '2 Email Accounts', 'Free SSL Certificate', 'Daily Backup'],
+      bn: ['৫ জিবি SSD স্টোরেজ', '৫০ জিবি ব্যান্ডউইথ', '২টি ইমেইল অ্যাকাউন্ট', 'ফ্রি SSL সার্টিফিকেট', 'দৈনিক ব্যাকআপ'],
+    },
+  },
+  {
+    id: 'hosting-business',
+    name: { en: 'Business Hosting', bn: 'বিজনেস হোস্টিং' },
+    description: { en: 'For growing businesses', bn: 'বর্ধনশীল ব্যবসার জন্য' },
+    price: 3500,
+    billingCycle: { en: '/year', bn: '/বছর' },
+    serviceType: 'hosting',
+    isPopular: true,
+    features: {
+      en: ['25 GB SSD Storage', 'Unlimited Bandwidth', '10 Email Accounts', 'Free SSL Certificate', 'Daily Backup', 'Priority Support'],
+      bn: ['২৫ জিবি SSD স্টোরেজ', 'আনলিমিটেড ব্যান্ডউইথ', '১০টি ইমেইল অ্যাকাউন্ট', 'ফ্রি SSL সার্টিফিকেট', 'দৈনিক ব্যাকআপ', 'অগ্রাধিকার সাপোর্ট'],
+    },
+  },
+  {
+    id: 'hosting-enterprise',
+    name: { en: 'Enterprise Hosting', bn: 'এন্টারপ্রাইজ হোস্টিং' },
+    description: { en: 'For large scale projects', bn: 'বড় প্রজেক্টের জন্য' },
+    price: 7500,
+    billingCycle: { en: '/year', bn: '/বছর' },
+    serviceType: 'hosting',
+    features: {
+      en: ['100 GB SSD Storage', 'Unlimited Bandwidth', 'Unlimited Email', 'Free SSL Certificate', 'Daily Backup', '24/7 Priority Support', 'Dedicated IP'],
+      bn: ['১০০ জিবি SSD স্টোরেজ', 'আনলিমিটেড ব্যান্ডউইথ', 'আনলিমিটেড ইমেইল', 'ফ্রি SSL সার্টিফিকেট', 'দৈনিক ব্যাকআপ', '২৪/৭ অগ্রাধিকার সাপোর্ট', 'ডেডিকেটেড IP'],
+    },
+  },
+  {
+    id: 'web-starter',
+    name: { en: 'Starter Website', bn: 'স্টার্টার ওয়েবসাইট' },
+    description: { en: 'Simple business website', bn: 'সাধারণ বিজনেস ওয়েবসাইট' },
+    price: 15000,
+    billingCycle: { en: '', bn: '' },
+    serviceType: 'web_development',
+    features: {
+      en: ['5 Pages', 'Responsive Design', 'Contact Form', 'SEO Optimized', '1 Month Support'],
+      bn: ['৫টি পেজ', 'রেসপন্সিভ ডিজাইন', 'কন্টাক্ট ফর্ম', 'SEO অপ্টিমাইজড', '১ মাস সাপোর্ট'],
+    },
+  },
+  {
+    id: 'web-business',
+    name: { en: 'Business Website', bn: 'বিজনেস ওয়েবসাইট' },
+    description: { en: 'Professional business presence', bn: 'প্রফেশনাল বিজনেস উপস্থিতি' },
+    price: 35000,
+    billingCycle: { en: '', bn: '' },
+    serviceType: 'web_development',
+    isPopular: true,
+    features: {
+      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'SEO Optimized', '3 Months Support'],
+      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'SEO অপ্টিমাইজড', '৩ মাস সাপোর্ট'],
+    },
+  },
+  {
+    id: 'web-ecommerce',
+    name: { en: 'E-commerce Website', bn: 'ই-কমার্স ওয়েবসাইট' },
+    description: { en: 'Full online store', bn: 'সম্পূর্ণ অনলাইন স্টোর' },
+    price: 75000,
+    billingCycle: { en: '', bn: '' },
+    serviceType: 'web_development',
+    features: {
+      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'Admin Dashboard', '6 Months Support'],
+      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'অ্যাডমিন ড্যাশবোর্ড', '৬ মাস সাপোর্ট'],
+    },
+  },
+];
+
+export default function Pricing() {
+  const { language } = useLanguage();
+  const { user } = useAuth();
+  const basePath = language === 'en' ? '/en' : '/bn';
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat(language === 'bn' ? 'bn-BD' : 'en-US', {
+      style: 'currency',
+      currency: 'BDT',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const hostingPlans = pricingPlans.filter(p => p.serviceType === 'hosting');
+  const webPlans = pricingPlans.filter(p => p.serviceType === 'web_development');
+
+  return (
+    <Layout>
+      <div className="py-16 md:py-24">
+        <div className="container-custom">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              {language === 'bn' ? 'মূল্য তালিকা' : 'Pricing Plans'}
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              {language === 'bn'
+                ? 'আপনার প্রয়োজন অনুযায়ী সেরা প্যাকেজ বেছে নিন'
+                : 'Choose the perfect package for your needs'}
+            </p>
+          </div>
+
+          {/* Hosting Plans */}
+          <div className="mb-20">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
+              {language === 'bn' ? 'ওয়েব হোস্টিং' : 'Web Hosting'}
+            </h2>
+            <div className="grid gap-8 md:grid-cols-3">
+              {hostingPlans.map((plan) => (
+                <PricingCard
+                  key={plan.id}
+                  plan={plan}
+                  language={language}
+                  formatCurrency={formatCurrency}
+                  basePath={basePath}
+                  isLoggedIn={!!user}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Web Development Plans */}
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
+              {language === 'bn' ? 'ওয়েব ডেভেলপমেন্ট' : 'Web Development'}
+            </h2>
+            <div className="grid gap-8 md:grid-cols-3">
+              {webPlans.map((plan) => (
+                <PricingCard
+                  key={plan.id}
+                  plan={plan}
+                  language={language}
+                  formatCurrency={formatCurrency}
+                  basePath={basePath}
+                  isLoggedIn={!!user}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-20 text-center">
+            <Card className="glass-card max-w-2xl mx-auto">
+              <CardContent className="py-8">
+                <h3 className="text-2xl font-bold mb-4">
+                  {language === 'bn'
+                    ? 'কাস্টম প্রজেক্ট প্রয়োজন?'
+                    : 'Need a Custom Project?'}
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {language === 'bn'
+                    ? 'আপনার প্রয়োজন অনুযায়ী কাস্টম সলিউশনের জন্য আমাদের সাথে যোগাযোগ করুন'
+                    : 'Contact us for a custom solution tailored to your specific needs'}
+                </p>
+                <Button asChild size="lg" className="gradient-button">
+                  <Link to={`${basePath}/contact`}>
+                    {language === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+function PricingCard({
+  plan,
+  language,
+  formatCurrency,
+  basePath,
+  isLoggedIn,
+}: {
+  plan: PricingPlan;
+  language: 'en' | 'bn';
+  formatCurrency: (amount: number) => string;
+  basePath: string;
+  isLoggedIn: boolean;
+}) {
+  return (
+    <Card className={`glass-card relative ${plan.isPopular ? 'border-primary shadow-lg scale-105' : ''}`}>
+      {plan.isPopular && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="gradient-button text-sm px-4 py-1 rounded-full">
+            {language === 'bn' ? 'জনপ্রিয়' : 'Popular'}
+          </span>
+        </div>
+      )}
+      <CardHeader className="text-center pb-2">
+        <CardTitle className="text-xl">{plan.name[language]}</CardTitle>
+        <CardDescription>{plan.description[language]}</CardDescription>
+      </CardHeader>
+      <CardContent className="text-center">
+        <div className="mb-6">
+          <span className="text-4xl font-bold">{formatCurrency(plan.price)}</span>
+          <span className="text-muted-foreground">{plan.billingCycle[language]}</span>
+        </div>
+
+        <ul className="space-y-3 mb-8 text-left">
+          {plan.features[language].map((feature, index) => (
+            <li key={index} className="flex items-center gap-2">
+              <Check className="h-5 w-5 text-primary shrink-0" />
+              <span className="text-sm">{feature}</span>
+            </li>
+          ))}
+        </ul>
+
+        <Button
+          asChild
+          className={`w-full ${plan.isPopular ? 'gradient-button' : ''}`}
+          variant={plan.isPopular ? 'default' : 'outline'}
+        >
+          <Link to={isLoggedIn ? `${basePath}/order?plan=${plan.id}` : `${basePath}/auth/register`}>
+            {language === 'bn' ? 'অর্ডার করুন' : 'Order Now'}
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
