@@ -26,6 +26,7 @@ import Orders from "./pages/dashboard/Orders";
 import Invoices from "./pages/dashboard/Invoices";
 import Payments from "./pages/dashboard/Payments";
 import PaymentSubmit from "./pages/dashboard/PaymentSubmit";
+import AffiliateDashboard from "./pages/dashboard/AffiliateDashboard";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -60,6 +61,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/dashboard/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
           <Route path="/bn/dashboard/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
           <Route path="/bn/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
+          <Route path="/bn/dashboard/affiliate" element={<ProtectedRoute><AffiliateDashboard /></ProtectedRoute>} />
           <Route path="/bn/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* Bangla - Protected Admin Routes */}
@@ -85,6 +87,7 @@ const LanguageRoutes = () => {
           <Route path="/en/dashboard/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
           <Route path="/en/dashboard/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
           <Route path="/en/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
+          <Route path="/en/dashboard/affiliate" element={<ProtectedRoute><AffiliateDashboard /></ProtectedRoute>} />
           <Route path="/en/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* English - Protected Admin Routes */}

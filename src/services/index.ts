@@ -7,3 +7,4 @@ export { domainService } from './domainService';
 export * from './hosting';
 export * from './renewal';
 export * from './analytics';
+export * from './affiliate';
