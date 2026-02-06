@@ -23,9 +23,12 @@ import VerifyEmail from "./pages/auth/VerifyEmail";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Orders from "./pages/dashboard/Orders";
 import Invoices from "./pages/dashboard/Invoices";
+import Payments from "./pages/dashboard/Payments";
+import PaymentSubmit from "./pages/dashboard/PaymentSubmit";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminPaymentVerification from "./pages/admin/AdminPaymentVerification";
 
 const queryClient = new QueryClient();
 
@@ -52,10 +55,13 @@ const LanguageRoutes = () => {
           <Route path="/bn/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/bn/dashboard/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
           <Route path="/bn/dashboard/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
+          <Route path="/bn/dashboard/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
+          <Route path="/bn/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
           <Route path="/bn/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* Bangla - Protected Admin Routes */}
           <Route path="/bn/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/bn/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -72,10 +78,13 @@ const LanguageRoutes = () => {
           <Route path="/en/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/en/dashboard/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
           <Route path="/en/dashboard/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
+          <Route path="/en/dashboard/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
+          <Route path="/en/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
           <Route path="/en/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* English - Protected Admin Routes */}
           <Route path="/en/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/en/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Catch-all routes for both languages */}

@@ -360,6 +360,78 @@ export type Database = {
           },
         ]
       }
+      manual_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          invoice_id: string | null
+          method: string
+          notes: string | null
+          order_id: string | null
+          rejection_reason: string | null
+          screenshot_url: string | null
+          sender_number: string | null
+          status: string
+          transaction_id: string
+          updated_at: string
+          user_id: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          method: string
+          notes?: string | null
+          order_id?: string | null
+          rejection_reason?: string | null
+          screenshot_url?: string | null
+          sender_number?: string | null
+          status?: string
+          transaction_id: string
+          updated_at?: string
+          user_id: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          method?: string
+          notes?: string | null
+          order_id?: string | null
+          rejection_reason?: string | null
+          screenshot_url?: string | null
+          sender_number?: string | null
+          status?: string
+          transaction_id?: string
+          updated_at?: string
+          user_id?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manual_payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "manual_payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       milestones: {
         Row: {
           amount: number | null
