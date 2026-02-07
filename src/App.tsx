@@ -42,6 +42,16 @@ import AffiliateDashboard from "./pages/dashboard/AffiliateDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminPaymentVerification from "./pages/admin/AdminPaymentVerification";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminServices from "./pages/admin/AdminServices";
+import AdminPackages from "./pages/admin/AdminPackages";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminInvoices from "./pages/admin/AdminInvoices";
+import AdminDomains from "./pages/admin/AdminDomains";
+import AdminHosting from "./pages/admin/AdminHosting";
+import AdminProjects from "./pages/admin/AdminProjects";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminBlog from "./pages/admin/AdminBlog";
+import AdminSEO from "./pages/admin/AdminSEO";
 
 const queryClient = new QueryClient();
 
@@ -91,6 +101,16 @@ const LanguageRoutes = () => {
           <Route path="/bn/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/bn/admin/analytics" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminAnalytics /></ProtectedRoute>} />
           <Route path="/bn/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
+          <Route path="/bn/admin/services" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminServices /></ProtectedRoute>} />
+          <Route path="/bn/admin/packages" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPackages /></ProtectedRoute>} />
+          <Route path="/bn/admin/orders" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminOrders /></ProtectedRoute>} />
+          <Route path="/bn/admin/invoices" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminInvoices /></ProtectedRoute>} />
+          <Route path="/bn/admin/domains" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDomains /></ProtectedRoute>} />
+          <Route path="/bn/admin/hosting" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminHosting /></ProtectedRoute>} />
+          <Route path="/bn/admin/projects" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProjects /></ProtectedRoute>} />
+          <Route path="/bn/admin/users" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminUsers /></ProtectedRoute>} />
+          <Route path="/bn/admin/blog" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBlog /></ProtectedRoute>} />
+          <Route path="/bn/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -130,6 +150,16 @@ const LanguageRoutes = () => {
           <Route path="/en/admin" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/en/admin/analytics" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminAnalytics /></ProtectedRoute>} />
           <Route path="/en/admin/payments" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPaymentVerification /></ProtectedRoute>} />
+          <Route path="/en/admin/services" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminServices /></ProtectedRoute>} />
+          <Route path="/en/admin/packages" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminPackages /></ProtectedRoute>} />
+          <Route path="/en/admin/orders" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminOrders /></ProtectedRoute>} />
+          <Route path="/en/admin/invoices" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminInvoices /></ProtectedRoute>} />
+          <Route path="/en/admin/domains" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDomains /></ProtectedRoute>} />
+          <Route path="/en/admin/hosting" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminHosting /></ProtectedRoute>} />
+          <Route path="/en/admin/projects" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProjects /></ProtectedRoute>} />
+          <Route path="/en/admin/users" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminUsers /></ProtectedRoute>} />
+          <Route path="/en/admin/blog" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBlog /></ProtectedRoute>} />
+          <Route path="/en/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Dynamic Landing Pages - must be before catch-all */}
