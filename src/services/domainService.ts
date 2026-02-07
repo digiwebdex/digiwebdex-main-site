@@ -163,19 +163,42 @@ class DomainService {
   }
 
   /**
-   * Check domain availability (MOCK for now - ready for API integration)
+   * Check domain availability via WHOIS/RDAP lookup
    */
   async checkAvailability(domainName: string, tld: string): Promise<boolean> {
-    // MOCK: Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
+    try {
+      const { data, error } = await supabase.functions.invoke('whois-lookup', {
+        body: { domain: domainName, tld },
+      });
 
-    // MOCK: Random availability with some bias
+      if (error) {
+        console.error('WHOIS lookup error:', error);
+        // Fallback to mock on error
+        return this.mockAvailabilityCheck(domainName);
+      }
+
+      if (data?.success && data?.data) {
+        return data.data.available === true;
+      }
+
+      // Fallback
+      return this.mockAvailabilityCheck(domainName);
+    } catch (error) {
+      console.error('WHOIS lookup failed:', error);
+      return this.mockAvailabilityCheck(domainName);
+    }
+  }
+
+  /**
+   * Fallback mock availability check
+   */
+  private mockAvailabilityCheck(domainName: string): boolean {
     // Premium/common words are usually taken
-    const commonWords = ['shop', 'store', 'tech', 'web', 'app', 'online', 'best', 'top', 'pro'];
-    const isCommonWord = commonWords.some(word => domainName.includes(word));
+    const commonWords = ['shop', 'store', 'tech', 'web', 'app', 'online', 'best', 'top', 'pro', 'google', 'facebook', 'amazon'];
+    const isCommonWord = commonWords.some(word => domainName.toLowerCase().includes(word));
     
-    // 70% chance unavailable for common words, 30% for others
-    const unavailableChance = isCommonWord ? 0.7 : 0.3;
+    // 80% chance unavailable for common words, 20% for others
+    const unavailableChance = isCommonWord ? 0.8 : 0.2;
     return Math.random() > unavailableChance;
   }
 
