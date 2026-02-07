@@ -5,6 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowRight, ExternalLink, Palette, Search, Zap, Settings, Globe } from 'lucide-react';
 
+// Import portfolio images
+import alhadasImg from '@/assets/portfolio/alhadas-construction.jpg';
+import gatebdImg from '@/assets/portfolio/gatebdgroup.jpg';
+import primelawyersImg from '@/assets/portfolio/primelawyersbd.jpg';
+import sandwichpanelImg from '@/assets/portfolio/sandwichpanel.jpg';
+import titasbuildImg from '@/assets/portfolio/titasbuild.jpg';
+import znlabsImg from '@/assets/portfolio/znlaboratories.jpg';
+import divisoriaImg from '@/assets/portfolio/divisoriaksa.jpg';
+import dailysushashonImg from '@/assets/portfolio/dailysushashon.jpg';
+import dmchImg from '@/assets/portfolio/dmchcardiology.jpg';
+import rxpromedImg from '@/assets/portfolio/rxpromed.jpg';
+import smelitehajjSoftImg from '@/assets/portfolio/smelitehajj-soft.jpg';
+import darulfurkanImg from '@/assets/portfolio/darulfurkantravels.jpg';
+import smelitehajjImg from '@/assets/portfolio/smelitehajj.jpg';
+
 interface Project {
   id: string;
   name: string;
@@ -33,7 +48,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Construction',
     contributions: ['UI/UX', 'SEO', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop',
+    screenshot: alhadasImg,
   },
   {
     id: '2',
@@ -42,7 +57,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Business Group',
     contributions: ['UI/UX', 'Automation', 'SEO'],
-    screenshot: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
+    screenshot: gatebdImg,
   },
   {
     id: '3',
@@ -51,7 +66,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Legal Services',
     contributions: ['UI/UX', 'SEO', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=600&fit=crop',
+    screenshot: primelawyersImg,
   },
   {
     id: '4',
@@ -60,7 +75,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Manufacturing',
     contributions: ['UI/UX', 'Performance', 'SEO'],
-    screenshot: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop',
+    screenshot: sandwichpanelImg,
   },
   {
     id: '5',
@@ -69,7 +84,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Construction',
     contributions: ['UI/UX', 'SEO', 'Automation'],
-    screenshot: 'https://images.unsplash.com/photo-1541976590-713941681591?w=800&h=600&fit=crop',
+    screenshot: titasbuildImg,
   },
   {
     id: '6',
@@ -78,7 +93,7 @@ const projects: Project[] = [
     category: 'corporate',
     industry: 'Healthcare Lab',
     contributions: ['UI/UX', 'Performance', 'SEO'],
-    screenshot: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&h=600&fit=crop',
+    screenshot: znlabsImg,
   },
   // eCommerce
   {
@@ -88,7 +103,7 @@ const projects: Project[] = [
     category: 'ecommerce',
     industry: 'Online Store',
     contributions: ['UI/UX', 'SEO', 'Performance', 'Automation'],
-    screenshot: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
+    screenshot: divisoriaImg,
   },
   // News Portal
   {
@@ -98,7 +113,7 @@ const projects: Project[] = [
     category: 'news',
     industry: 'News Media',
     contributions: ['UI/UX', 'SEO', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=600&fit=crop',
+    screenshot: dailysushashonImg,
   },
   // Custom Software
   {
@@ -108,7 +123,7 @@ const projects: Project[] = [
     category: 'software',
     industry: 'Healthcare',
     contributions: ['UI/UX', 'Automation', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop',
+    screenshot: dmchImg,
   },
   {
     id: '10',
@@ -117,7 +132,7 @@ const projects: Project[] = [
     category: 'software',
     industry: 'Medical Software',
     contributions: ['UI/UX', 'Automation', 'SEO'],
-    screenshot: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=800&h=600&fit=crop',
+    screenshot: rxpromedImg,
   },
   {
     id: '11',
@@ -126,7 +141,7 @@ const projects: Project[] = [
     category: 'software',
     industry: 'Travel Management',
     contributions: ['UI/UX', 'Automation', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop',
+    screenshot: smelitehajjSoftImg,
   },
   // Tours & Travel
   {
@@ -136,7 +151,7 @@ const projects: Project[] = [
     category: 'travel',
     industry: 'Hajj & Umrah',
     contributions: ['UI/UX', 'SEO', 'Performance'],
-    screenshot: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&h=600&fit=crop',
+    screenshot: darulfurkanImg,
   },
   {
     id: '13',
@@ -145,7 +160,7 @@ const projects: Project[] = [
     category: 'travel',
     industry: 'Hajj & Umrah',
     contributions: ['UI/UX', 'SEO', 'Automation'],
-    screenshot: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&h=600&fit=crop',
+    screenshot: smelitehajjImg,
   },
 ];
 
