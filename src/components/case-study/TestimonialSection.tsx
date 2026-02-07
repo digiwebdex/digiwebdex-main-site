@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -27,26 +26,14 @@ export function TestimonialSection({
   return (
     <section className="py-20 bg-white dark:bg-slate-900">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {language === 'bn' ? 'ক্লায়েন্ট প্রতিক্রিয়া' : 'Client Testimonial'}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full" />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
-        >
+        <div className="max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <div className="glass-premium rounded-3xl p-8 md:p-12 relative overflow-hidden">
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl" />
@@ -97,7 +84,7 @@ export function TestimonialSection({
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

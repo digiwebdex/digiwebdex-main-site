@@ -1,4 +1,3 @@
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { TrendingUp, Users, Gauge, ShoppingCart, Star } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
@@ -21,16 +20,30 @@ function AnimatedCounter({ value, suffix = '' }: { value: string; suffix?: strin
   const ref = useRef<HTMLSpanElement>(null);
   const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''));
   const prefix = value.match(/^[^\d]*/)?.[0] || '';
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          const controls = animate(0, numericValue, {
-            duration: 2,
-            onUpdate: (v) => setDisplayValue(Math.round(v))
-          });
-          return () => controls.stop();
+        if (entries[0].isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          const duration = 2000;
+          const startTime = performance.now();
+          
+          const animate = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            setDisplayValue(Math.round(numericValue * easeOutQuart));
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          };
+          
+          requestAnimationFrame(animate);
         }
       },
       { threshold: 0.5 }
@@ -64,13 +77,7 @@ export function ResultsSection({ results }: ResultsSectionProps) {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             {language === 'bn' ? 'চূড়ান্ত ফলাফল' : 'The Results'}
           </h2>
@@ -80,7 +87,7 @@ export function ResultsSection({ results }: ResultsSectionProps) {
               : 'Measurable improvements that drove business success'}
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4" />
-        </motion.div>
+        </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {results.map((result, index) => {
@@ -88,13 +95,10 @@ export function ResultsSection({ results }: ResultsSectionProps) {
             const suffix = result.value.includes('%') ? '%' : result.value.includes('+') ? '+' : '';
             
             return (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="glass-premium rounded-2xl p-8 text-center group hover:scale-105 transition-transform"
+                className="glass-premium rounded-2xl p-8 text-center group hover:scale-105 transition-transform animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-500/25">
                   <IconComponent className="w-8 h-8 text-white" />
@@ -103,7 +107,7 @@ export function ResultsSection({ results }: ResultsSectionProps) {
                 <p className="text-slate-300 mt-3 text-lg">
                   {language === 'bn' ? result.label_bn : result.label_en}
                 </p>
-              </motion.div>
+              </div>
             );
           })}
         </div>

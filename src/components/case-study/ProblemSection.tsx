@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { AlertTriangle, Zap, Smartphone, Search, TrendingDown } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import type { Problem } from '@/services/caseStudyService';
@@ -23,13 +22,7 @@ export function ProblemSection({ problems }: ProblemSectionProps) {
   return (
     <section className="py-20 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {language === 'bn' ? 'সমস্যাসমূহ' : 'The Problems'}
           </h2>
@@ -39,19 +32,16 @@ export function ProblemSection({ problems }: ProblemSectionProps) {
               : 'Challenges the client was facing before working with us'}
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-red-500 to-orange-500 mx-auto rounded-full mt-4" />
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {problems.map((problem, index) => {
             const IconComponent = iconMap[problem.icon || 'default'] || AlertTriangle;
             return (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-red-100 dark:border-red-900/30 hover:shadow-xl transition-all group"
+                className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-red-100 dark:border-red-900/30 hover:shadow-xl transition-all group animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <IconComponent className="w-6 h-6 text-white" />
@@ -64,7 +54,7 @@ export function ProblemSection({ problems }: ProblemSectionProps) {
                     {language === 'bn' ? problem.description_bn : problem.description_en}
                   </p>
                 )}
-              </motion.div>
+              </div>
             );
           })}
         </div>

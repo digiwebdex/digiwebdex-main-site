@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { ArrowRight, Phone, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -39,12 +38,7 @@ export function CaseStudyHero({
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6 animate-fade-in">
             {/* Tags */}
             <div className="flex flex-wrap gap-3">
               {industryTag && (
@@ -96,16 +90,11 @@ export function CaseStudyHero({
                 </a>
               </Button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Hero Image */}
           {heroImageUrl && (
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
+            <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-indigo-500/20 border border-white/10">
                 <img
                   src={heroImageUrl}
@@ -117,15 +106,10 @@ export function CaseStudyHero({
               </div>
               
               {/* Floating Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
-                className="absolute -bottom-4 -left-4 glass-premium px-6 py-3 rounded-xl"
-              >
+              <div className="absolute -bottom-4 -left-4 glass-premium px-6 py-3 rounded-xl animate-fade-in" style={{ animationDelay: '0.8s' }}>
                 <p className="text-white font-semibold">{projectName}</p>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           )}
         </div>
       </div>
