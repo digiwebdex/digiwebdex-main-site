@@ -4,7 +4,7 @@ import {
   HeroSection, 
   TrustSection, 
   ServicesSection, 
-  PortfolioSection, 
+  PortfolioCategorySection,
   WhyChooseUsSection, 
   FeaturesSection,
   ProcessSection, 
@@ -51,8 +51,8 @@ const Home = () => {
       {/* Why Choose Us - 8 benefits */}
       <WhyChooseUsSection />
       
-      {/* Portfolio Carousel */}
-      <PortfolioSection />
+      {/* Category-Wise Portfolio */}
+      <PortfolioCategorySection />
       
       {/* Feature Benefits List */}
       <FeaturesSection />

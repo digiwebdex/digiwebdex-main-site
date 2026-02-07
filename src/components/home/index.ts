@@ -2,6 +2,7 @@ export { HeroSection } from './HeroSection';
 export { TrustSection } from './TrustSection';
 export { ServicesSection } from './ServicesSection';
 export { PortfolioSection } from './PortfolioSection';
+export { PortfolioCategorySection } from './PortfolioCategorySection';
 export { WhyChooseUsSection } from './WhyChooseUsSection';
 export { ProcessSection } from './ProcessSection';
 export { TestimonialsSection } from './TestimonialsSection';
