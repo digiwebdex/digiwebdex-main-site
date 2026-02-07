@@ -7,8 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, Loader2 } from 'lucide-react';
 import { z } from 'zod';
+import { contactService, DIGIWEBDEX_CONTACT } from '@/services/contactService';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { SchemaMarkup } from '@/components/seo/SchemaMarkup';
+import { seoService } from '@/services/seo';
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name is required').max(100),
@@ -39,25 +43,37 @@ export default function Contact() {
 
     try {
       const validatedData = contactSchema.parse(formData);
+      const result = await contactService.submitContactForm({
+        name: validatedData.name,
+        email: validatedData.email,
+        phone: validatedData.phone,
+        subject: validatedData.subject,
+        message: validatedData.message,
+      });
       
-      // Here you would typically send to an API
-      console.log('Form submitted:', validatedData);
-      
-      toast.success(
-        language === 'bn' ? 'বার্তা পাঠানো হয়েছে!' : 'Message sent!',
-        {
-          description: language === 'bn'
-            ? 'আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।'
-            : 'We will get back to you soon.',
-        }
-      );
-      
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      if (result.success) {
+        toast.success(
+          language === 'bn' ? 'বার্তা পাঠানো হয়েছে!' : 'Message sent!',
+          {
+            description: language === 'bn'
+              ? 'আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।'
+              : 'We will get back to you soon.',
+          }
+        );
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      } else {
+        throw new Error(result.error);
+      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         toast.error(
           language === 'bn' ? 'ত্রুটি' : 'Error',
           { description: err.errors[0].message }
+        );
+      } else {
+        toast.error(
+          language === 'bn' ? 'ত্রুটি' : 'Error',
+          { description: language === 'bn' ? 'বার্তা পাঠাতে সমস্যা হয়েছে' : 'Failed to send message' }
         );
       }
     } finally {
@@ -69,29 +85,63 @@ export default function Contact() {
     {
       icon: Mail,
       title: language === 'bn' ? 'ইমেইল' : 'Email',
-      value: 'support@digiwebdex.com',
-      href: 'mailto:support@digiwebdex.com',
+      value: DIGIWEBDEX_CONTACT.email,
+      href: `mailto:${DIGIWEBDEX_CONTACT.email}`,
     },
     {
       icon: Phone,
       title: language === 'bn' ? 'ফোন' : 'Phone',
-      value: '+880 1234 567890',
-      href: 'tel:+8801234567890',
+      value: DIGIWEBDEX_CONTACT.phone,
+      href: `tel:${DIGIWEBDEX_CONTACT.phone}`,
     },
     {
       icon: MapPin,
       title: language === 'bn' ? 'ঠিকানা' : 'Address',
-      value: language === 'bn' ? 'ঢাকা, বাংলাদেশ' : 'Dhaka, Bangladesh',
+      value: language === 'bn' ? DIGIWEBDEX_CONTACT.address.bn : DIGIWEBDEX_CONTACT.address.en,
     },
     {
       icon: Clock,
       title: language === 'bn' ? 'কর্মঘণ্টা' : 'Working Hours',
-      value: language === 'bn' ? 'শনি - বৃহঃ: সকাল ১০ - রাত ৮' : 'Sat - Thu: 10AM - 8PM',
+      value: language === 'bn' ? DIGIWEBDEX_CONTACT.workingHours.bn : DIGIWEBDEX_CONTACT.workingHours.en,
     },
   ];
 
+  // Generate contact page schema
+  const contactPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: language === 'bn' ? 'যোগাযোগ করুন - DigiWebDex' : 'Contact Us - DigiWebDex',
+    description: language === 'bn' 
+      ? 'DigiWebDex এর সাথে যোগাযোগ করুন। ওয়েব ডেভেলপমেন্ট, সফটওয়্যার ডেভেলপমেন্ট এবং ডিজিটাল মার্কেটিং সেবা।'
+      : 'Contact DigiWebDex for web development, software development and digital marketing services.',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'DigiWebDex',
+      telephone: DIGIWEBDEX_CONTACT.phone,
+      email: DIGIWEBDEX_CONTACT.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'House No. 49 Shekhertek, Mohammadpur',
+        addressLocality: 'Dhaka',
+        addressCountry: 'BD',
+      },
+    },
+  };
+
+  const localBusinessSchema = seoService.generateLocalBusinessSchema();
+
   return (
     <Layout>
+      <SEOHead
+        title={language === 'bn' ? 'যোগাযোগ করুন - DigiWebDex' : 'Contact Us - DigiWebDex'}
+        description={language === 'bn'
+          ? 'DigiWebDex এর সাথে যোগাযোগ করুন। ঢাকা, বাংলাদেশে ওয়েব ডেভেলপমেন্ট, সফটওয়্যার এবং ডিজিটাল মার্কেটিং সেবা।'
+          : 'Contact DigiWebDex for web development, software, and digital marketing services in Dhaka, Bangladesh.'}
+        keywords={['contact', 'DigiWebDex', 'Dhaka', 'Bangladesh', 'web development', 'যোগাযোগ']}
+      />
+      <SchemaMarkup schema={contactPageSchema} id="contact-page-schema" />
+      <SchemaMarkup schema={localBusinessSchema} id="local-business-schema" />
+      
       <div className="py-16 md:py-24">
         <div className="container-custom">
           {/* Header */}
@@ -183,7 +233,11 @@ export default function Contact() {
                   </div>
 
                   <Button type="submit" className="w-full gradient-button" disabled={loading}>
-                    <Send className="h-4 w-4 mr-2" />
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4 mr-2" />
+                    )}
                     {loading
                       ? (language === 'bn' ? 'পাঠানো হচ্ছে...' : 'Sending...')
                       : (language === 'bn' ? 'বার্তা পাঠান' : 'Send Message')}
