@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useAuth } from '@/lib/auth';
 import { Layout } from '@/components/layout/Layout';
@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { EasyOrderModal, PackageOption } from '@/components/order/EasyOrderModal';
 
 interface PricingPlan {
   id: string;
@@ -99,6 +100,22 @@ export default function Pricing() {
   const { language } = useLanguage();
   const { user } = useAuth();
   const basePath = language === 'en' ? '/en' : '/bn';
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PackageOption | undefined>(undefined);
+
+  const handleOrderClick = (plan: PricingPlan) => {
+    const packageOption: PackageOption = {
+      id: plan.id,
+      name: plan.name,
+      description: plan.description,
+      price: plan.price,
+      features: plan.features,
+      isPopular: plan.isPopular,
+      serviceType: plan.serviceType,
+    };
+    setSelectedPlan(packageOption);
+    setIsOrderModalOpen(true);
+  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat(language === 'bn' ? 'bn-BD' : 'en-US', {
@@ -141,6 +158,7 @@ export default function Pricing() {
                   formatCurrency={formatCurrency}
                   basePath={basePath}
                   isLoggedIn={!!user}
+                  onOrder={() => handleOrderClick(plan)}
                 />
               ))}
             </div>
@@ -160,6 +178,7 @@ export default function Pricing() {
                   formatCurrency={formatCurrency}
                   basePath={basePath}
                   isLoggedIn={!!user}
+                  onOrder={() => handleOrderClick(plan)}
                 />
               ))}
             </div>
@@ -189,6 +208,16 @@ export default function Pricing() {
           </div>
         </div>
       </div>
+
+      {/* Easy Order Modal */}
+      <EasyOrderModal
+        isOpen={isOrderModalOpen}
+        onClose={() => {
+          setIsOrderModalOpen(false);
+          setSelectedPlan(undefined);
+        }}
+        preselectedPackage={selectedPlan}
+      />
     </Layout>
   );
 }
@@ -199,12 +228,14 @@ function PricingCard({
   formatCurrency,
   basePath,
   isLoggedIn,
+  onOrder,
 }: {
   plan: PricingPlan;
   language: 'en' | 'bn';
   formatCurrency: (amount: number) => string;
   basePath: string;
   isLoggedIn: boolean;
+  onOrder: () => void;
 }) {
   return (
     <Card className={`glass-card relative ${plan.isPopular ? 'border-primary shadow-lg scale-105' : ''}`}>
@@ -235,13 +266,11 @@ function PricingCard({
         </ul>
 
         <Button
-          asChild
+          onClick={onOrder}
           className={`w-full ${plan.isPopular ? 'gradient-button' : ''}`}
           variant={plan.isPopular ? 'default' : 'outline'}
         >
-          <Link to={isLoggedIn ? `${basePath}/order?plan=${plan.id}` : `${basePath}/auth/register`}>
-            {language === 'bn' ? 'অর্ডার করুন' : 'Order Now'}
-          </Link>
+          {language === 'bn' ? 'অর্ডার করুন' : 'Order Now'}
         </Button>
       </CardContent>
     </Card>
