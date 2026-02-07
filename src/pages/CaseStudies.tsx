@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { SEOHead } from '@/components/seo';
@@ -49,12 +48,7 @@ export default function CaseStudies() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
+          <div className="text-center animate-fade-in">
             <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 px-4 py-1.5 mb-6">
               <Sparkles className="w-3 h-3 mr-2" />
               {language === 'bn' ? 'সফলতার গল্প' : 'Success Stories'}
@@ -67,7 +61,7 @@ export default function CaseStudies() {
                 ? 'দেখুন কিভাবে আমরা ক্লায়েন্টদের ব্যবসায়িক সাফল্য অর্জনে সাহায্য করেছি'
                 : 'See how we helped our clients achieve business success'}
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -89,12 +83,10 @@ export default function CaseStudies() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {caseStudies.map((study, index) => (
-                <motion.div
+                <div
                   key={study.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <Card className="h-full glass-premium border-0 overflow-hidden group hover:shadow-xl transition-all">
                     {study.hero_image_url && (
@@ -140,7 +132,7 @@ export default function CaseStudies() {
                       </Button>
                     </CardFooter>
                   </Card>
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
@@ -150,12 +142,7 @@ export default function CaseStudies() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               {language === 'bn' 
                 ? 'আপনার প্রজেক্ট নিয়ে আলোচনা করতে চান?'
@@ -171,7 +158,7 @@ export default function CaseStudies() {
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </Button>
-          </motion.div>
+          </div>
         </div>
       </section>
     </Layout>

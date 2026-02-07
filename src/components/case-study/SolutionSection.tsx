@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { 
   Palette, Zap, Search, Shield, Target, 
   Code, Server, Gauge, CheckCircle2 
@@ -30,13 +29,7 @@ export function SolutionSection({ solutions }: SolutionSectionProps) {
   return (
     <section className="py-20 bg-white dark:bg-slate-900">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {language === 'bn' ? 'আমাদের সমাধান ও কৌশল' : 'Our Strategy & Solution'}
           </h2>
@@ -46,19 +39,16 @@ export function SolutionSection({ solutions }: SolutionSectionProps) {
               : 'How we tackled each challenge systematically'}
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4" />
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {solutions.map((solution, index) => {
             const IconComponent = iconMap[solution.icon || 'default'] || CheckCircle2;
             return (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-premium rounded-2xl p-6 hover:shadow-xl transition-all group relative overflow-hidden"
+                className="glass-premium rounded-2xl p-6 hover:shadow-xl transition-all group relative overflow-hidden animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Gradient Border */}
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -76,7 +66,7 @@ export function SolutionSection({ solutions }: SolutionSectionProps) {
                     </p>
                   )}
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

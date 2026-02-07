@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Gauge, Smartphone, Zap } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import type { PerformanceImprovement } from '@/services/caseStudyService';
 
@@ -35,30 +34,18 @@ export function BeforeAfterSection({
   return (
     <section className="py-20 bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {language === 'bn' ? 'আগে ও পরে তুলনা' : 'Before & After Comparison'}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full" />
-        </motion.div>
+        </div>
 
         {/* Screenshots Comparison */}
         {(beforeScreenshotUrl || afterScreenshotUrl) && (
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
             {beforeScreenshotUrl && (
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="space-y-4"
-              >
+              <div className="space-y-4 animate-fade-in">
                 <div className="text-center">
                   <span className="inline-block px-4 py-2 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold text-sm">
                     {language === 'bn' ? 'আগে' : 'BEFORE'}
@@ -71,17 +58,11 @@ export function BeforeAfterSection({
                     className="w-full h-auto object-cover"
                   />
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {afterScreenshotUrl && (
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="space-y-4"
-              >
+              <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 <div className="text-center">
                   <span className="inline-block px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-semibold text-sm">
                     {language === 'bn' ? 'পরে' : 'AFTER'}
@@ -94,20 +75,14 @@ export function BeforeAfterSection({
                     className="w-full h-auto object-cover"
                   />
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
         )}
 
         {/* PageSpeed Score */}
         {(beforePagespeedScore || afterPagespeedScore) && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col md:flex-row items-center justify-center gap-8 mb-16"
-          >
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-16 animate-fade-in" style={{ animationDelay: '0.3s' }}>
             {beforePagespeedScore && (
               <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-2">
@@ -131,20 +106,17 @@ export function BeforeAfterSection({
                 </div>
               </div>
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* Performance Improvements */}
         {performanceImprovements && performanceImprovements.length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {performanceImprovements.map((improvement, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-premium rounded-xl p-5 text-center"
+                className="glass-premium rounded-xl p-5 text-center animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <p className="text-sm text-muted-foreground mb-2">
                   {language === 'bn' ? improvement.metric_bn : improvement.metric_en}
@@ -154,7 +126,7 @@ export function BeforeAfterSection({
                   <ArrowRight className="w-4 h-4 text-indigo-500" />
                   <span className="text-green-500 font-bold text-xl">{improvement.after_value}</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

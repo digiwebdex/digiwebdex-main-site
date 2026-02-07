@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/lib/i18n';
@@ -24,13 +23,7 @@ export function CaseStudyCTA() {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto"
-        >
+        <div className="text-center max-w-3xl mx-auto animate-fade-in">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
             {language === 'bn' 
               ? 'আপনার ব্যবসাও হতে পারে পরবর্তী সফলতার গল্প'
@@ -65,7 +58,7 @@ export function CaseStudyCTA() {
               </a>
             </Button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
