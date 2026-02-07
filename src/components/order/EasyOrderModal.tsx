@@ -28,6 +28,7 @@ import { useAuth } from '@/lib/auth';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import { DIGIWEBDEX_CONTACT } from '@/services/contactService';
 
 // Form validation schema
 const customerFormSchema = z.object({
@@ -60,7 +61,7 @@ type PaymentMethod = 'bkash_personal' | 'bank_transfer';
 
 const paymentInfo = {
   bkash_personal: {
-    number: '01XXXXXXXXX',
+    number: '01674533303',
     name: 'DigiWebDex',
     type: 'Personal',
     instructions: {
@@ -231,10 +232,9 @@ export function EasyOrderModal({ isOpen, onClose, packages = defaultPackages, pr
 
       // Send multi-channel notifications via edge function
       try {
-        await supabase.functions.invoke('send-order-notification', {
+        await supabase.functions.invoke('contact-notification', {
           body: {
             type: screenshotUrl ? 'payment_received' : 'order_created',
-            orderId: order.id,
             orderNumber: generatedOrderNumber,
             customerName: data.name,
             customerPhone: data.phone,
@@ -242,7 +242,6 @@ export function EasyOrderModal({ isOpen, onClose, packages = defaultPackages, pr
             packageName: selectedPackage.name.en,
             amount: selectedPackage.price,
             paymentMethod: paymentMethod,
-            screenshotUploaded: !!screenshotUrl,
           },
         });
       } catch (notifError) {
@@ -342,7 +341,7 @@ export function EasyOrderModal({ isOpen, onClose, packages = defaultPackages, pr
               </Button>
               <Button 
                 className="gradient-button"
-                onClick={() => window.open(`https://wa.me/8801XXXXXXXXX?text=Order: ${orderNumber}`, '_blank')}
+                onClick={() => window.open(`https://wa.me/${DIGIWEBDEX_CONTACT.whatsapp}?text=Order: ${orderNumber}`, '_blank')}
               >
                 {language === 'bn' ? 'WhatsApp এ যোগাযোগ' : 'Chat on WhatsApp'}
               </Button>

@@ -107,28 +107,29 @@ export interface ServiceSchema extends Record<string, unknown> {
   serviceType: string;
 }
 
-// Digiwebdex business info for schemas
+// DigiWebDex business info for schemas
 const BUSINESS_INFO = {
-  name: 'Digiwebdex',
+  name: 'DigiWebDex',
   nameBn: 'ডিজিওয়েবডেক্স',
-  url: 'https://digiwebdex.com',
-  telephone: '+880-1234-567890',
-  email: 'info@digiwebdex.com',
+  url: 'https://digiwebdex.lovable.app',
+  telephone: '+8801674533303',
+  email: 'digiwebdex@gmail.com',
   address: {
-    streetAddress: 'Dhaka, Bangladesh',
+    streetAddress: 'House No. 49 Shekhertek, Mohammadpur',
     addressLocality: 'Dhaka',
     addressRegion: 'Dhaka Division',
-    postalCode: '1000',
+    postalCode: '1207',
     addressCountry: 'BD'
   },
   geo: {
-    latitude: 23.8103,
-    longitude: 90.4125
+    latitude: 23.7667,
+    longitude: 90.3567
   },
   socialLinks: [
     'https://facebook.com/digiwebdex',
     'https://twitter.com/digiwebdex',
-    'https://linkedin.com/company/digiwebdex'
+    'https://linkedin.com/company/digiwebdex',
+    'https://instagram.com/digiwebdex'
   ]
 };
 

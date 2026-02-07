@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, MessageCircle, X, ChevronUp } from 'lucide-react';
+import { ShoppingCart, MessageCircle, X, ChevronUp, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/lib/i18n';
 import { EasyOrderModal } from './EasyOrderModal';
-
-const WHATSAPP_NUMBER = '8801XXXXXXXXX'; // Replace with actual number
+import { ContactFormModal } from '@/components/contact';
+import { DIGIWEBDEX_CONTACT } from '@/services/contactService';
 
 export function FloatingActions() {
   const { language } = useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -32,7 +33,11 @@ export function FloatingActions() {
         ? 'হ্যালো, আমি DigiWebDex এর সার্ভিস সম্পর্কে জানতে চাই।'
         : 'Hello, I want to know about DigiWebDex services.'
     );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${DIGIWEBDEX_CONTACT.whatsapp}?text=${message}`, '_blank');
+  };
+
+  const openPhoneCall = () => {
+    window.open(`tel:${DIGIWEBDEX_CONTACT.phone}`, '_self');
   };
 
   return (
@@ -60,6 +65,27 @@ export function FloatingActions() {
             isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           )}
         >
+          {/* Contact Form Button */}
+          <Button
+            className="h-12 gap-2 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 text-white px-4"
+            onClick={() => {
+              setIsContactModalOpen(true);
+              setIsExpanded(false);
+            }}
+          >
+            <Mail className="h-5 w-5" />
+            <span className="hidden sm:inline">{language === 'bn' ? 'মেসেজ' : 'Message'}</span>
+          </Button>
+
+          {/* Phone Call Button */}
+          <Button
+            className="h-12 gap-2 rounded-full shadow-lg bg-purple-500 hover:bg-purple-600 text-white px-4"
+            onClick={openPhoneCall}
+          >
+            <Phone className="h-5 w-5" />
+            <span className="hidden sm:inline">{language === 'bn' ? 'কল করুন' : 'Call'}</span>
+          </Button>
+
           {/* WhatsApp Button */}
           <Button
             className="h-12 gap-2 rounded-full shadow-lg bg-green-500 hover:bg-green-600 text-white px-4"
@@ -102,20 +128,31 @@ export function FloatingActions() {
 
       {/* Mobile Bottom Bar - Alternative for better mobile UX */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background/95 backdrop-blur-sm border-t p-3 safe-area-inset-bottom">
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Button
-            className="flex-1 gap-2 bg-green-500 hover:bg-green-600 text-white"
+            size="sm"
+            variant="outline"
+            className="flex-1 gap-1"
+            onClick={openPhoneCall}
+          >
+            <Phone className="h-4 w-4" />
+            {language === 'bn' ? 'কল' : 'Call'}
+          </Button>
+          <Button
+            size="sm"
+            className="flex-1 gap-1 bg-green-500 hover:bg-green-600 text-white"
             onClick={openWhatsApp}
           >
             <MessageCircle className="h-4 w-4" />
             WhatsApp
           </Button>
           <Button
-            className="flex-1 gap-2 gradient-button"
+            size="sm"
+            className="flex-1 gap-1 gradient-button"
             onClick={() => setIsOrderModalOpen(true)}
           >
             <ShoppingCart className="h-4 w-4" />
-            {language === 'bn' ? 'অর্ডার করুন' : 'Order Now'}
+            {language === 'bn' ? 'অর্ডার' : 'Order'}
           </Button>
         </div>
       </div>
@@ -124,6 +161,12 @@ export function FloatingActions() {
       <EasyOrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
+      />
+
+      {/* Contact Form Modal */}
+      <ContactFormModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
       />
     </>
   );
