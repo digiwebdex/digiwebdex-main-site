@@ -138,8 +138,8 @@ const DomainHostingPage = () => {
   const hostingPlans = [
     {
       name: language === 'bn' ? 'স্টার্টার' : 'Starter',
-      price: '৳99',
-      period: language === 'bn' ? '/মাস' : '/month',
+      price: '৳4,800',
+      period: language === 'bn' ? '/বছর' : '/year',
       description: language === 'bn' ? 'ব্যক্তিগত ওয়েবসাইটের জন্য পারফেক্ট' : 'Perfect for personal websites',
       features: [
         language === 'bn' ? '1GB SSD স্টোরেজ' : '1GB SSD Storage',
@@ -153,8 +153,8 @@ const DomainHostingPage = () => {
     },
     {
       name: language === 'bn' ? 'বিজনেস' : 'Business',
-      price: '৳299',
-      period: language === 'bn' ? '/মাস' : '/month',
+      price: '৳9,900',
+      period: language === 'bn' ? '/বছর' : '/year',
       description: language === 'bn' ? 'ছোট ব্যবসার জন্য আদর্শ' : 'Ideal for small businesses',
       features: [
         language === 'bn' ? '10GB SSD স্টোরেজ' : '10GB SSD Storage',
@@ -170,8 +170,8 @@ const DomainHostingPage = () => {
     },
     {
       name: language === 'bn' ? 'প্রিমিয়াম' : 'Premium',
-      price: '৳599',
-      period: language === 'bn' ? '/মাস' : '/month',
+      price: '৳14,500',
+      period: language === 'bn' ? '/বছর' : '/year',
       description: language === 'bn' ? 'বড় ব্যবসা ও উচ্চ ট্রাফিকের জন্য' : 'For large businesses & high traffic',
       features: [
         language === 'bn' ? 'আনলিমিটেড SSD স্টোরেজ' : 'Unlimited SSD Storage',
