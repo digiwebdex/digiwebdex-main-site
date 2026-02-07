@@ -161,23 +161,6 @@ export function HeroSection() {
           </div>
 
           {/* Stats Cards */}
-          <div className="animate-slide-up delay-600 mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
-            {[
-              { value: '500+', label: language === 'bn' ? 'প্রকল্প সম্পন্ন' : 'Projects Done', icon: '🚀' },
-              { value: '200+', label: language === 'bn' ? 'খুশি ক্লায়েন্ট' : 'Happy Clients', icon: '😊' },
-              { value: '99.9%', label: language === 'bn' ? 'আপটাইম' : 'Uptime', icon: '⚡' },
-              { value: '24/7', label: language === 'bn' ? 'সাপোর্ট' : 'Support', icon: '🛡️' },
-            ].map((stat, index) => (
-              <div 
-                key={index} 
-                className="glass-card p-4 md:p-6 text-center card-shine group cursor-default"
-              >
-                <div className="text-2xl mb-2">{stat.icon}</div>
-                <div className="text-2xl md:text-3xl font-bold gradient-text">{stat.value}</div>
-                <div className="text-xs md:text-sm text-muted-foreground mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
