@@ -46,13 +46,18 @@ export function ProcessSection() {
 
   return (
     <section className="section-padding relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 mesh-gradient opacity-30" />
+      {/* Enhanced Background */}
+      <div className="absolute inset-0 mesh-gradient opacity-40" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--primary)/0.08)_0%,transparent_60%)]" />
+
+      {/* Decorative elements */}
+      <div className="absolute top-20 right-20 w-40 h-40 rounded-full bg-primary/10 blur-3xl animate-bounce-slow" />
+      <div className="absolute bottom-20 left-20 w-40 h-40 rounded-full bg-accent/10 blur-3xl animate-bounce-slow" style={{ animationDelay: '1.5s' }} />
 
       <div className="container-custom relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-premium text-primary text-sm font-semibold mb-6 animate-fade-in">
             <span>🔄</span>
             {language === 'bn' ? 'কাজের প্রক্রিয়া' : 'Work Process'}
           </div>
@@ -70,10 +75,10 @@ export function ProcessSection() {
           </p>
         </div>
 
-        {/* Process Steps */}
+        {/* Process Steps with enhanced visuals */}
         <div className="relative">
-          {/* Connection Line - Desktop */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 via-orange-500 to-green-500 -translate-y-1/2 rounded-full opacity-20" />
+          {/* Connection Line - Desktop with gradient */}
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary/50 -translate-y-1/2 rounded-full opacity-30" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {steps.map((step, index) => (
@@ -85,21 +90,21 @@ export function ProcessSection() {
                 {/* Arrow Between Steps - Desktop */}
                 {index < steps.length - 1 && (
                   <div className="hidden lg:flex absolute top-1/2 -right-4 w-8 h-8 items-center justify-center z-10">
-                    <ArrowRight className="w-5 h-5 text-primary/50" />
+                    <ArrowRight className="w-5 h-5 text-primary/60" />
                   </div>
                 )}
 
-                <div className="group glass-card p-8 text-center hover:border-primary/30 transition-all duration-500 h-full">
-                  {/* Step Number */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className={`inline-block px-4 py-1 rounded-full text-sm font-bold text-white bg-gradient-to-r ${step.color} shadow-lg`}>
+                <div className="group glass-premium p-8 text-center hover:border-primary/40 transition-all duration-500 h-full card-shine">
+                  {/* Step Number with glow */}
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className={`inline-block px-5 py-1.5 rounded-full text-sm font-bold text-white bg-gradient-to-r ${step.color} shadow-xl`}>
                       {step.number}
                     </span>
                   </div>
 
-                  {/* Icon */}
-                  <div className={`w-20 h-20 mx-auto mt-4 mb-6 rounded-2xl bg-gradient-to-br ${step.color} p-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <step.icon className="w-full h-full text-white" />
+                  {/* Icon with enhanced effects */}
+                  <div className={`w-20 h-20 mx-auto mt-6 mb-6 rounded-2xl bg-gradient-to-br ${step.color} p-5 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 group-hover:shadow-2xl`}>
+                    <step.icon className="w-full h-full text-white drop-shadow-lg" />
                   </div>
 
                   {/* Content */}
@@ -115,12 +120,12 @@ export function ProcessSection() {
           </div>
         </div>
 
-        {/* Bottom Message */}
+        {/* Bottom Message with enhanced styling */}
         <div className="mt-16 text-center animate-slide-up delay-700">
-          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl glass-card">
-            <span className="text-2xl">⏱️</span>
+          <div className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl glass-premium">
+            <span className="text-3xl">⏱️</span>
             <div className="text-left">
-              <p className="font-bold text-foreground">
+              <p className="font-bold text-lg text-foreground">
                 {language === 'bn' ? 'গড় ডেলিভারি সময়: ৭-১৪ দিন' : 'Average Delivery: 7-14 Days'}
               </p>
               <p className="text-sm text-muted-foreground">

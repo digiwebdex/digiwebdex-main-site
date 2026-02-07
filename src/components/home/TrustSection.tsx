@@ -11,14 +11,14 @@ export function TrustSection() {
       value: '500',
       suffix: '+',
       label: language === 'bn' ? 'সম্পন্ন প্রজেক্ট' : 'Projects Completed',
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-primary to-primary/70',
     },
     {
       icon: Users,
       value: '200',
       suffix: '+',
       label: language === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients',
-      color: 'from-violet-500 to-purple-500',
+      color: 'from-secondary to-accent',
     },
     {
       icon: Clock,
@@ -32,14 +32,19 @@ export function TrustSection() {
       value: '10',
       suffix: '+',
       label: language === 'bn' ? 'বছরের অভিজ্ঞতা' : 'Years Experience',
-      color: 'from-orange-500 to-amber-500',
+      color: 'from-accent to-secondary',
     },
   ];
 
   return (
-    <section className="py-16 bg-secondary/30 relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.02)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+    <section className="py-20 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.03)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      
+      {/* Glowing orbs */}
+      <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl animate-pulse-soft" />
+      <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-accent/10 blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }} />
       
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
@@ -49,32 +54,35 @@ export function TrustSection() {
               className="group animate-slide-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} p-3 mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                  <stat.icon className="w-full h-full text-white" />
+              <div className="flex flex-col items-center text-center p-8 rounded-3xl glass-premium hover:border-primary/40 transition-all duration-500 hover-lift">
+                {/* Icon with glow */}
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} p-3.5 mb-5 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:shadow-2xl`}>
+                  <stat.icon className="w-full h-full text-white drop-shadow-lg" />
                 </div>
                 
-                {/* Value */}
-                <div className="text-3xl md:text-4xl font-bold text-foreground mb-1">
+                {/* Value with gradient */}
+                <div className="text-4xl md:text-5xl font-extrabold text-foreground mb-2 tracking-tight">
                   {stat.value}
                   <span className="gradient-text">{stat.suffix}</span>
                 </div>
                 
                 {/* Label */}
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom tagline */}
-        <div className="mt-12 text-center animate-slide-up delay-500">
-          <p className="text-muted-foreground">
-            {language === 'bn' 
-              ? '🏆 বাংলাদেশের শীর্ষস্থানীয় ডিজিটাল সার্ভিস প্রোভাইডার'
-              : '🏆 Bangladesh\'s Leading Digital Service Provider'}
-          </p>
+        {/* Bottom tagline with enhanced styling */}
+        <div className="mt-14 text-center animate-slide-up delay-500">
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass-premium">
+            <span className="text-xl">🏆</span>
+            <p className="text-foreground font-semibold">
+              {language === 'bn' 
+                ? 'বাংলাদেশের শীর্ষস্থানীয় ডিজিটাল সার্ভিস প্রোভাইডার'
+                : 'Bangladesh\'s Leading Digital Service Provider'}
+            </p>
+          </div>
         </div>
       </div>
     </section>
