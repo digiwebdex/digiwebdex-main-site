@@ -133,17 +133,18 @@ const BUSINESS_INFO = {
   ]
 };
 
-// Bangladesh divisions for location-based SEO
-export const BANGLADESH_DIVISIONS = [
-  { slug: 'dhaka', nameBn: 'ঢাকা', nameEn: 'Dhaka' },
-  { slug: 'chittagong', nameBn: 'চট্টগ্রাম', nameEn: 'Chittagong' },
-  { slug: 'rajshahi', nameBn: 'রাজশাহী', nameEn: 'Rajshahi' },
-  { slug: 'khulna', nameBn: 'খুলনা', nameEn: 'Khulna' },
-  { slug: 'barishal', nameBn: 'বরিশাল', nameEn: 'Barishal' },
-  { slug: 'sylhet', nameBn: 'সিলেট', nameEn: 'Sylhet' },
-  { slug: 'rangpur', nameBn: 'রংপুর', nameEn: 'Rangpur' },
-  { slug: 'mymensingh', nameBn: 'ময়মনসিংহ', nameEn: 'Mymensingh' }
+// Worldwide regions for location-based SEO
+export const WORLDWIDE_REGIONS = [
+  { slug: 'asia', nameBn: 'এশিয়া', nameEn: 'Asia', icon: '🌏' },
+  { slug: 'middle-east', nameBn: 'মধ্যপ্রাচ্য', nameEn: 'Middle East', icon: '🕌' },
+  { slug: 'europe', nameBn: 'ইউরোপ', nameEn: 'Europe', icon: '🇪🇺' },
+  { slug: 'north-america', nameBn: 'উত্তর আমেরিকা', nameEn: 'North America', icon: '🌎' },
+  { slug: 'australia', nameBn: 'অস্ট্রেলিয়া', nameEn: 'Australia & Oceania', icon: '🦘' },
+  { slug: 'africa', nameBn: 'আফ্রিকা', nameEn: 'Africa', icon: '🌍' },
 ];
+
+// Legacy Bangladesh divisions (kept for backward compatibility)
+export const BANGLADESH_DIVISIONS = WORLDWIDE_REGIONS;
 
 // Cache for SEO data
 const seoCache = new Map<string, { data: unknown; timestamp: number }>();

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { SchemaMarkup, MultiSchemaMarkup } from '@/components/seo/SchemaMarkup';
-import { seoService, BANGLADESH_DIVISIONS } from '@/services/seo';
+import { seoService, WORLDWIDE_REGIONS } from '@/services/seo';
 import { useLanguage } from '@/lib/i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -75,44 +75,51 @@ export function LocationPage() {
   const getTitle = (loc: LocationPage) => 
     language === 'bn' ? loc.title_bn : loc.title_en;
 
-  // If no slug, show locations list
+  // If no slug, show worldwide locations list
   if (!slug) {
     return (
       <Layout>
         <SEOHead
-          title={language === 'bn' ? 'আমাদের সার্ভিস লোকেশন' : 'Our Service Locations'}
+          title={language === 'bn' ? 'বিশ্বব্যাপী আমাদের সার্ভিস' : 'Our Worldwide Services'}
           description={language === 'bn' 
-            ? 'বাংলাদেশের সকল বিভাগে আমাদের ওয়েব ডেভেলপমেন্ট এবং ডিজিটাল মার্কেটিং সেবা পাওয়া যায়।'
-            : 'Our web development and digital marketing services are available across all divisions of Bangladesh.'}
-          keywords={['Bangladesh', 'Dhaka', 'Chittagong', 'web development', 'digital marketing']}
+            ? 'বিশ্বের যেকোনো প্রান্তে আমাদের ওয়েব ডেভেলপমেন্ট, সফটওয়্যার এবং ডিজিটাল মার্কেটিং সেবা পাওয়া যায়।'
+            : 'Our web development, software and digital marketing services are available anywhere in the world.'}
+          keywords={['worldwide', 'global', 'international', 'web development', 'digital marketing', 'remote services']}
         />
 
         <div className="container-custom py-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            {language === 'bn' ? 'আমাদের সার্ভিস লোকেশন' : 'Our Service Locations'}
-          </h1>
-          <p className="text-lg text-muted-foreground mb-8 max-w-3xl">
-            {language === 'bn'
-              ? 'বাংলাদেশের সকল বিভাগে আমাদের সেবা পাওয়া যায়। আপনার এলাকায় আমাদের সেবা সম্পর্কে জানতে নিচে ক্লিক করুন।'
-              : 'Our services are available across all divisions of Bangladesh. Click below to learn about our services in your area.'}
-          </p>
+          {/* Hero Section */}
+          <div className="text-center mb-12">
+            <Badge className="mb-4 text-lg px-4 py-2">
+              <Globe className="h-4 w-4 mr-2" />
+              {language === 'bn' ? 'বিশ্বব্যাপী সেবা' : 'Global Services'}
+            </Badge>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">
+              {language === 'bn' ? 'বিশ্বের যেকোনো প্রান্তে আমাদের সেবা' : 'We Serve Clients Worldwide'}
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              {language === 'bn'
+                ? 'DigiWebDex বিশ্বের যেকোনো দেশে রিমোট সার্ভিস প্রদান করে। আমরা এশিয়া, মধ্যপ্রাচ্য, ইউরোপ, আমেরিকা সহ সব অঞ্চলে কাজ করি।'
+                : 'DigiWebDex provides remote services to clients in any country. We work with businesses across Asia, Middle East, Europe, Americas, and beyond.'}
+            </p>
+          </div>
 
-          {/* Divisions Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {BANGLADESH_DIVISIONS.map(division => {
-              const divisionPages = allLocations.filter(loc => loc.division === division.slug);
+          {/* Global Regions Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {WORLDWIDE_REGIONS.map(region => {
+              const regionPages = allLocations.filter(loc => loc.division === region.slug);
               return (
-                <Card key={division.slug} className="hover:shadow-lg transition-shadow">
+                <Card key={region.slug} className="hover:shadow-lg transition-shadow hover:border-primary/50">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-primary" />
-                      {language === 'bn' ? division.nameBn : division.nameEn}
+                    <CardTitle className="flex items-center gap-3 text-xl">
+                      <span className="text-3xl">{region.icon}</span>
+                      {language === 'bn' ? region.nameBn : region.nameEn}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {divisionPages.length > 0 ? (
+                    {regionPages.length > 0 ? (
                       <div className="space-y-2">
-                        {divisionPages.slice(0, 3).map(loc => (
+                        {regionPages.slice(0, 3).map(loc => (
                           <Link 
                             key={loc.id} 
                             to={`${basePath}/locations/${loc.slug}`}
@@ -121,9 +128,9 @@ export function LocationPage() {
                             {getLocationName(loc)}
                           </Link>
                         ))}
-                        {divisionPages.length > 3 && (
+                        {regionPages.length > 3 && (
                           <span className="text-sm text-muted-foreground">
-                            +{divisionPages.length - 3} {language === 'bn' ? 'আরও' : 'more'}
+                            +{regionPages.length - 3} {language === 'bn' ? 'আরও' : 'more'}
                           </span>
                         )}
                       </div>
@@ -137,6 +144,68 @@ export function LocationPage() {
               );
             })}
           </div>
+
+          {/* Why Work With Us Globally */}
+          <section className="bg-muted rounded-2xl p-8 mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              {language === 'bn' ? 'বিশ্বব্যাপী কেন আমাদের বেছে নেবেন?' : 'Why Choose Us Globally?'}
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { 
+                  icon: '🌐', 
+                  titleEn: 'Remote First', 
+                  titleBn: 'রিমোট সার্ভিস',
+                  descEn: 'Work with us from anywhere in the world',
+                  descBn: 'বিশ্বের যেকোনো জায়গা থেকে কাজ করুন'
+                },
+                { 
+                  icon: '💬', 
+                  titleEn: 'Multi-language Support', 
+                  titleBn: 'বহুভাষা সাপোর্ট',
+                  descEn: 'English, Bengali & Arabic support',
+                  descBn: 'ইংরেজি, বাংলা ও আরবি সাপোর্ট'
+                },
+                { 
+                  icon: '⏰', 
+                  titleEn: 'Flexible Timezone', 
+                  titleBn: 'ফ্লেক্সিবল টাইমজোন',
+                  descEn: 'We adjust to your business hours',
+                  descBn: 'আপনার সময় অনুযায়ী কাজ করি'
+                },
+                { 
+                  icon: '💳', 
+                  titleEn: 'Global Payments', 
+                  titleBn: 'গ্লোবাল পেমেন্ট',
+                  descEn: 'Accept payments worldwide',
+                  descBn: 'বিশ্বব্যাপী পেমেন্ট গ্রহণ'
+                },
+              ].map((item, index) => (
+                <div key={index} className="text-center p-4">
+                  <span className="text-4xl mb-3 block">{item.icon}</span>
+                  <h3 className="font-semibold mb-2">{language === 'bn' ? item.titleBn : item.titleEn}</h3>
+                  <p className="text-sm text-muted-foreground">{language === 'bn' ? item.descBn : item.descEn}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section className="text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              {language === 'bn' ? 'আজই আপনার প্রজেক্ট শুরু করুন' : 'Start Your Project Today'}
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              {language === 'bn'
+                ? 'বিশ্বের যেকোনো প্রান্ত থেকে আমাদের সাথে যোগাযোগ করুন'
+                : 'Contact us from anywhere in the world'}
+            </p>
+            <Link to={`${basePath}/contact`}>
+              <Button size="lg" className="gradient-button">
+                {language === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
+              </Button>
+            </Link>
+          </section>
         </div>
       </Layout>
     );
@@ -223,11 +292,11 @@ export function LocationPage() {
       <div className="container-custom py-12">
         {/* Header */}
         <div className="mb-8">
-          <Badge className="mb-4">
-            <MapPin className="h-3 w-3 mr-1" />
+        <Badge className="mb-4">
+            <Globe className="h-3 w-3 mr-1" />
             {page.division && (language === 'bn' 
-              ? BANGLADESH_DIVISIONS.find(d => d.slug === page.division)?.nameBn 
-              : BANGLADESH_DIVISIONS.find(d => d.slug === page.division)?.nameEn)}
+              ? WORLDWIDE_REGIONS.find(d => d.slug === page.division)?.nameBn 
+              : WORLDWIDE_REGIONS.find(d => d.slug === page.division)?.nameEn)}
           </Badge>
           <h1 className="text-3xl md:text-5xl font-bold mb-4">{title}</h1>
           
