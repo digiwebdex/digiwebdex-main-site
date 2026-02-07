@@ -82,16 +82,19 @@ export function WhyChooseUsSection() {
   ];
 
   return (
-    <section className="section-padding bg-secondary/30 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.02)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
-      </div>
+    <section className="section-padding relative overflow-hidden">
+      {/* Enhanced Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-accent/5" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.02)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
+      
+      {/* Decorative orbs */}
+      <div className="absolute top-1/4 -left-20 w-72 h-72 rounded-full bg-primary/10 blur-3xl animate-morph" />
+      <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-accent/10 blur-3xl animate-morph" style={{ animationDelay: '4s' }} />
 
       <div className="container-custom relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-premium text-primary text-sm font-semibold mb-6 animate-fade-in">
             <span>🏆</span>
             {language === 'bn' ? 'কেন আমরা' : 'Why Choose Us'}
           </div>
@@ -109,7 +112,7 @@ export function WhyChooseUsSection() {
           </p>
         </div>
 
-        {/* Benefits Grid */}
+        {/* Benefits Grid with enhanced cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((benefit, index) => (
             <div
@@ -117,10 +120,10 @@ export function WhyChooseUsSection() {
               className="group animate-slide-up"
               style={{ animationDelay: `${index * 75 + 150}ms` }}
             >
-              <div className="h-full glass-card p-6 text-center hover:border-primary/30 transition-all duration-500">
-                {/* Icon */}
-                <div className={`w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br ${benefit.color} p-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                  <benefit.icon className="w-full h-full text-white" />
+              <div className="h-full glass-premium p-6 text-center hover:border-primary/40 transition-all duration-500 card-shine">
+                {/* Icon with enhanced effects */}
+                <div className={`w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br ${benefit.color} p-4 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 group-hover:shadow-2xl`}>
+                  <benefit.icon className="w-full h-full text-white drop-shadow-lg" />
                 </div>
 
                 {/* Content */}
@@ -135,18 +138,18 @@ export function WhyChooseUsSection() {
           ))}
         </div>
 
-        {/* Trust Badge */}
+        {/* Trust Badge with enhanced styling */}
         <div className="mt-16 text-center animate-slide-up delay-700">
-          <div className="inline-flex items-center gap-4 px-8 py-4 rounded-2xl glass-card">
+          <div className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl glass-premium">
             <div className="flex -space-x-3">
               {['😊', '🎉', '💼', '🚀'].map((emoji, i) => (
-                <span key={i} className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg border-2 border-background">
+                <span key={i} className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-xl border-2 border-background shadow-lg">
                   {emoji}
                 </span>
               ))}
             </div>
             <div className="text-left">
-              <p className="font-bold text-foreground">
+              <p className="font-bold text-lg text-foreground">
                 {language === 'bn' ? '৫০০+ সন্তুষ্ট ক্লায়েন্ট' : '500+ Satisfied Clients'}
               </p>
               <p className="text-sm text-muted-foreground">

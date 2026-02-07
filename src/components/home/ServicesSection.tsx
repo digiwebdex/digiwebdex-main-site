@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
-import { Globe, Code2, Cpu, TrendingUp, ArrowRight } from 'lucide-react';
+import { Globe, Code2, Cpu, TrendingUp, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function ServicesSection() {
@@ -73,14 +73,19 @@ export function ServicesSection() {
 
   return (
     <section className="section-padding relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 mesh-gradient opacity-50" />
+      {/* Enhanced Background */}
+      <div className="absolute inset-0 mesh-gradient opacity-60" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.05)_0%,transparent_50%)]" />
+      
+      {/* Floating decorative elements */}
+      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-primary/5 blur-2xl animate-float" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-accent/5 blur-2xl animate-float" style={{ animationDelay: '2s' }} />
       
       <div className="container-custom relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-in">
-            <span>✨</span>
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-premium text-primary text-sm font-semibold mb-6 animate-fade-in">
+            <Sparkles className="w-4 h-4" />
             {language === 'bn' ? 'আমাদের সেবাসমূহ' : 'Our Services'}
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-slide-up">
@@ -97,7 +102,7 @@ export function ServicesSection() {
           </p>
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid with enhanced cards */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <Link 
@@ -106,15 +111,18 @@ export function ServicesSection() {
               className="group animate-slide-up"
               style={{ animationDelay: `${index * 100 + 200}ms` }}
             >
-              <div className="relative h-full glass-card p-8 hover:border-primary/30 transition-all duration-500 card-shine overflow-hidden">
-                {/* Background Gradient */}
+              <div className="relative h-full glass-premium p-8 hover:border-primary/40 transition-all duration-500 card-shine overflow-hidden gradient-border">
+                {/* Background Gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                {/* Glow effect */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
                   {/* Icon & Price */}
                   <div className="flex items-start justify-between mb-6">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} p-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      <service.icon className="w-full h-full text-white" />
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} p-4 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 group-hover:shadow-2xl`}>
+                      <service.icon className="w-full h-full text-white drop-shadow-lg" />
                     </div>
                     <div className="text-right">
                       <span className="text-2xl font-bold text-foreground">{service.price}</span>
@@ -130,22 +138,22 @@ export function ServicesSection() {
                     {service.description}
                   </p>
 
-                  {/* Features */}
+                  {/* Features with enhanced styling */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {service.features.map((feature, fIndex) => (
                       <span 
                         key={fIndex}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium bg-secondary/50 text-foreground"
+                        className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-foreground border border-primary/20 group-hover:border-primary/40 transition-colors"
                       >
                         {feature}
                       </span>
                     ))}
                   </div>
 
-                  {/* CTA */}
-                  <div className="flex items-center text-primary font-medium">
+                  {/* CTA with arrow animation */}
+                  <div className="flex items-center text-primary font-semibold group-hover:gap-3 gap-2 transition-all">
                     {language === 'bn' ? 'বিস্তারিত দেখুন' : 'Learn More'}
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                   </div>
                 </div>
               </div>
@@ -153,17 +161,17 @@ export function ServicesSection() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* Bottom CTA with enhanced styling */}
         <div className="mt-16 text-center animate-slide-up delay-500">
           <p className="text-muted-foreground mb-6">
             {language === 'bn' 
               ? 'কোন সার্ভিস আপনার জন্য সেরা তা জানতে চান?'
               : 'Not sure which service is right for you?'}
           </p>
-          <Button size="lg" className="gradient-button h-14 px-10" asChild>
+          <Button size="lg" className="gradient-button h-14 px-10 group" asChild>
             <Link to={`${basePath}/contact`}>
               {language === 'bn' ? 'ফ্রি কনসাল্টেশন নিন' : 'Get Free Consultation'}
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
         </div>
