@@ -45,7 +45,7 @@ import AffiliateDashboard from "./pages/dashboard/AffiliateDashboard";
 import ProjectMilestones from "./pages/dashboard/ProjectMilestones";
 import Subscriptions from "./pages/dashboard/Subscriptions";
 import SupportTickets from "./pages/dashboard/SupportTickets";
-
+import { ResellerDashboard } from "./pages/reseller";
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminPaymentVerification from "./pages/admin/AdminPaymentVerification";
@@ -64,6 +64,7 @@ import AdminLeads from "./pages/admin/AdminLeads";
 import AdminProposals from "./pages/admin/AdminProposals";
 import AdminSubscriptions from "./pages/admin/AdminSubscriptions";
 import AdminTickets from "./pages/admin/AdminTickets";
+import AdminResellers from "./pages/admin/AdminResellers";
 
 // Public Pages
 import ProposalView from "./pages/ProposalView";
@@ -122,6 +123,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/dashboard/milestones" element={<ProtectedRoute><ProjectMilestones /></ProtectedRoute>} />
           <Route path="/bn/dashboard/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
           <Route path="/bn/dashboard/support" element={<ProtectedRoute><SupportTickets /></ProtectedRoute>} />
+          <Route path="/bn/dashboard/reseller" element={<ProtectedRoute><ResellerDashboard /></ProtectedRoute>} />
           <Route path="/bn/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* Bangla - Protected Admin Routes */}
@@ -142,6 +144,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
           <Route path="/bn/admin/subscriptions" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSubscriptions /></ProtectedRoute>} />
           <Route path="/bn/admin/tickets" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminTickets /></ProtectedRoute>} />
+          <Route path="/bn/admin/resellers" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminResellers /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -185,6 +188,7 @@ const LanguageRoutes = () => {
           <Route path="/en/dashboard/milestones" element={<ProtectedRoute><ProjectMilestones /></ProtectedRoute>} />
           <Route path="/en/dashboard/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
           <Route path="/en/dashboard/support" element={<ProtectedRoute><SupportTickets /></ProtectedRoute>} />
+          <Route path="/en/dashboard/reseller" element={<ProtectedRoute><ResellerDashboard /></ProtectedRoute>} />
           <Route path="/en/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* English - Protected Admin Routes */}
@@ -205,6 +209,7 @@ const LanguageRoutes = () => {
           <Route path="/en/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
           <Route path="/en/admin/subscriptions" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSubscriptions /></ProtectedRoute>} />
           <Route path="/en/admin/tickets" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminTickets /></ProtectedRoute>} />
+          <Route path="/en/admin/resellers" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminResellers /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Dynamic Landing Pages - must be before catch-all */}
