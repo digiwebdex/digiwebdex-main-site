@@ -1,15 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Sparkles } from 'lucide-react';
+import { domainService, type DomainPricing } from '@/services/domainService';
 
 export function DomainSearchBox() {
   const { language, t } = useLanguage();
   const navigate = useNavigate();
   const [domain, setDomain] = useState('');
+  const [popularTlds, setPopularTlds] = useState<{ tld: string; price: string }[]>([]);
   const basePath = language === 'en' ? '/en' : '/bn';
+
+  useEffect(() => {
+    loadPopularTlds();
+  }, []);
+
+  const loadPopularTlds = async () => {
+    try {
+      const pricing = await domainService.getPopularTlds();
+      const formatted = pricing.slice(0, 5).map((item: DomainPricing) => ({
+        tld: item.tld,
+        price: `৳${Math.ceil(item.base_price * (1 + item.margin_percent / 100)).toLocaleString('bn-BD')}`,
+      }));
+      setPopularTlds(formatted);
+    } catch (error) {
+      console.error('Error loading TLD pricing:', error);
+      // Fallback to static prices if fetch fails
+      setPopularTlds([
+        { tld: '.com', price: '৳১,৭৯৫' },
+        { tld: '.net', price: '৳২,১৯০' },
+        { tld: '.org', price: '৳২,০২০' },
+        { tld: '.com.bd', price: '৳২,৫০০' },
+        { tld: '.xyz', price: '৳১,২০০' },
+      ]);
+    }
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,14 +44,6 @@ export function DomainSearchBox() {
       navigate(`${basePath}/domains?search=${encodeURIComponent(domain.trim())}`);
     }
   };
-
-  const popularTlds = [
-    { tld: '.com', price: '৳999' },
-    { tld: '.net', price: '৳1,199' },
-    { tld: '.org', price: '৳1,099' },
-    { tld: '.com.bd', price: '৳1,500' },
-    { tld: '.xyz', price: '৳199' },
-  ];
 
   return (
     <div className="w-full">
