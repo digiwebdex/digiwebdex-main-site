@@ -19,7 +19,7 @@ export function DomainSearchBox() {
   };
 
   const popularTlds = [
-    { tld: '.com', price: '৳1,265' },
+    { tld: '.com', price: '৳999' },
     { tld: '.net', price: '৳2,090' },
     { tld: '.org', price: '৳1,964' },
     { tld: '.com.bd', price: '৳2,625' },
