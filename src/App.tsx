@@ -43,6 +43,7 @@ import Payments from "./pages/dashboard/Payments";
 import PaymentSubmit from "./pages/dashboard/PaymentSubmit";
 import AffiliateDashboard from "./pages/dashboard/AffiliateDashboard";
 import ProjectMilestones from "./pages/dashboard/ProjectMilestones";
+import Subscriptions from "./pages/dashboard/Subscriptions";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -60,6 +61,7 @@ import AdminBlog from "./pages/admin/AdminBlog";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminLeads from "./pages/admin/AdminLeads";
 import AdminProposals from "./pages/admin/AdminProposals";
+import AdminSubscriptions from "./pages/admin/AdminSubscriptions";
 
 // Public Pages
 import ProposalView from "./pages/ProposalView";
@@ -116,6 +118,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
           <Route path="/bn/dashboard/affiliate" element={<ProtectedRoute><AffiliateDashboard /></ProtectedRoute>} />
           <Route path="/bn/dashboard/milestones" element={<ProtectedRoute><ProjectMilestones /></ProtectedRoute>} />
+          <Route path="/bn/dashboard/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
           <Route path="/bn/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* Bangla - Protected Admin Routes */}
@@ -134,6 +137,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/bn/admin/leads" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminLeads /></ProtectedRoute>} />
           <Route path="/bn/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
+          <Route path="/bn/admin/subscriptions" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSubscriptions /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -175,6 +179,7 @@ const LanguageRoutes = () => {
           <Route path="/en/dashboard/payment/submit" element={<ProtectedRoute><PaymentSubmit /></ProtectedRoute>} />
           <Route path="/en/dashboard/affiliate" element={<ProtectedRoute><AffiliateDashboard /></ProtectedRoute>} />
           <Route path="/en/dashboard/milestones" element={<ProtectedRoute><ProjectMilestones /></ProtectedRoute>} />
+          <Route path="/en/dashboard/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
           <Route path="/en/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* English - Protected Admin Routes */}
@@ -193,6 +198,7 @@ const LanguageRoutes = () => {
           <Route path="/en/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/en/admin/leads" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminLeads /></ProtectedRoute>} />
           <Route path="/en/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
+          <Route path="/en/admin/subscriptions" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSubscriptions /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Dynamic Landing Pages - must be before catch-all */}
