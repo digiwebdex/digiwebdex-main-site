@@ -19,11 +19,11 @@ export function DomainSearchBox() {
   };
 
   const popularTlds = [
-    { tld: '.com', price: '৳999' },
-    { tld: '.net', price: '৳1,199' },
-    { tld: '.org', price: '৳1,099' },
-    { tld: '.com.bd', price: '৳1,500' },
-    { tld: '.xyz', price: '৳199' },
+    { tld: '.com', price: '৳1,265' },
+    { tld: '.net', price: '৳2,090' },
+    { tld: '.org', price: '৳1,964' },
+    { tld: '.com.bd', price: '৳2,625' },
+    { tld: '.xyz', price: '৳394' },
   ];
 
   return (
