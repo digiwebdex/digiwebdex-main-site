@@ -25,6 +25,7 @@ import {
   Home,
   UserPlus,
   FileCheck,
+  RefreshCcw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -64,6 +65,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         { label: language === 'bn' ? 'অর্ডারসমূহ' : 'Orders', icon: ShoppingCart, href: `${basePath}/admin/orders` },
         { label: language === 'bn' ? 'ইনভয়েস' : 'Invoices', icon: FileText, href: `${basePath}/admin/invoices` },
         { label: language === 'bn' ? 'পেমেন্ট' : 'Payments', icon: CreditCard, href: `${basePath}/admin/payments` },
+        { label: language === 'bn' ? 'সাবস্ক্রিপশন' : 'Subscriptions', icon: RefreshCcw, href: `${basePath}/admin/subscriptions` },
       ],
     },
     {

@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Users,
   ListChecks,
+  RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -72,6 +73,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       label: language === 'bn' ? 'মাইলস্টোন' : 'Milestones', 
       icon: ListChecks, 
       href: `${basePath}/dashboard/milestones` 
+    },
+    { 
+      label: language === 'bn' ? 'সাবস্ক্রিপশন' : 'Subscriptions', 
+      icon: RefreshCw, 
+      href: `${basePath}/dashboard/subscriptions` 
     },
     { 
       label: language === 'bn' ? 'প্রোফাইল' : 'Profile', 

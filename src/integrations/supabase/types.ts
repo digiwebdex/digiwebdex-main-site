@@ -2598,6 +2598,185 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_billing_history: {
+        Row: {
+          amount: number
+          billing_date: string
+          created_at: string
+          id: string
+          invoice_id: string | null
+          notes: string | null
+          payment_date: string | null
+          status: string
+          subscription_id: string
+        }
+        Insert: {
+          amount: number
+          billing_date: string
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_date?: string | null
+          status?: string
+          subscription_id: string
+        }
+        Update: {
+          amount?: number
+          billing_date?: string
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          payment_date?: string | null
+          status?: string
+          subscription_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_billing_history_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscription_billing_history_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          new_status: Database["public"]["Enums"]["subscription_status"] | null
+          old_status: Database["public"]["Enums"]["subscription_status"] | null
+          performed_by: string | null
+          subscription_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          new_status?: Database["public"]["Enums"]["subscription_status"] | null
+          old_status?: Database["public"]["Enums"]["subscription_status"] | null
+          performed_by?: string | null
+          subscription_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          new_status?: Database["public"]["Enums"]["subscription_status"] | null
+          old_status?: Database["public"]["Enums"]["subscription_status"] | null
+          performed_by?: string | null
+          subscription_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_logs_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          amount: number
+          auto_renew: boolean | null
+          billing_cycle: Database["public"]["Enums"]["billing_cycle"]
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          created_at: string
+          currency: string | null
+          domain_id: string | null
+          failed_billing_attempts: number | null
+          grace_period_days: number | null
+          hosting_account_id: string | null
+          id: string
+          last_billing_date: string | null
+          metadata: Json | null
+          next_billing_date: string
+          plan_name: string
+          service_type: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          suspended_at: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          auto_renew?: boolean | null
+          billing_cycle?: Database["public"]["Enums"]["billing_cycle"]
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string | null
+          domain_id?: string | null
+          failed_billing_attempts?: number | null
+          grace_period_days?: number | null
+          hosting_account_id?: string | null
+          id?: string
+          last_billing_date?: string | null
+          metadata?: Json | null
+          next_billing_date: string
+          plan_name: string
+          service_type: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          suspended_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          auto_renew?: boolean | null
+          billing_cycle?: Database["public"]["Enums"]["billing_cycle"]
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string | null
+          domain_id?: string | null
+          failed_billing_attempts?: number | null
+          grace_period_days?: number | null
+          hosting_account_id?: string | null
+          id?: string
+          last_billing_date?: string | null
+          metadata?: Json | null
+          next_billing_date?: string
+          plan_name?: string
+          service_type?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          suspended_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_domain_id_fkey"
+            columns: ["domain_id"]
+            isOneToOne: false
+            referencedRelation: "domains"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_hosting_account_id_fkey"
+            columns: ["hosting_account_id"]
+            isOneToOne: false
+            referencedRelation: "hosting_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -2644,6 +2823,7 @@ export type Database = {
     Enums: {
       affiliate_status: "pending" | "active" | "suspended" | "rejected"
       app_role: "admin" | "staff" | "client"
+      billing_cycle: "monthly" | "quarterly" | "yearly"
       billing_type: "one_time" | "recurring" | "milestone"
       commission_status: "pending" | "approved" | "paid" | "cancelled"
       domain_status:
@@ -2686,6 +2866,12 @@ export type Database = {
         | "software_development"
         | "digital_marketing"
         | "other"
+      subscription_status:
+        | "active"
+        | "suspended"
+        | "cancelled"
+        | "pending"
+        | "expired"
       withdrawal_status: "pending" | "processing" | "completed" | "rejected"
     }
     CompositeTypes: {
@@ -2816,6 +3002,7 @@ export const Constants = {
     Enums: {
       affiliate_status: ["pending", "active", "suspended", "rejected"],
       app_role: ["admin", "staff", "client"],
+      billing_cycle: ["monthly", "quarterly", "yearly"],
       billing_type: ["one_time", "recurring", "milestone"],
       commission_status: ["pending", "approved", "paid", "cancelled"],
       domain_status: [
@@ -2862,6 +3049,13 @@ export const Constants = {
         "software_development",
         "digital_marketing",
         "other",
+      ],
+      subscription_status: [
+        "active",
+        "suspended",
+        "cancelled",
+        "pending",
+        "expired",
       ],
       withdrawal_status: ["pending", "processing", "completed", "rejected"],
     },
