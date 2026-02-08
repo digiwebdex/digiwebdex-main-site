@@ -58,6 +58,10 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminProposals from "./pages/admin/AdminProposals";
+
+// Public Pages
+import ProposalView from "./pages/ProposalView";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +71,9 @@ const LanguageRoutes = () => {
     <LanguageProvider>
       <AuthProvider>
         <Routes>
+          {/* Public proposal view */}
+          <Route path="/proposal/:token" element={<ProposalView />} />
+          
           {/* Default redirect to Bangla */}
           <Route path="/" element={<Navigate to="/bn" replace />} />
           
@@ -124,6 +131,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/admin/blog" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBlog /></ProtectedRoute>} />
           <Route path="/bn/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/bn/admin/leads" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminLeads /></ProtectedRoute>} />
+          <Route path="/bn/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -181,6 +189,7 @@ const LanguageRoutes = () => {
           <Route path="/en/admin/blog" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBlog /></ProtectedRoute>} />
           <Route path="/en/admin/seo" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminSEO /></ProtectedRoute>} />
           <Route path="/en/admin/leads" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminLeads /></ProtectedRoute>} />
+          <Route path="/en/admin/proposals" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminProposals /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Dynamic Landing Pages - must be before catch-all */}
