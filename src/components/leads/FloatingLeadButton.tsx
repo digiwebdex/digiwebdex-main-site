@@ -100,7 +100,7 @@ export function FloatingLeadButton() {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md border-0 glass-premium">
+      <DialogContent className="sm:max-w-md border-0 bg-background shadow-xl z-[100]">
         <button
           onClick={handleClose}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
@@ -178,7 +178,11 @@ export function FloatingLeadButton() {
                   <SelectTrigger className={errors.service ? 'border-destructive' : ''}>
                     <SelectValue placeholder={language === 'bn' ? 'সার্ভিস বাছুন' : 'Choose service'} />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent 
+                    position="popper" 
+                    sideOffset={4}
+                    className="z-[200] bg-popover border border-border shadow-lg"
+                  >
                     {services.map((s) => (
                       <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                     ))}
