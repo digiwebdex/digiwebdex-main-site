@@ -19,6 +19,7 @@ import {
   ListChecks,
   RefreshCw,
   Headphones,
+  Building2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -94,6 +95,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       label: language === 'bn' ? 'অ্যাফিলিয়েট' : 'Affiliate', 
       icon: Users, 
       href: `${basePath}/dashboard/affiliate` 
+    },
+    { 
+      label: language === 'bn' ? 'রিসেলার' : 'Reseller', 
+      icon: Building2, 
+      href: `${basePath}/dashboard/reseller` 
     },
   ];
 

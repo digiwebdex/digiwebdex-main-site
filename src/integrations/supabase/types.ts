@@ -2225,6 +2225,261 @@ export type Database = {
           },
         ]
       }
+      reseller_clients: {
+        Row: {
+          client_user_id: string
+          created_at: string
+          id: string
+          reseller_id: string
+        }
+        Insert: {
+          client_user_id: string
+          created_at?: string
+          id?: string
+          reseller_id: string
+        }
+        Update: {
+          client_user_id?: string
+          created_at?: string
+          id?: string
+          reseller_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reseller_clients_reseller_id_fkey"
+            columns: ["reseller_id"]
+            isOneToOne: false
+            referencedRelation: "resellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reseller_earnings: {
+        Row: {
+          approved_at: string | null
+          client_user_id: string | null
+          commission_rate: number
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at: string
+          earning_amount: number
+          id: string
+          notes: string | null
+          order_amount: number
+          order_id: string
+          paid_at: string | null
+          reseller_id: string
+          status: Database["public"]["Enums"]["earning_status"]
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          client_user_id?: string | null
+          commission_rate: number
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          earning_amount: number
+          id?: string
+          notes?: string | null
+          order_amount: number
+          order_id: string
+          paid_at?: string | null
+          reseller_id: string
+          status?: Database["public"]["Enums"]["earning_status"]
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          client_user_id?: string | null
+          commission_rate?: number
+          commission_type?: Database["public"]["Enums"]["commission_type"]
+          created_at?: string
+          earning_amount?: number
+          id?: string
+          notes?: string | null
+          order_amount?: number
+          order_id?: string
+          paid_at?: string | null
+          reseller_id?: string
+          status?: Database["public"]["Enums"]["earning_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reseller_earnings_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reseller_earnings_reseller_id_fkey"
+            columns: ["reseller_id"]
+            isOneToOne: false
+            referencedRelation: "resellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reseller_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          performed_by: string | null
+          reseller_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          performed_by?: string | null
+          reseller_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          performed_by?: string | null
+          reseller_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reseller_logs_reseller_id_fkey"
+            columns: ["reseller_id"]
+            isOneToOne: false
+            referencedRelation: "resellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reseller_withdrawals: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          payment_details: Json | null
+          payment_method: string
+          processed_at: string | null
+          processed_by: string | null
+          rejection_reason: string | null
+          reseller_id: string
+          status: Database["public"]["Enums"]["withdrawal_status"]
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_details?: Json | null
+          payment_method: string
+          processed_at?: string | null
+          processed_by?: string | null
+          rejection_reason?: string | null
+          reseller_id: string
+          status?: Database["public"]["Enums"]["withdrawal_status"]
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_details?: Json | null
+          payment_method?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          rejection_reason?: string | null
+          reseller_id?: string
+          status?: Database["public"]["Enums"]["withdrawal_status"]
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reseller_withdrawals_reseller_id_fkey"
+            columns: ["reseller_id"]
+            isOneToOne: false
+            referencedRelation: "resellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resellers: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          balance: number
+          brand_color: string | null
+          commission_rate: number
+          commission_type: Database["public"]["Enums"]["commission_type"]
+          company_logo_url: string | null
+          company_name: string
+          created_at: string
+          id: string
+          min_withdrawal_amount: number
+          notes: string | null
+          payment_details: Json | null
+          payment_method: string | null
+          pending_earnings: number
+          status: Database["public"]["Enums"]["reseller_status"]
+          total_earnings: number
+          updated_at: string
+          user_id: string
+          withdrawn_earnings: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          balance?: number
+          brand_color?: string | null
+          commission_rate?: number
+          commission_type?: Database["public"]["Enums"]["commission_type"]
+          company_logo_url?: string | null
+          company_name: string
+          created_at?: string
+          id?: string
+          min_withdrawal_amount?: number
+          notes?: string | null
+          payment_details?: Json | null
+          payment_method?: string | null
+          pending_earnings?: number
+          status?: Database["public"]["Enums"]["reseller_status"]
+          total_earnings?: number
+          updated_at?: string
+          user_id: string
+          withdrawn_earnings?: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          balance?: number
+          brand_color?: string | null
+          commission_rate?: number
+          commission_type?: Database["public"]["Enums"]["commission_type"]
+          company_logo_url?: string | null
+          company_name?: string
+          created_at?: string
+          id?: string
+          min_withdrawal_amount?: number
+          notes?: string | null
+          payment_details?: Json | null
+          payment_method?: string | null
+          pending_earnings?: number
+          status?: Database["public"]["Enums"]["reseller_status"]
+          total_earnings?: number
+          updated_at?: string
+          user_id?: string
+          withdrawn_earnings?: number
+        }
+        Relationships: []
+      }
       revenue_summary: {
         Row: {
           active_domains_count: number
@@ -2986,16 +3241,18 @@ export type Database = {
     }
     Enums: {
       affiliate_status: "pending" | "active" | "suspended" | "rejected"
-      app_role: "admin" | "staff" | "client"
+      app_role: "admin" | "staff" | "client" | "reseller"
       billing_cycle: "monthly" | "quarterly" | "yearly"
       billing_type: "one_time" | "recurring" | "milestone"
       commission_status: "pending" | "approved" | "paid" | "cancelled"
+      commission_type: "fixed" | "percentage"
       domain_status:
         | "pending"
         | "registered"
         | "active"
         | "expired"
         | "transferred"
+      earning_status: "pending" | "approved" | "paid"
       hosting_status: "pending" | "active" | "suspended" | "terminated"
       invoice_status: "unpaid" | "paid" | "overdue" | "cancelled"
       lead_status: "new" | "contacted" | "converted" | "lost"
@@ -3023,6 +3280,7 @@ export type Database = {
         | "on_hold"
         | "cancelled"
       proposal_status: "draft" | "sent" | "accepted" | "rejected" | "expired"
+      reseller_status: "pending" | "active" | "suspended"
       service_type:
         | "domain"
         | "hosting"
@@ -3179,10 +3437,11 @@ export const Constants = {
   public: {
     Enums: {
       affiliate_status: ["pending", "active", "suspended", "rejected"],
-      app_role: ["admin", "staff", "client"],
+      app_role: ["admin", "staff", "client", "reseller"],
       billing_cycle: ["monthly", "quarterly", "yearly"],
       billing_type: ["one_time", "recurring", "milestone"],
       commission_status: ["pending", "approved", "paid", "cancelled"],
+      commission_type: ["fixed", "percentage"],
       domain_status: [
         "pending",
         "registered",
@@ -3190,6 +3449,7 @@ export const Constants = {
         "expired",
         "transferred",
       ],
+      earning_status: ["pending", "approved", "paid"],
       hosting_status: ["pending", "active", "suspended", "terminated"],
       invoice_status: ["unpaid", "paid", "overdue", "cancelled"],
       lead_status: ["new", "contacted", "converted", "lost"],
@@ -3220,6 +3480,7 @@ export const Constants = {
         "cancelled",
       ],
       proposal_status: ["draft", "sent", "accepted", "rejected", "expired"],
+      reseller_status: ["pending", "active", "suspended"],
       service_type: [
         "domain",
         "hosting",

@@ -27,6 +27,7 @@ import {
   FileCheck,
   RefreshCcw,
   Headphones,
+  Building2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -94,6 +95,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       title: language === 'bn' ? 'ব্যবস্থাপনা' : 'Management',
       items: [
         { label: language === 'bn' ? 'ব্যবহারকারী' : 'Users', icon: Users, href: `${basePath}/admin/users` },
+        { label: language === 'bn' ? 'রিসেলার' : 'Resellers', icon: Building2, href: `${basePath}/admin/resellers` },
         { label: language === 'bn' ? 'নোটিফিকেশন' : 'Notifications', icon: Bell, href: `${basePath}/admin/notifications` },
         { label: language === 'bn' ? 'সেটিংস' : 'Settings', icon: Settings, href: `${basePath}/admin/settings` },
       ],
