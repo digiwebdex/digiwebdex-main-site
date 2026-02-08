@@ -2029,6 +2029,164 @@ export type Database = {
           },
         ]
       }
+      proposal_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: string | null
+          performed_by: string | null
+          proposal_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          performed_by?: string | null
+          proposal_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          performed_by?: string | null
+          proposal_id?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_logs_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposals: {
+        Row: {
+          accepted_at: string | null
+          access_token: string
+          client_email: string | null
+          client_name: string
+          client_phone: string
+          converted_order_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deliverables: Json | null
+          description: string | null
+          discount_amount: number | null
+          discount_type: string | null
+          discount_value: number | null
+          expiry_date: string | null
+          id: string
+          lead_id: string | null
+          line_items: Json
+          package_name: string | null
+          payment_instructions: string | null
+          payment_link: string | null
+          proposal_number: string
+          rejected_at: string | null
+          rejection_reason: string | null
+          sent_at: string | null
+          service_type: string
+          status: Database["public"]["Enums"]["proposal_status"]
+          subtotal: number
+          timeline: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          access_token?: string
+          client_email?: string | null
+          client_name: string
+          client_phone: string
+          converted_order_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deliverables?: Json | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          lead_id?: string | null
+          line_items?: Json
+          package_name?: string | null
+          payment_instructions?: string | null
+          payment_link?: string | null
+          proposal_number: string
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          sent_at?: string | null
+          service_type: string
+          status?: Database["public"]["Enums"]["proposal_status"]
+          subtotal?: number
+          timeline?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          access_token?: string
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string
+          converted_order_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deliverables?: Json | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          lead_id?: string | null
+          line_items?: Json
+          package_name?: string | null
+          payment_instructions?: string | null
+          payment_link?: string | null
+          proposal_number?: string
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          sent_at?: string | null
+          service_type?: string
+          status?: Database["public"]["Enums"]["proposal_status"]
+          subtotal?: number
+          timeline?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_converted_order_id_fkey"
+            columns: ["converted_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       renewal_logs: {
         Row: {
           created_at: string
@@ -2468,6 +2626,7 @@ export type Database = {
     Functions: {
       generate_invoice_number: { Args: never; Returns: string }
       generate_order_number: { Args: never; Returns: string }
+      generate_proposal_number: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
@@ -2519,6 +2678,7 @@ export type Database = {
         | "completed"
         | "on_hold"
         | "cancelled"
+      proposal_status: "draft" | "sent" | "accepted" | "rejected" | "expired"
       service_type:
         | "domain"
         | "hosting"
@@ -2694,6 +2854,7 @@ export const Constants = {
         "on_hold",
         "cancelled",
       ],
+      proposal_status: ["draft", "sent", "accepted", "rejected", "expired"],
       service_type: [
         "domain",
         "hosting",
