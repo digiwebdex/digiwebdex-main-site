@@ -72,10 +72,49 @@ class SystemSettingsService {
   private settingsCache: Map<string, unknown> = new Map();
   private cacheExpiry: number = 0;
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  private preloadPromise: Promise<void> | null = null;
 
   // =========================================================
   // System Settings CRUD
   // =========================================================
+
+  /**
+   * Preload all settings into cache in a single query.
+   * Called once on first access; subsequent calls use cache.
+   */
+  private async preloadSettings(): Promise<void> {
+    if (Date.now() < this.cacheExpiry && this.settingsCache.size > 0) {
+      return;
+    }
+
+    // Deduplicate concurrent preload calls
+    if (this.preloadPromise) {
+      return this.preloadPromise;
+    }
+
+    this.preloadPromise = (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('system_settings')
+          .select('key, value');
+
+        if (error) {
+          console.error('Error preloading settings:', error);
+          return;
+        }
+
+        this.settingsCache.clear();
+        for (const row of data || []) {
+          this.settingsCache.set(row.key, row.value);
+        }
+        this.cacheExpiry = Date.now() + this.CACHE_DURATION;
+      } finally {
+        this.preloadPromise = null;
+      }
+    })();
+
+    return this.preloadPromise;
+  }
 
   async getAllSettings(): Promise<SystemSetting[]> {
     const { data, error } = await supabase
@@ -99,27 +138,14 @@ class SystemSettingsService {
   }
 
   async getSetting<T = unknown>(key: string): Promise<T | null> {
-    // Check cache first
-    if (this.settingsCache.has(key) && Date.now() < this.cacheExpiry) {
+    // Ensure all settings are preloaded
+    await this.preloadSettings();
+
+    if (this.settingsCache.has(key)) {
       return this.settingsCache.get(key) as T;
     }
 
-    const { data, error } = await supabase
-      .from('system_settings')
-      .select('value')
-      .eq('key', key)
-      .single();
-
-    if (error) {
-      console.error(`Error fetching setting ${key}:`, error);
-      return null;
-    }
-
-    const value = data?.value as T;
-    this.settingsCache.set(key, value);
-    this.cacheExpiry = Date.now() + this.CACHE_DURATION;
-    
-    return value;
+    return null;
   }
 
   async updateSetting(key: string, value: unknown): Promise<void> {
