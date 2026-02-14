@@ -109,22 +109,28 @@ class GoogleTrackingService {
     const trackingId = this.ga4MeasurementId || this.adsConversionId;
     if (!trackingId) return;
 
-    // Load gtag.js
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${trackingId}`;
-    document.head.appendChild(script);
-
-    // Initialize dataLayer and gtag
+    // Initialize dataLayer and gtag BEFORE script loads
     win.dataLayer = win.dataLayer || [];
     win.gtag = function (...args: unknown[]) {
       win.dataLayer.push(args);
     };
+
+    // Load gtag.js via our proxy to bypass ad blockers
+    const proxyBase = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ga4-proxy`;
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `${proxyBase}?action=gtag-script&id=${trackingId}`;
+    document.head.appendChild(script);
+
     win.gtag('js', new Date());
 
-    // Configure GA4
+    // Configure GA4 — route collection through our proxy too
     if (this.ga4MeasurementId) {
-      win.gtag('config', this.ga4MeasurementId, { send_page_view: false });
+      win.gtag('config', this.ga4MeasurementId, {
+        send_page_view: false,
+        transport_url: proxyBase,
+        first_party_collection: true,
+      });
     }
 
     // Configure Google Ads
@@ -180,7 +186,7 @@ class GoogleTrackingService {
     return eventId;
   }
 
-  // Send to server-side (GA4 Measurement Protocol + Google Ads Conversion API)
+  // Send to server-side via our proxy (bypasses ad blockers completely)
   private async sendToServerAsync(
     event: string,
     eventId: string,
@@ -188,14 +194,13 @@ class GoogleTrackingService {
     userData?: GoogleUserData
   ): Promise<void> {
     try {
-      const capiEnabled = await systemSettingsService.getSetting<boolean>('google_capi_enabled');
-      if (!capiEnabled) return;
-
-      // Get client_id from GA cookie
+      // Always send server-side — this is the ad-blocker-proof path
       const clientId = this.getGAClientId();
 
-      await supabase.functions.invoke('google-capi', {
+      // Use the unified ga4-proxy edge function
+      await supabase.functions.invoke('ga4-proxy', {
         body: {
+          action: 'event',
           event_name: event,
           event_id: eventId,
           client_id: clientId,
@@ -205,7 +210,7 @@ class GoogleTrackingService {
         },
       });
     } catch (error) {
-      console.error('Error sending to Google CAPI:', error);
+      console.error('Error sending to GA4 server-side:', error);
     }
   }
 
