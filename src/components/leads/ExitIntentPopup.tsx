@@ -61,7 +61,7 @@ export function ExitIntentPopup() {
         ]);
 
         setPopupSettings({
-          enabled: enabled !== false,
+          enabled: enabled === true,
           titleBn: titleBn || 'যাবেন না!',
           titleEn: titleEn || 'Wait!',
           subtitleBn: subtitleBn || 'ফ্রি কনসাল্টেশন নিন এবং ১০% ডিসকাউন্ট পান!',
