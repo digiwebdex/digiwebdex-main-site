@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Cookie, X, Check } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import { facebookPixelService } from '@/services/tracking';
+import { facebookPixelService, googleTrackingService } from '@/services/tracking';
 import { systemSettingsService } from '@/services/settings';
 import { cn } from '@/lib/utils';
 
@@ -57,11 +57,13 @@ export function CookieConsentBanner({ className }: CookieConsentBannerProps) {
 
   const handleAccept = () => {
     facebookPixelService.grantConsent();
+    googleTrackingService.grantConsent();
     setIsVisible(false);
   };
 
   const handleDecline = () => {
     facebookPixelService.denyConsent();
+    googleTrackingService.denyConsent();
     setIsVisible(false);
   };
 
