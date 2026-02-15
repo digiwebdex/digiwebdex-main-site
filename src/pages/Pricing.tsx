@@ -42,8 +42,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '/year', bn: '/বছর' },
     serviceType: 'hosting',
     features: {
-      en: ['1 GB SSD Storage', '10 GB Bandwidth', '1 Email Account', 'Free SSL Certificate', 'cPanel Access'],
-      bn: ['১ জিবি SSD স্টোরেজ', '১০ জিবি ব্যান্ডউইথ', '১টি ইমেইল অ্যাকাউন্ট', 'ফ্রি SSL সার্টিফিকেট', 'cPanel অ্যাক্সেস'],
+      en: ['5 GB SSD Storage', '50 GB Bandwidth', '5 Email Accounts', 'Free SSL Certificate', 'cPanel Access'],
+      bn: ['৫ জিবি SSD স্টোরেজ', '৫০ জিবি ব্যান্ডউইথ', '৫টি ইমেইল অ্যাকাউন্ট', 'ফ্রি SSL সার্টিফিকেট', 'cPanel অ্যাক্সেস'],
     },
   },
   {
@@ -67,8 +67,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '/year', bn: '/বছর' },
     serviceType: 'hosting',
     features: {
-      en: ['Unlimited SSD Storage', 'Unlimited Bandwidth', 'Unlimited Email', 'Free Domain', 'Dedicated IP', 'Premium Support', 'Malware Scan'],
-      bn: ['আনলিমিটেড SSD স্টোরেজ', 'আনলিমিটেড ব্যান্ডউইথ', 'আনলিমিটেড ইমেইল', 'ফ্রি ডোমেইন', 'ডেডিকেটেড IP', 'প্রিমিয়াম সাপোর্ট', 'ম্যালওয়্যার স্ক্যান'],
+      en: ['20 GB SSD Storage', 'Unlimited Bandwidth', 'Unlimited Email', 'Free Domain', 'Dedicated IP', 'Premium Support', 'Malware Scan'],
+      bn: ['২০ জিবি SSD স্টোরেজ', 'আনলিমিটেড ব্যান্ডউইথ', 'আনলিমিটেড ইমেইল', 'ফ্রি ডোমেইন', 'ডেডিকেটেড IP', 'প্রিমিয়াম সাপোর্ট', 'ম্যালওয়্যার স্ক্যান'],
     },
   },
   // Web Development Plans
