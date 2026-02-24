@@ -106,14 +106,19 @@ export function WhatsAppChatWidget() {
       <Button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'h-14 w-14 rounded-full shadow-xl transition-all',
+          'shadow-xl transition-all gap-2',
           isOpen
-            ? 'bg-muted text-muted-foreground hover:bg-muted/80'
-            : 'bg-emerald-500 hover:bg-emerald-600 text-white hover:shadow-2xl hover:shadow-emerald-500/30'
+            ? 'h-14 w-14 rounded-full bg-muted text-muted-foreground hover:bg-muted/80'
+            : 'h-12 px-5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white hover:shadow-2xl hover:shadow-emerald-500/30'
         )}
         aria-label="WhatsApp Chat"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        {isOpen ? <X className="w-6 h-6" /> : (
+          <>
+            <MessageCircle className="w-5 h-5" />
+            <span className="text-sm font-medium">{language === 'bn' ? 'সরাসরি হোয়াটসঅ্যাপ যোগাযোগ করুন' : 'Contact via WhatsApp'}</span>
+          </>
+        )}
       </Button>
     </div>
   );
