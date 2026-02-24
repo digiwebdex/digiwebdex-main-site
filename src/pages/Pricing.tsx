@@ -80,8 +80,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'web_development',
     features: {
-      en: ['5 Pages', 'Responsive Design', 'Contact Form', 'SEO Optimized', '1 Month Support'],
-      bn: ['৫টি পেজ', 'রেসপন্সিভ ডিজাইন', 'কন্টাক্ট ফর্ম', 'SEO অপ্টিমাইজড', '১ মাস সাপোর্ট'],
+      en: ['5 Pages', 'Responsive Design', 'Contact Form', 'SEO Optimized', '1 Year Support'],
+      bn: ['৫টি পেজ', 'রেসপন্সিভ ডিজাইন', 'কন্টাক্ট ফর্ম', 'SEO অপ্টিমাইজড', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -93,8 +93,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'web_development',
     isPopular: true,
     features: {
-      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'SEO Optimized', '3 Months Support'],
-      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'SEO অপ্টিমাইজড', '৩ মাস সাপোর্ট'],
+      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'SEO Optimized', '1 Year Support'],
+      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'SEO অপ্টিমাইজড', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -105,8 +105,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'web_development',
     features: {
-      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'Admin Dashboard', '6 Months Support'],
-      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'অ্যাডমিন ড্যাশবোর্ড', '৬ মাস সাপোর্ট'],
+      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'Admin Dashboard', '1 Year Support'],
+      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'অ্যাডমিন ড্যাশবোর্ড', '১ বছর সাপোর্ট'],
     },
   },
   // Software Development Plans
@@ -118,8 +118,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'software_development',
     features: {
-      en: ['Basic Features', 'Single User', 'Cloud Hosting', 'Mobile Responsive', '3 Months Support'],
-      bn: ['বেসিক ফিচার', 'সিঙ্গেল ইউজার', 'ক্লাউড হোস্টিং', 'মোবাইল রেসপন্সিভ', '৩ মাস সাপোর্ট'],
+      en: ['Basic Features', 'Single User', 'Cloud Hosting', 'Mobile Responsive', '1 Year Support'],
+      bn: ['বেসিক ফিচার', 'সিঙ্গেল ইউজার', 'ক্লাউড হোস্টিং', 'মোবাইল রেসপন্সিভ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -131,8 +131,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'software_development',
     isPopular: true,
     features: {
-      en: ['Advanced Features', 'Multi-User', 'Role Management', 'Reports & Analytics', 'API Integration', '6 Months Support'],
-      bn: ['অ্যাডভান্সড ফিচার', 'মাল্টি-ইউজার', 'রোল ম্যানেজমেন্ট', 'রিপোর্ট ও অ্যানালিটিক্স', 'API ইন্টিগ্রেশন', '৬ মাস সাপোর্ট'],
+      en: ['Advanced Features', 'Multi-User', 'Role Management', 'Reports & Analytics', 'API Integration', '1 Year Support'],
+      bn: ['অ্যাডভান্সড ফিচার', 'মাল্টি-ইউজার', 'রোল ম্যানেজমেন্ট', 'রিপোর্ট ও অ্যানালিটিক্স', 'API ইন্টিগ্রেশন', '১ বছর সাপোর্ট'],
     },
   },
   {
