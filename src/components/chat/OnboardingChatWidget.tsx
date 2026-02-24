@@ -155,20 +155,45 @@ export function OnboardingChatWidget() {
 
   return (
     <>
-      {/* Chat Toggle - positioned above WhatsApp on desktop */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        className={cn(
-          'fixed z-50 rounded-full shadow-xl transition-all duration-300',
-          'bg-primary text-primary-foreground hover:shadow-2xl hover:shadow-primary/30',
-          'md:bottom-[8.5rem] md:right-6 h-14 w-14',
-          'bottom-[4.5rem] left-4 md:left-auto',
-          open && 'rotate-90 scale-90'
-        )}
-        aria-label="AI Assistant"
-      >
-        {open ? <X className="h-6 w-6 mx-auto" /> : (isDashboard ? <CreditCard className="h-6 w-6 mx-auto" /> : <Bot className="h-6 w-6 mx-auto" />)}
-      </button>
+      {/* Floating Ask Bar - visible when chat is closed */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className={cn(
+            'fixed z-50 transition-all duration-300 group',
+            'md:bottom-[8.5rem] md:right-6',
+            'bottom-[4.5rem] left-4 md:left-auto',
+            'flex items-center gap-3 bg-primary text-primary-foreground',
+            'rounded-full shadow-xl hover:shadow-2xl hover:shadow-primary/30',
+            'pl-4 pr-5 py-3'
+          )}
+          aria-label="AI Assistant"
+        >
+          <div className="h-9 w-9 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
+            {isDashboard ? <CreditCard className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
+          </div>
+          <span className="text-sm font-medium whitespace-nowrap">
+            {language === 'bn' ? 'কি জানতে চাচ্ছেন? বলুন আমাকে' : 'Have a question? Ask me'}
+          </span>
+        </button>
+      )}
+
+      {/* Close button when chat is open */}
+      {open && (
+        <button
+          onClick={() => setOpen(false)}
+          className={cn(
+            'fixed z-50 rounded-full shadow-xl transition-all duration-300',
+            'bg-primary text-primary-foreground hover:shadow-2xl hover:shadow-primary/30',
+            'md:bottom-[8.5rem] md:right-6 h-14 w-14',
+            'bottom-[4.5rem] left-4 md:left-auto',
+            'rotate-90 scale-90'
+          )}
+          aria-label="Close AI Assistant"
+        >
+          <X className="h-6 w-6 mx-auto" />
+        </button>
+      )}
 
       {/* Chat Panel */}
       {open && (
