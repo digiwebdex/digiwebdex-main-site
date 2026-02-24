@@ -28,7 +28,7 @@ export function Layout({ children }: LayoutProps) {
       <FloatingLeadButton />
       <WhatsAppChatWidget />
       {/* Floating Consultation Button - Desktop */}
-      <div className="fixed bottom-6 left-6 z-50 hidden md:block" style={{ bottom: '6.5rem' }}>
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <ConsultationBookingModal
           trigger={
             <Button className="h-12 px-5 rounded-full shadow-xl gradient-button hover:shadow-2xl transition-all">
