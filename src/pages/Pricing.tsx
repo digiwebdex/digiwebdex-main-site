@@ -80,8 +80,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'web_development',
     features: {
-      en: ['5 Pages', 'Responsive Design', 'Contact Form', 'SEO Optimized', '1 Year Support'],
-      bn: ['৫টি পেজ', 'রেসপন্সিভ ডিজাইন', 'কন্টাক্ট ফর্ম', 'SEO অপ্টিমাইজড', '১ বছর সাপোর্ট'],
+      en: ['5 Pages', 'Responsive Design', 'Contact Form', 'SEO Optimized', 'AI Chatbot Setup', '1 Year Support'],
+      bn: ['৫টি পেজ', 'রেসপন্সিভ ডিজাইন', 'কন্টাক্ট ফর্ম', 'SEO অপ্টিমাইজড', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -93,8 +93,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'web_development',
     isPopular: true,
     features: {
-      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'SEO Optimized', '1 Year Support'],
-      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'SEO অপ্টিমাইজড', '১ বছর সাপোর্ট'],
+      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'SEO Optimized', 'AI Chatbot Setup', '1 Year Support'],
+      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'SEO অপ্টিমাইজড', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -105,8 +105,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'web_development',
     features: {
-      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'Admin Dashboard', '1 Year Support'],
-      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'অ্যাডমিন ড্যাশবোর্ড', '১ বছর সাপোর্ট'],
+      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'Admin Dashboard', 'AI Chatbot Setup', '1 Year Support'],
+      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'অ্যাডমিন ড্যাশবোর্ড', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   // Software Development Plans
@@ -118,8 +118,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'software_development',
     features: {
-      en: ['Basic Features', 'Single User', 'Cloud Hosting', 'Mobile Responsive', '1 Year Support'],
-      bn: ['বেসিক ফিচার', 'সিঙ্গেল ইউজার', 'ক্লাউড হোস্টিং', 'মোবাইল রেসপন্সিভ', '১ বছর সাপোর্ট'],
+      en: ['Basic Features', 'Single User', 'Cloud Hosting', 'Mobile Responsive', 'AI Chatbot Setup', '1 Year Support'],
+      bn: ['বেসিক ফিচার', 'সিঙ্গেল ইউজার', 'ক্লাউড হোস্টিং', 'মোবাইল রেসপন্সিভ', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -131,8 +131,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'software_development',
     isPopular: true,
     features: {
-      en: ['Advanced Features', 'Multi-User', 'Role Management', 'Reports & Analytics', 'API Integration', '1 Year Support'],
-      bn: ['অ্যাডভান্সড ফিচার', 'মাল্টি-ইউজার', 'রোল ম্যানেজমেন্ট', 'রিপোর্ট ও অ্যানালিটিক্স', 'API ইন্টিগ্রেশন', '১ বছর সাপোর্ট'],
+      en: ['Advanced Features', 'Multi-User', 'Role Management', 'Reports & Analytics', 'API Integration', 'AI Chatbot Setup', '1 Year Support'],
+      bn: ['অ্যাডভান্সড ফিচার', 'মাল্টি-ইউজার', 'রোল ম্যানেজমেন্ট', 'রিপোর্ট ও অ্যানালিটিক্স', 'API ইন্টিগ্রেশন', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -143,8 +143,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'software_development',
     features: {
-      en: ['Full ERP/POS', 'Unlimited Users', 'Multi-Branch', 'Mobile App', 'Custom Modules', 'Dedicated Support', '1 Year AMC'],
-      bn: ['সম্পূর্ণ ERP/POS', 'আনলিমিটেড ইউজার', 'মাল্টি-ব্র্যাঞ্চ', 'মোবাইল অ্যাপ', 'কাস্টম মডিউল', 'ডেডিকেটেড সাপোর্ট', '১ বছর AMC'],
+      en: ['Full ERP/POS', 'Unlimited Users', 'Multi-Branch', 'Mobile App', 'Custom Modules', 'AI Chatbot Setup', 'Dedicated Support', '1 Year AMC'],
+      bn: ['সম্পূর্ণ ERP/POS', 'আনলিমিটেড ইউজার', 'মাল্টি-ব্র্যাঞ্চ', 'মোবাইল অ্যাপ', 'কাস্টম মডিউল', 'AI চ্যাটবট সেটআপ', 'ডেডিকেটেড সাপোর্ট', '১ বছর AMC'],
     },
   },
   // Digital Marketing Plans
@@ -156,8 +156,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '/month', bn: '/মাস' },
     serviceType: 'digital_marketing',
     features: {
-      en: ['Social Media Management', '10 Posts/Month', 'Basic SEO', 'Monthly Report'],
-      bn: ['সোশ্যাল মিডিয়া ম্যানেজমেন্ট', '১০টি পোস্ট/মাস', 'বেসিক SEO', 'মাসিক রিপোর্ট'],
+      en: ['Social Media Management', '10 Posts/Month', 'Basic SEO', 'AI Chatbot Setup', 'Monthly Report'],
+      bn: ['সোশ্যাল মিডিয়া ম্যানেজমেন্ট', '১০টি পোস্ট/মাস', 'বেসিক SEO', 'AI চ্যাটবট সেটআপ', 'মাসিক রিপোর্ট'],
     },
   },
   {
@@ -169,8 +169,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'digital_marketing',
     isPopular: true,
     features: {
-      en: ['Social Media Management', '20 Posts/Month', 'Facebook & Google Ads', 'SEO Optimization', 'Content Creation', 'Weekly Report'],
-      bn: ['সোশ্যাল মিডিয়া ম্যানেজমেন্ট', '২০টি পোস্ট/মাস', 'ফেসবুক ও গুগল অ্যাডস', 'SEO অপ্টিমাইজেশন', 'কন্টেন্ট ক্রিয়েশন', 'সাপ্তাহিক রিপোর্ট'],
+      en: ['Social Media Management', '20 Posts/Month', 'Facebook & Google Ads', 'SEO Optimization', 'Content Creation', 'AI Chatbot Setup', 'Weekly Report'],
+      bn: ['সোশ্যাল মিডিয়া ম্যানেজমেন্ট', '২০টি পোস্ট/মাস', 'ফেসবুক ও গুগল অ্যাডস', 'SEO অপ্টিমাইজেশন', 'কন্টেন্ট ক্রিয়েশন', 'AI চ্যাটবট সেটআপ', 'সাপ্তাহিক রিপোর্ট'],
     },
   },
   {
@@ -181,8 +181,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '/month', bn: '/মাস' },
     serviceType: 'digital_marketing',
     features: {
-      en: ['Full Digital Strategy', 'Unlimited Posts', 'Paid Ads Management', 'Advanced SEO', 'Video Content', 'Influencer Marketing', 'Daily Report'],
-      bn: ['সম্পূর্ণ ডিজিটাল স্ট্র্যাটেজি', 'আনলিমিটেড পোস্ট', 'পেইড অ্যাডস ম্যানেজমেন্ট', 'অ্যাডভান্সড SEO', 'ভিডিও কন্টেন্ট', 'ইনফ্লুয়েন্সার মার্কেটিং', 'দৈনিক রিপোর্ট'],
+      en: ['Full Digital Strategy', 'Unlimited Posts', 'Paid Ads Management', 'Advanced SEO', 'Video Content', 'Influencer Marketing', 'AI Chatbot Setup', 'Daily Report'],
+      bn: ['সম্পূর্ণ ডিজিটাল স্ট্র্যাটেজি', 'আনলিমিটেড পোস্ট', 'পেইড অ্যাডস ম্যানেজমেন্ট', 'অ্যাডভান্সড SEO', 'ভিডিও কন্টেন্ট', 'ইনফ্লুয়েন্সার মার্কেটিং', 'AI চ্যাটবট সেটআপ', 'দৈনিক রিপোর্ট'],
     },
   },
 ];
