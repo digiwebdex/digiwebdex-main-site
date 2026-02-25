@@ -93,8 +93,8 @@ const pricingPlans: PricingPlan[] = [
     serviceType: 'web_development',
     isPopular: true,
     features: {
-      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'Business Software', 'SEO Optimized', 'AI Chatbot Setup', '1 Year Support'],
-      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'বিজনেস সফটওয়্যার সহ', 'SEO অপ্টিমাইজড', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
+      en: ['15 Pages', 'Custom Design', 'Blog Section', 'Admin Panel', 'Business Software', 'SEO Optimized', 'AI Chatbot Setup', 'Facebook Chatbot AI Setup', '1 Year Support'],
+      bn: ['১৫টি পেজ', 'কাস্টম ডিজাইন', 'ব্লগ সেকশন', 'অ্যাডমিন প্যানেল', 'বিজনেস সফটওয়্যার সহ', 'SEO অপ্টিমাইজড', 'AI চ্যাটবট সেটআপ', 'ফেসবুক চ্যাটবট AI সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   {
@@ -105,8 +105,8 @@ const pricingPlans: PricingPlan[] = [
     billingCycle: { en: '', bn: '' },
     serviceType: 'web_development',
     features: {
-      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'ERP Software', 'Admin Dashboard', 'AI Chatbot Setup', '1 Year Support'],
-      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'ERP সফটওয়্যার সহ', 'অ্যাডমিন ড্যাশবোর্ড', 'AI চ্যাটবট সেটআপ', '১ বছর সাপোর্ট'],
+      en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Inventory System', 'ERP Software', 'Admin Dashboard', 'AI Chatbot Setup', 'Facebook Chatbot AI Setup', '1 Year Support'],
+      bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ইনভেন্টরি সিস্টেম', 'ERP সফটওয়্যার সহ', 'অ্যাডমিন ড্যাশবোর্ড', 'AI চ্যাটবট সেটআপ', 'ফেসবুক চ্যাটবট AI সেটআপ', '১ বছর সাপোর্ট'],
     },
   },
   // Software Development Plans
