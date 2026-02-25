@@ -129,7 +129,7 @@ const bundlePackages: BundlePackage[] = [
     price: 30000,
     category: 'web_development',
     isPopular: true,
-    features: { en: ['15 Pages', 'Custom Design', 'Admin Panel', 'Contact Forms'], bn: ['১৫ পেজ', 'কাস্টম ডিজাইন', 'অ্যাডমিন প্যানেল', 'কন্টাক্ট ফর্ম'] },
+    features: { en: ['15 Pages', 'Custom Design', 'Admin Panel', 'Contact Forms', 'Facebook Chatbot AI Setup'], bn: ['১৫ পেজ', 'কাস্টম ডিজাইন', 'অ্যাডমিন প্যানেল', 'কন্টাক্ট ফর্ম', 'ফেসবুক চ্যাটবট AI সেটআপ'] },
   },
   {
     id: 'web-ecommerce',
@@ -137,7 +137,7 @@ const bundlePackages: BundlePackage[] = [
     description: { en: 'Full Online Store', bn: 'সম্পূর্ণ অনলাইন স্টোর' },
     price: 50000,
     category: 'web_development',
-    features: { en: ['Unlimited Products', 'Payment Gateway', 'Order Management'], bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট'] },
+    features: { en: ['Unlimited Products', 'Payment Gateway', 'Order Management', 'Facebook Chatbot AI Setup'], bn: ['আনলিমিটেড প্রোডাক্ট', 'পেমেন্ট গেটওয়ে', 'অর্ডার ম্যানেজমেন্ট', 'ফেসবুক চ্যাটবট AI সেটআপ'] },
   },
   // Software Packages
   {
