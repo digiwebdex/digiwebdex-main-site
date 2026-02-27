@@ -666,11 +666,13 @@ export default function AdminOrders() {
                     </div>
                     <div className="space-y-1">
                       <Label className="text-xs">{language === 'bn' ? 'মূল্য (৳)' : 'Price (৳)'}</Label>
-                      {item.package_id === 'custom' ? (
-                        <Input type="number" placeholder={language === 'bn' ? 'প্রাইস লিখুন' : 'Enter price'} value={item.subtotal || ''} onChange={(e) => updateServiceItem(index, 'subtotal', Number(e.target.value))} min={0} />
-                      ) : (
-                        <Input type="number" value={item.subtotal} readOnly className="bg-muted font-medium" />
-                      )}
+                      <Input
+                        type="number"
+                        placeholder={language === 'bn' ? 'প্রাইস লিখুন' : 'Enter price'}
+                        value={item.subtotal || ''}
+                        onChange={(e) => updateServiceItem(index, 'subtotal', Number(e.target.value))}
+                        min={0}
+                      />
                     </div>
                   </div>
                 </div>
