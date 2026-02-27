@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { Eye, Bell, Send, Trash2, Printer } from 'lucide-react';
+import { Eye, Bell, Send, Trash2, Printer, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { Database } from '@/integrations/supabase/types';
 import { logAudit } from '@/lib/auditLog';
@@ -48,7 +48,108 @@ export default function AdminOrders() {
   const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const [selectedRows, setSelectedRows] = useState<Order[]>([]);
 
-  useEffect(() => { fetchOrders(); }, []);
+  // Manual order creation state
+  const [createOpen, setCreateOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [customers, setCustomers] = useState<{ user_id: string; full_name: string | null; phone: string | null }[]>([]);
+  const [services, setServices] = useState<{ id: string; name_en: string; name_bn: string; service_type: string }[]>([]);
+  const [packages, setPackages] = useState<{ id: string; name_en: string; name_bn: string; price: number; service_id: string }[]>([]);
+  const [filteredPackages, setFilteredPackages] = useState<typeof packages>([]);
+  const [createForm, setCreateForm] = useState({
+    user_id: '',
+    service_id: '',
+    package_id: '',
+    service_type: '' as string,
+    billing_type: 'one_time' as string,
+    subtotal: 0,
+    discount: 0,
+    tax: 0,
+    total: 0,
+    advance_payment: 0,
+    notes: '',
+    admin_notes: '',
+  });
+
+  useEffect(() => { fetchOrders(); fetchCustomersAndServices(); }, []);
+
+  const fetchCustomersAndServices = async () => {
+    const [custRes, svcRes, pkgRes] = await Promise.all([
+      supabase.from('profiles').select('user_id, full_name, phone').order('full_name'),
+      supabase.from('services').select('id, name_en, name_bn, service_type').eq('is_active', true).order('sort_order'),
+      supabase.from('service_packages').select('id, name_en, name_bn, price, service_id').eq('is_active', true).order('sort_order'),
+    ]);
+    if (custRes.data) setCustomers(custRes.data);
+    if (svcRes.data) setServices(svcRes.data);
+    if (pkgRes.data) setPackages(pkgRes.data);
+  };
+
+  const handleServiceChange = (serviceId: string) => {
+    const svc = services.find(s => s.id === serviceId);
+    const filtered = packages.filter(p => p.service_id === serviceId);
+    setFilteredPackages(filtered);
+    setCreateForm(prev => ({
+      ...prev,
+      service_id: serviceId,
+      package_id: '',
+      service_type: svc?.service_type || '',
+      billing_type: svc?.service_type === 'hosting' || svc?.service_type === 'domain' ? 'recurring' : 'one_time',
+      subtotal: 0, total: 0,
+    }));
+  };
+
+  const handlePackageChange = (packageId: string) => {
+    const pkg = packages.find(p => p.id === packageId);
+    const price = pkg?.price || 0;
+    setCreateForm(prev => ({
+      ...prev,
+      package_id: packageId,
+      subtotal: price,
+      total: price - prev.discount + prev.tax,
+    }));
+  };
+
+  const handleCreateOrder = async () => {
+    if (!createForm.user_id || !createForm.service_id || !createForm.package_id) {
+      toast({ title: language === 'bn' ? 'সব তথ্য পূরণ করুন' : 'Fill all required fields', variant: 'destructive' });
+      return;
+    }
+    setCreating(true);
+    try {
+      // Generate order number
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const rand = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+      const orderNumber = `${yy}${mm}${rand}`;
+
+      const { error } = await supabase.from('orders').insert({
+        order_number: orderNumber,
+        user_id: createForm.user_id,
+        service_id: createForm.service_id,
+        package_id: createForm.package_id,
+        service_type: createForm.service_type as Database['public']['Enums']['service_type'],
+        billing_type: createForm.billing_type as Database['public']['Enums']['billing_type'],
+        subtotal: createForm.subtotal,
+        discount: createForm.discount,
+        tax: createForm.tax,
+        total: createForm.total,
+        advance_payment: createForm.advance_payment,
+        notes: createForm.notes || null,
+        admin_notes: createForm.admin_notes || null,
+        status: 'pending' as Database['public']['Enums']['order_status'],
+      });
+
+      if (error) throw error;
+      await logAudit('create', 'order', null as any, null, { order_number: orderNumber } as any);
+      toast({ title: language === 'bn' ? '✅ অর্ডার তৈরি হয়েছে' : '✅ Order Created' });
+      setCreateOpen(false);
+      setCreateForm({ user_id: '', service_id: '', package_id: '', service_type: '', billing_type: 'one_time', subtotal: 0, discount: 0, tax: 0, total: 0, advance_payment: 0, notes: '', admin_notes: '' });
+      fetchOrders();
+    } catch (err) {
+      toast({ title: 'Error', description: (err as Error).message, variant: 'destructive' });
+    }
+    setCreating(false);
+  };
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -240,9 +341,15 @@ export default function AdminOrders() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">{language === 'bn' ? 'অর্ডার ম্যানেজমেন্ট' : 'Orders Management'}</h1>
-          <p className="text-muted-foreground">{language === 'bn' ? 'সব অর্ডার দেখুন এবং পরিচালনা করুন' : 'View and manage all orders'}</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">{language === 'bn' ? 'অর্ডার ম্যানেজমেন্ট' : 'Orders Management'}</h1>
+            <p className="text-muted-foreground">{language === 'bn' ? 'সব অর্ডার দেখুন এবং পরিচালনা করুন' : 'View and manage all orders'}</p>
+          </div>
+          <Button onClick={() => setCreateOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            {language === 'bn' ? 'নতুন অর্ডার' : 'New Order'}
+          </Button>
         </div>
 
         <Card>
@@ -362,6 +469,133 @@ export default function AdminOrders() {
         title={language === 'bn' ? 'অর্ডার মুছে ফেলুন' : 'Delete Order'}
         description={language === 'bn' ? `আপনি কি নিশ্চিত যে আপনি অর্ডার ${orderToDelete?.order_number} মুছে ফেলতে চান?` : `Are you sure you want to delete order ${orderToDelete?.order_number}?`}
       />
+
+      {/* Create Order Modal */}
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{language === 'bn' ? 'নতুন অর্ডার তৈরি করুন' : 'Create New Order'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Customer */}
+            <div className="space-y-2">
+              <Label>{language === 'bn' ? 'কাস্টমার *' : 'Customer *'}</Label>
+              <Select value={createForm.user_id} onValueChange={(v) => setCreateForm(prev => ({ ...prev, user_id: v }))}>
+                <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'কাস্টমার নির্বাচন করুন' : 'Select customer'} /></SelectTrigger>
+                <SelectContent>
+                  {customers.map((c) => (
+                    <SelectItem key={c.user_id} value={c.user_id}>
+                      {c.full_name || 'N/A'} {c.phone ? `(${c.phone})` : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Service & Package */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'সার্ভিস *' : 'Service *'}</Label>
+                <Select value={createForm.service_id} onValueChange={handleServiceChange}>
+                  <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'সার্ভিস নির্বাচন করুন' : 'Select service'} /></SelectTrigger>
+                  <SelectContent>
+                    {services.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {language === 'bn' ? s.name_bn : s.name_en}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'প্যাকেজ *' : 'Package *'}</Label>
+                <Select value={createForm.package_id} onValueChange={handlePackageChange} disabled={!createForm.service_id}>
+                  <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
+                  <SelectContent>
+                    {filteredPackages.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {language === 'bn' ? p.name_bn : p.name_en} - ৳{p.price.toLocaleString()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Billing Type */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'বিলিং টাইপ' : 'Billing Type'}</Label>
+                <Select value={createForm.billing_type} onValueChange={(v) => setCreateForm(prev => ({ ...prev, billing_type: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="one_time">{language === 'bn' ? 'একবার' : 'One Time'}</SelectItem>
+                    <SelectItem value="recurring">{language === 'bn' ? 'পুনরাবৃত্তি' : 'Recurring'}</SelectItem>
+                    <SelectItem value="milestone">{language === 'bn' ? 'মাইলস্টোন' : 'Milestone'}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'সার্ভিস টাইপ' : 'Service Type'}</Label>
+                <Input value={createForm.service_type} readOnly className="bg-muted" />
+              </div>
+            </div>
+
+            {/* Pricing */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'মূল্য' : 'Subtotal'}</Label>
+                <Input type="number" value={createForm.subtotal} onChange={(e) => {
+                  const subtotal = Number(e.target.value);
+                  setCreateForm(prev => ({ ...prev, subtotal, total: subtotal - prev.discount + prev.tax }));
+                }} />
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'ডিসকাউন্ট' : 'Discount'}</Label>
+                <Input type="number" value={createForm.discount} onChange={(e) => {
+                  const discount = Number(e.target.value);
+                  setCreateForm(prev => ({ ...prev, discount, total: prev.subtotal - discount + prev.tax }));
+                }} />
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'ট্যাক্স' : 'Tax'}</Label>
+                <Input type="number" value={createForm.tax} onChange={(e) => {
+                  const tax = Number(e.target.value);
+                  setCreateForm(prev => ({ ...prev, tax, total: prev.subtotal - prev.discount + tax }));
+                }} />
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'মোট' : 'Total'}</Label>
+                <Input type="number" value={createForm.total} readOnly className="bg-muted font-bold" />
+              </div>
+            </div>
+
+            {/* Advance Payment */}
+            <div className="space-y-2">
+              <Label>{language === 'bn' ? 'অগ্রিম পেমেন্ট' : 'Advance Payment'}</Label>
+              <Input type="number" value={createForm.advance_payment} onChange={(e) => setCreateForm(prev => ({ ...prev, advance_payment: Number(e.target.value) }))} min={0} />
+            </div>
+
+            {/* Notes */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'কাস্টমার নোট' : 'Customer Notes'}</Label>
+                <Textarea value={createForm.notes} onChange={(e) => setCreateForm(prev => ({ ...prev, notes: e.target.value }))} rows={2} />
+              </div>
+              <div className="space-y-2">
+                <Label>{language === 'bn' ? 'অ্যাডমিন নোট' : 'Admin Notes'}</Label>
+                <Textarea value={createForm.admin_notes} onChange={(e) => setCreateForm(prev => ({ ...prev, admin_notes: e.target.value }))} rows={2} />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateOpen(false)}>{language === 'bn' ? 'বাতিল' : 'Cancel'}</Button>
+            <Button onClick={handleCreateOrder} disabled={creating}>
+              {creating ? (language === 'bn' ? 'তৈরি হচ্ছে...' : 'Creating...') : (language === 'bn' ? 'অর্ডার তৈরি করুন' : 'Create Order')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }
