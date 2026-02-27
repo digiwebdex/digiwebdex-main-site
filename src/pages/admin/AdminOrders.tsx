@@ -632,21 +632,31 @@ export default function AdminOrders() {
                     </div>
                   </div>
 
-                  {/* Domain, Dates, Billing */}
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="space-y-1">
-                      <Label className="text-xs">{language === 'bn' ? 'ডোমেইন নেইম' : 'Domain Name'}</Label>
-                      <Input placeholder="example.com" value={item.domain_name} onChange={(e) => updateServiceItem(index, 'domain_name', e.target.value)} />
+                  {/* Domain, Dates - Show only for hosting/domain services */}
+                  {(item.service_type === 'hosting' || item.service_type === 'domain') && (
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">{language === 'bn' ? 'ডোমেইন নেইম' : 'Domain Name'}</Label>
+                        <Input placeholder="example.com" value={item.domain_name} onChange={(e) => updateServiceItem(index, 'domain_name', e.target.value)} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">
+                          {item.service_type === 'hosting' 
+                            ? (language === 'bn' ? 'হোস্টিং রেজিস্ট্রেশন তারিখ' : 'Hosting Reg. Date')
+                            : (language === 'bn' ? 'রেজিস্ট্রেশন তারিখ' : 'Reg. Date')}
+                        </Label>
+                        <Input type="date" value={item.registration_date} onChange={(e) => updateServiceItem(index, 'registration_date', e.target.value)} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">
+                          {item.service_type === 'hosting'
+                            ? (language === 'bn' ? 'হোস্টিং রিনিউ তারিখ' : 'Hosting Renewal Date')
+                            : (language === 'bn' ? 'রিনিউ তারিখ' : 'Renewal Date')}
+                        </Label>
+                        <Input type="date" value={item.renewal_date} onChange={(e) => updateServiceItem(index, 'renewal_date', e.target.value)} />
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">{language === 'bn' ? 'রেজিস্ট্রেশন তারিখ' : 'Reg. Date'}</Label>
-                      <Input type="date" value={item.registration_date} onChange={(e) => updateServiceItem(index, 'registration_date', e.target.value)} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">{language === 'bn' ? 'রিনিউ তারিখ' : 'Renewal Date'}</Label>
-                      <Input type="date" value={item.renewal_date} onChange={(e) => updateServiceItem(index, 'renewal_date', e.target.value)} />
-                    </div>
-                  </div>
+                  )}
 
                   <div className="grid grid-cols-3 gap-3">
                     <div className="space-y-1">
