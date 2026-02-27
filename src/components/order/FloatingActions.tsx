@@ -85,15 +85,15 @@ export function FloatingActions() {
 
       {/* Mobile Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background/95 backdrop-blur-md border-t shadow-2xl safe-area-inset-bottom">
-        <div className="flex items-center gap-2 p-3">
+        <div className="flex items-center gap-2 p-3 flex-row">
           {/* WhatsApp Button - Left */}
           <Button
-            className="h-12 gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white flex-shrink-0 px-4"
+            className="flex-1 h-12 gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white px-4"
             onClick={openWhatsApp}
             aria-label="WhatsApp"
           >
             <MessageCircle className="h-5 w-5" />
-            <span className="text-xs font-medium">{language === 'bn' ? 'সরাসরি হোয়াটসঅ্যাপ যোগাযোগ করুন' : 'Contact via WhatsApp'}</span>
+            <span className="text-xs font-medium truncate">{language === 'bn' ? 'হোয়াটসঅ্যাপ' : 'WhatsApp'}</span>
           </Button>
 
           {/* Quick Order CTA */}
