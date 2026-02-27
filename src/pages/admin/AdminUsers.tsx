@@ -355,18 +355,12 @@ export default function AdminUsers() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>{language === 'bn' ? 'ডোমেইন প্যাকেজ' : 'Domain Package'}</Label>
-              <Select value={addForm.domain} onValueChange={(v) => setAddForm({ ...addForm, domain: v })}>
-                <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{language === 'bn' ? 'নেই' : 'None'}</SelectItem>
-                  {packages.domain.map((pkg) => (
-                    <SelectItem key={pkg.id} value={pkg.id}>
-                      {language === 'bn' ? pkg.name_bn : pkg.name_en} - ৳{pkg.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label>{language === 'bn' ? 'ডোমেইন নাম' : 'Domain Name'}</Label>
+              <Input
+                value={addForm.domain}
+                onChange={(e) => setAddForm({ ...addForm, domain: e.target.value })}
+                placeholder="example.com"
+              />
             </div>
             <div className="space-y-2">
               <Label>{language === 'bn' ? 'হোস্টিং প্যাকেজ' : 'Hosting Package'}</Label>
