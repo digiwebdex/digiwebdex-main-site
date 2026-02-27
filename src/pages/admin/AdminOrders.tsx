@@ -52,26 +52,35 @@ export default function AdminOrders() {
   const [createOpen, setCreateOpen] = useState(false);
   const [creating, setCreating] = useState(false);
   const [customers, setCustomers] = useState<{ user_id: string; full_name: string | null; phone: string | null }[]>([]);
-  const [services, setServices] = useState<{ id: string; name_en: string; name_bn: string; service_type: string }[]>([]);
+  const [servicesList, setServicesList] = useState<{ id: string; name_en: string; name_bn: string; service_type: string }[]>([]);
   const [packages, setPackages] = useState<{ id: string; name_en: string; name_bn: string; price: number; service_id: string }[]>([]);
-  const [filteredPackages, setFilteredPackages] = useState<typeof packages>([]);
-  const [createForm, setCreateForm] = useState({
-    user_id: '',
-    service_id: '',
-    package_id: '',
-    service_type: '' as string,
-    billing_type: 'one_time' as string,
-    subtotal: 0,
-    discount: 0,
-    tax: 0,
-    total: 0,
-    advance_payment: 0,
-    notes: '',
-    admin_notes: '',
-    domain_name: '',
-    registration_date: '',
-    renewal_date: '',
-  });
+
+  interface ServiceItem {
+    service_id: string;
+    package_id: string;
+    service_type: string;
+    billing_type: string;
+    domain_name: string;
+    registration_date: string;
+    renewal_date: string;
+    subtotal: number;
+  }
+
+  const emptyServiceItem: ServiceItem = {
+    service_id: '', package_id: '', service_type: '', billing_type: 'one_time',
+    domain_name: '', registration_date: '', renewal_date: '', subtotal: 0,
+  };
+
+  const [createCustomerId, setCreateCustomerId] = useState('');
+  const [serviceItems, setServiceItems] = useState<ServiceItem[]>([{ ...emptyServiceItem }]);
+  const [createDiscount, setCreateDiscount] = useState(0);
+  const [createTax, setCreateTax] = useState(0);
+  const [createAdvancePayment, setCreateAdvancePayment] = useState(0);
+  const [createNotes, setCreateNotes] = useState('');
+  const [createAdminNotes, setCreateAdminNotes] = useState('');
+
+  const createSubtotal = serviceItems.reduce((sum, s) => sum + s.subtotal, 0);
+  const createTotal = createSubtotal - createDiscount + createTax;
 
   useEffect(() => { fetchOrders(); fetchCustomersAndServices(); }, []);
 
@@ -82,98 +91,133 @@ export default function AdminOrders() {
       supabase.from('service_packages').select('id, name_en, name_bn, price, service_id').eq('is_active', true).order('sort_order'),
     ]);
     if (custRes.data) setCustomers(custRes.data);
-    if (svcRes.data) setServices(svcRes.data);
+    if (svcRes.data) setServicesList(svcRes.data);
     if (pkgRes.data) setPackages(pkgRes.data);
   };
 
-  const handleServiceChange = (serviceId: string) => {
-    const svc = services.find(s => s.id === serviceId);
-    const filtered = packages.filter(p => p.service_id === serviceId);
-    setFilteredPackages(filtered);
-    setCreateForm(prev => ({
-      ...prev,
-      service_id: serviceId,
-      package_id: '',
-      service_type: svc?.service_type || '',
-      billing_type: svc?.service_type === 'hosting' || svc?.service_type === 'domain' ? 'recurring' : 'one_time',
-      subtotal: 0, total: 0,
-    }));
+  const updateServiceItem = (index: number, field: keyof ServiceItem, value: string | number) => {
+    setServiceItems(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
   };
 
-  const handlePackageChange = (packageId: string) => {
-    if (packageId === 'custom') {
-      setCreateForm(prev => ({
-        ...prev,
-        package_id: 'custom',
+  const handleItemServiceChange = (index: number, serviceId: string) => {
+    const svc = servicesList.find(s => s.id === serviceId);
+    setServiceItems(prev => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        service_id: serviceId,
+        package_id: '',
+        service_type: svc?.service_type || '',
+        billing_type: svc?.service_type === 'hosting' || svc?.service_type === 'domain' ? 'recurring' : 'one_time',
         subtotal: 0,
-        total: 0 - prev.discount + prev.tax,
-      }));
+      };
+      return updated;
+    });
+  };
+
+  const handleItemPackageChange = (index: number, packageId: string) => {
+    if (packageId === 'custom') {
+      setServiceItems(prev => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], package_id: 'custom', subtotal: 0 };
+        return updated;
+      });
       return;
     }
     const pkg = packages.find(p => p.id === packageId);
-    const price = pkg?.price || 0;
-    setCreateForm(prev => ({
-      ...prev,
-      package_id: packageId,
-      subtotal: price,
-      total: price - prev.discount + prev.tax,
-    }));
+    setServiceItems(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], package_id: packageId, subtotal: pkg?.price || 0 };
+      return updated;
+    });
+  };
+
+  const addServiceItem = () => setServiceItems(prev => [...prev, { ...emptyServiceItem }]);
+  const removeServiceItem = (index: number) => {
+    if (serviceItems.length <= 1) return;
+    setServiceItems(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const resetCreateForm = () => {
+    setCreateCustomerId('');
+    setServiceItems([{ ...emptyServiceItem }]);
+    setCreateDiscount(0);
+    setCreateTax(0);
+    setCreateAdvancePayment(0);
+    setCreateNotes('');
+    setCreateAdminNotes('');
   };
 
   const handleCreateOrder = async () => {
-    if (!createForm.user_id || !createForm.service_id || !createForm.package_id) {
-      toast({ title: language === 'bn' ? 'সব তথ্য পূরণ করুন' : 'Fill all required fields', variant: 'destructive' });
+    if (!createCustomerId) {
+      toast({ title: language === 'bn' ? 'কাস্টমার নির্বাচন করুন' : 'Select a customer', variant: 'destructive' });
       return;
     }
-    if (createForm.package_id === 'custom' && createForm.subtotal <= 0) {
-      toast({ title: language === 'bn' ? 'কাস্টম প্রাইস দিন' : 'Enter custom price', variant: 'destructive' });
-      return;
+    for (const item of serviceItems) {
+      if (!item.service_id || !item.package_id) {
+        toast({ title: language === 'bn' ? 'প্রতিটি সার্ভিসের তথ্য পূরণ করুন' : 'Fill all service fields', variant: 'destructive' });
+        return;
+      }
+      if (item.package_id === 'custom' && item.subtotal <= 0) {
+        toast({ title: language === 'bn' ? 'কাস্টম প্রাইস দিন' : 'Enter custom price', variant: 'destructive' });
+        return;
+      }
     }
     setCreating(true);
     try {
-      // Generate order number
-      const now = new Date();
-      const yy = String(now.getFullYear()).slice(-2);
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const rand = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
-      const orderNumber = `${yy}${mm}${rand}`;
+      for (const item of serviceItems) {
+        const now = new Date();
+        const yy = String(now.getFullYear()).slice(-2);
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const rand = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+        const orderNumber = `${yy}${mm}${rand}`;
 
-      const { error } = await supabase.from('orders').insert({
-        order_number: orderNumber,
-        user_id: createForm.user_id,
-        service_id: createForm.service_id,
-        package_id: createForm.package_id === 'custom' ? null : createForm.package_id,
-        service_type: createForm.service_type as Database['public']['Enums']['service_type'],
-        billing_type: createForm.billing_type as Database['public']['Enums']['billing_type'],
-        subtotal: createForm.subtotal,
-        discount: createForm.discount,
-        tax: createForm.tax,
-        total: createForm.total,
-        advance_payment: createForm.advance_payment,
-        notes: createForm.notes || null,
-        admin_notes: createForm.admin_notes || null,
-        status: 'pending' as Database['public']['Enums']['order_status'],
-      });
+        const isMulti = serviceItems.length > 1;
+        const proportion = createSubtotal > 0 ? item.subtotal / createSubtotal : 1;
+        const itemDiscount = isMulti ? Math.round(proportion * createDiscount) : createDiscount;
+        const itemTax = isMulti ? Math.round(proportion * createTax) : createTax;
+        const itemTotal = item.subtotal - itemDiscount + itemTax;
+        const itemAdvance = isMulti ? Math.round(proportion * createAdvancePayment) : createAdvancePayment;
 
-      if (error) throw error;
+        const { error } = await supabase.from('orders').insert({
+          order_number: orderNumber,
+          user_id: createCustomerId,
+          service_id: item.service_id,
+          package_id: item.package_id === 'custom' ? null : item.package_id,
+          service_type: item.service_type as Database['public']['Enums']['service_type'],
+          billing_type: item.billing_type as Database['public']['Enums']['billing_type'],
+          subtotal: item.subtotal,
+          discount: itemDiscount,
+          tax: itemTax,
+          total: itemTotal,
+          advance_payment: itemAdvance,
+          notes: createNotes || null,
+          admin_notes: createAdminNotes || null,
+          status: 'pending' as Database['public']['Enums']['order_status'],
+        });
+        if (error) throw error;
 
-      // Save order meta (domain_name, registration_date, renewal_date)
-      const insertedOrder = await supabase.from('orders').select('id').eq('order_number', orderNumber).single();
-      if (insertedOrder.data) {
-        const metaEntries = [
-          { order_id: insertedOrder.data.id, meta_key: 'domain_name', meta_value: createForm.domain_name as any },
-          { order_id: insertedOrder.data.id, meta_key: 'registration_date', meta_value: createForm.registration_date as any },
-          { order_id: insertedOrder.data.id, meta_key: 'renewal_date', meta_value: createForm.renewal_date as any },
-        ].filter(m => m.meta_value);
-        if (metaEntries.length > 0) {
-          await supabase.from('order_meta').insert(metaEntries);
+        const insertedOrder = await supabase.from('orders').select('id').eq('order_number', orderNumber).single();
+        if (insertedOrder.data) {
+          const metaEntries = [
+            { order_id: insertedOrder.data.id, meta_key: 'domain_name', meta_value: item.domain_name as any },
+            { order_id: insertedOrder.data.id, meta_key: 'registration_date', meta_value: item.registration_date as any },
+            { order_id: insertedOrder.data.id, meta_key: 'renewal_date', meta_value: item.renewal_date as any },
+          ].filter(m => m.meta_value);
+          if (metaEntries.length > 0) {
+            await supabase.from('order_meta').insert(metaEntries);
+          }
         }
+        await logAudit('create', 'order', null as any, null, { order_number: orderNumber } as any);
       }
 
-      await logAudit('create', 'order', null as any, null, { order_number: orderNumber } as any);
-      toast({ title: language === 'bn' ? '✅ অর্ডার তৈরি হয়েছে' : '✅ Order Created' });
+      toast({ title: language === 'bn' ? `✅ ${serviceItems.length}টি অর্ডার তৈরি হয়েছে` : `✅ ${serviceItems.length} Order(s) Created` });
       setCreateOpen(false);
-      setCreateForm({ user_id: '', service_id: '', package_id: '', service_type: '', billing_type: 'one_time', subtotal: 0, discount: 0, tax: 0, total: 0, advance_payment: 0, notes: '', admin_notes: '', domain_name: '', registration_date: '', renewal_date: '' });
+      resetCreateForm();
       fetchOrders();
     } catch (err) {
       toast({ title: 'Error', description: (err as Error).message, variant: 'destructive' });
@@ -502,7 +546,7 @@ export default function AdminOrders() {
 
       {/* Create Order Modal */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{language === 'bn' ? 'নতুন অর্ডার তৈরি করুন' : 'Create New Order'}</DialogTitle>
           </DialogHeader>
@@ -510,7 +554,7 @@ export default function AdminOrders() {
             {/* Customer */}
             <div className="space-y-2">
               <Label>{language === 'bn' ? 'কাস্টমার *' : 'Customer *'}</Label>
-              <Select value={createForm.user_id} onValueChange={(v) => setCreateForm(prev => ({ ...prev, user_id: v }))}>
+              <Select value={createCustomerId} onValueChange={setCreateCustomerId}>
                 <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'কাস্টমার নির্বাচন করুন' : 'Select customer'} /></SelectTrigger>
                 <SelectContent>
                   {customers.map((c) => (
@@ -522,147 +566,140 @@ export default function AdminOrders() {
               </Select>
             </div>
 
-            {/* Service & Package */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'সার্ভিস *' : 'Service *'}</Label>
-                <Select value={createForm.service_id} onValueChange={handleServiceChange}>
-                  <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'সার্ভিস নির্বাচন করুন' : 'Select service'} /></SelectTrigger>
-                  <SelectContent>
-                    {services.map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {language === 'bn' ? s.name_bn : s.name_en}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'প্যাকেজ *' : 'Package *'}</Label>
-                <Select value={createForm.package_id} onValueChange={handlePackageChange} disabled={!createForm.service_id}>
-                  <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
-                  <SelectContent>
-                    {filteredPackages.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {language === 'bn' ? p.name_bn : p.name_en} - ৳{p.price.toLocaleString()}
-                      </SelectItem>
-                    ))}
-                    <SelectItem value="custom" className="font-semibold border-t">
-                      ✏️ {language === 'bn' ? 'কাস্টম (ম্যানুয়াল প্রাইস)' : 'Custom (Manual Price)'}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            {/* Service Items */}
+            {serviceItems.map((item, index) => {
+              const filteredPkgs = packages.filter(p => p.service_id === item.service_id);
+              return (
+                <div key={index} className="border rounded-lg p-4 space-y-3 relative">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-semibold text-sm">
+                      {language === 'bn' ? `সার্ভিস #${index + 1}` : `Service #${index + 1}`}
+                    </h4>
+                    {serviceItems.length > 1 && (
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeServiceItem(index)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
 
-            {/* Custom Price Input */}
-            {createForm.package_id === 'custom' && (
-              <div className="space-y-2 p-3 border border-dashed rounded-md bg-muted/50">
-                <Label>{language === 'bn' ? 'কাস্টম প্রাইস (৳) *' : 'Custom Price (৳) *'}</Label>
-                <Input
-                  type="number"
-                  placeholder={language === 'bn' ? 'ম্যানুয়ালি প্রাইস লিখুন' : 'Enter price manually'}
-                  value={createForm.subtotal || ''}
-                  onChange={(e) => {
-                    const subtotal = Number(e.target.value);
-                    setCreateForm(prev => ({ ...prev, subtotal, total: subtotal - prev.discount + prev.tax }));
-                  }}
-                  min={0}
-                />
-              </div>
-            )}
+                  {/* Service & Package */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'সার্ভিস *' : 'Service *'}</Label>
+                      <Select value={item.service_id} onValueChange={(v) => handleItemServiceChange(index, v)}>
+                        <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'সার্ভিস নির্বাচন করুন' : 'Select service'} /></SelectTrigger>
+                        <SelectContent>
+                          {servicesList.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {language === 'bn' ? s.name_bn : s.name_en}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'প্যাকেজ *' : 'Package *'}</Label>
+                      <Select value={item.package_id} onValueChange={(v) => handleItemPackageChange(index, v)} disabled={!item.service_id}>
+                        <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
+                        <SelectContent>
+                          {filteredPkgs.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {language === 'bn' ? p.name_bn : p.name_en} - ৳{p.price.toLocaleString()}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="custom" className="font-semibold border-t">
+                            ✏️ {language === 'bn' ? 'কাস্টম (ম্যানুয়াল প্রাইস)' : 'Custom (Manual Price)'}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
 
-            {/* Domain & Date Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'ডোমেইন নেইম' : 'Domain Name'}</Label>
-                <Input
-                  placeholder="example.com"
-                  value={createForm.domain_name}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, domain_name: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'রেজিস্ট্রেশন তারিখ' : 'Registration Date'}</Label>
-                <Input
-                  type="date"
-                  value={createForm.registration_date}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, registration_date: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'রিনিউ তারিখ' : 'Renewal Date'}</Label>
-                <Input
-                  type="date"
-                  value={createForm.renewal_date}
-                  onChange={(e) => setCreateForm(prev => ({ ...prev, renewal_date: e.target.value }))}
-                />
-              </div>
-            </div>
+                  {/* Domain, Dates, Billing */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'ডোমেইন নেইম' : 'Domain Name'}</Label>
+                      <Input placeholder="example.com" value={item.domain_name} onChange={(e) => updateServiceItem(index, 'domain_name', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'রেজিস্ট্রেশন তারিখ' : 'Reg. Date'}</Label>
+                      <Input type="date" value={item.registration_date} onChange={(e) => updateServiceItem(index, 'registration_date', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'রিনিউ তারিখ' : 'Renewal Date'}</Label>
+                      <Input type="date" value={item.renewal_date} onChange={(e) => updateServiceItem(index, 'renewal_date', e.target.value)} />
+                    </div>
+                  </div>
 
-            {/* Billing Type */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'বিলিং টাইপ' : 'Billing Type'}</Label>
-                <Select value={createForm.billing_type} onValueChange={(v) => setCreateForm(prev => ({ ...prev, billing_type: v }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="one_time">{language === 'bn' ? 'একবার' : 'One Time'}</SelectItem>
-                    <SelectItem value="recurring">{language === 'bn' ? 'পুনরাবৃত্তি' : 'Recurring'}</SelectItem>
-                    <SelectItem value="milestone">{language === 'bn' ? 'মাইলস্টোন' : 'Milestone'}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'সার্ভিস টাইপ' : 'Service Type'}</Label>
-                <Input value={createForm.service_type} readOnly className="bg-muted" />
-              </div>
-            </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'বিলিং টাইপ' : 'Billing Type'}</Label>
+                      <Select value={item.billing_type} onValueChange={(v) => updateServiceItem(index, 'billing_type', v)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="one_time">{language === 'bn' ? 'একবার' : 'One Time'}</SelectItem>
+                          <SelectItem value="recurring">{language === 'bn' ? 'পুনরাবৃত্তি' : 'Recurring'}</SelectItem>
+                          <SelectItem value="milestone">{language === 'bn' ? 'মাইলস্টোন' : 'Milestone'}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'সার্ভিস টাইপ' : 'Service Type'}</Label>
+                      <Input value={item.service_type} readOnly className="bg-muted" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">{language === 'bn' ? 'মূল্য (৳)' : 'Price (৳)'}</Label>
+                      {item.package_id === 'custom' ? (
+                        <Input type="number" placeholder={language === 'bn' ? 'প্রাইস লিখুন' : 'Enter price'} value={item.subtotal || ''} onChange={(e) => updateServiceItem(index, 'subtotal', Number(e.target.value))} min={0} />
+                      ) : (
+                        <Input type="number" value={item.subtotal} readOnly className="bg-muted font-medium" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
 
-            {/* Pricing */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'মূল্য' : 'Subtotal'}</Label>
-                <Input type="number" value={createForm.subtotal} onChange={(e) => {
-                  const subtotal = Number(e.target.value);
-                  setCreateForm(prev => ({ ...prev, subtotal, total: subtotal - prev.discount + prev.tax }));
-                }} />
+            <Button variant="outline" onClick={addServiceItem} className="w-full border-dashed">
+              <Plus className="h-4 w-4 mr-2" />
+              {language === 'bn' ? '+ আরেকটি সার্ভিস যোগ করুন' : '+ Add Another Service'}
+            </Button>
+
+            {/* Summary */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-3 bg-muted/50 rounded-lg">
+              <div className="space-y-1">
+                <Label className="text-xs">{language === 'bn' ? 'সাবটোটাল' : 'Subtotal'}</Label>
+                <Input type="number" value={createSubtotal} readOnly className="bg-muted font-medium" />
               </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'ডিসকাউন্ট' : 'Discount'}</Label>
-                <Input type="number" value={createForm.discount} onChange={(e) => {
-                  const discount = Number(e.target.value);
-                  setCreateForm(prev => ({ ...prev, discount, total: prev.subtotal - discount + prev.tax }));
-                }} />
+              <div className="space-y-1">
+                <Label className="text-xs">{language === 'bn' ? 'ডিসকাউন্ট' : 'Discount'}</Label>
+                <Input type="number" value={createDiscount} onChange={(e) => setCreateDiscount(Number(e.target.value))} />
               </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'ট্যাক্স' : 'Tax'}</Label>
-                <Input type="number" value={createForm.tax} onChange={(e) => {
-                  const tax = Number(e.target.value);
-                  setCreateForm(prev => ({ ...prev, tax, total: prev.subtotal - prev.discount + tax }));
-                }} />
+              <div className="space-y-1">
+                <Label className="text-xs">{language === 'bn' ? 'ট্যাক্স' : 'Tax'}</Label>
+                <Input type="number" value={createTax} onChange={(e) => setCreateTax(Number(e.target.value))} />
               </div>
-              <div className="space-y-2">
-                <Label>{language === 'bn' ? 'মোট' : 'Total'}</Label>
-                <Input type="number" value={createForm.total} readOnly className="bg-muted font-bold" />
+              <div className="space-y-1">
+                <Label className="text-xs font-bold">{language === 'bn' ? 'মোট' : 'Total'}</Label>
+                <Input type="number" value={createTotal} readOnly className="bg-muted font-bold" />
               </div>
             </div>
 
             {/* Advance Payment */}
             <div className="space-y-2">
               <Label>{language === 'bn' ? 'অগ্রিম পেমেন্ট' : 'Advance Payment'}</Label>
-              <Input type="number" value={createForm.advance_payment} onChange={(e) => setCreateForm(prev => ({ ...prev, advance_payment: Number(e.target.value) }))} min={0} />
+              <Input type="number" value={createAdvancePayment} onChange={(e) => setCreateAdvancePayment(Number(e.target.value))} min={0} />
             </div>
 
             {/* Notes */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>{language === 'bn' ? 'কাস্টমার নোট' : 'Customer Notes'}</Label>
-                <Textarea value={createForm.notes} onChange={(e) => setCreateForm(prev => ({ ...prev, notes: e.target.value }))} rows={2} />
+                <Textarea value={createNotes} onChange={(e) => setCreateNotes(e.target.value)} rows={2} />
               </div>
               <div className="space-y-2">
                 <Label>{language === 'bn' ? 'অ্যাডমিন নোট' : 'Admin Notes'}</Label>
-                <Textarea value={createForm.admin_notes} onChange={(e) => setCreateForm(prev => ({ ...prev, admin_notes: e.target.value }))} rows={2} />
+                <Textarea value={createAdminNotes} onChange={(e) => setCreateAdminNotes(e.target.value)} rows={2} />
               </div>
             </div>
           </div>
