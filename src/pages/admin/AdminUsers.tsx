@@ -14,13 +14,6 @@ import { Pencil, Shield, ShieldCheck, ShieldAlert, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { Database } from '@/integrations/supabase/types';
 
-type ServicePackage = {
-  id: string;
-  name_en: string;
-  name_bn: string;
-  service_id: string;
-  price: number;
-};
 
 type Profile = Database['public']['Tables']['profiles']['Row'] & {
   email?: string;
@@ -42,37 +35,18 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [newRole, setNewRole] = useState('client');
   const [saving, setSaving] = useState(false);
-  const [packages, setPackages] = useState<{ hosting: ServicePackage[]; domain: ServicePackage[]; website: ServicePackage[]; software: ServicePackage[]; }>({ hosting: [], domain: [], website: [], software: [] });
+  
 
   // Add user form state
   const [addForm, setAddForm] = useState({
     email: '', password: '', full_name: '', phone: '', company_name: '', role: 'client',
-    city: '', address: '', domain: '', hosting: '', website: '', software: '',
+    city: '', address: '',
   });
 
   useEffect(() => {
     fetchUsers();
-    fetchPackages();
   }, []);
 
-  const fetchPackages = async () => {
-    const { data } = await supabase.from('service_packages').select('id, name_en, name_bn, service_id, price').eq('is_active', true).order('sort_order');
-    if (data) {
-      const serviceMap: Record<string, string> = {};
-      const { data: services } = await supabase.from('services').select('id, service_type').eq('is_active', true);
-      services?.forEach(s => { serviceMap[s.id] = s.service_type; });
-      
-      const grouped = { hosting: [] as ServicePackage[], domain: [] as ServicePackage[], website: [] as ServicePackage[], software: [] as ServicePackage[] };
-      data.forEach((pkg: any) => {
-        const type = serviceMap[pkg.service_id];
-        if (type === 'hosting') grouped.hosting.push(pkg);
-        else if (type === 'domain') grouped.domain.push(pkg);
-        else if (type === 'web_development') grouped.website.push(pkg);
-        else if (type === 'software_development') grouped.software.push(pkg);
-      });
-      setPackages(grouped);
-    }
-  };
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -144,7 +118,7 @@ export default function AdminUsers() {
     } else {
       toast({ title: language === 'bn' ? 'সফল' : 'Success', description: language === 'bn' ? 'নতুন কাস্টমার যোগ হয়েছে' : 'New customer added' });
       setAddModalOpen(false);
-      setAddForm({ email: '', password: '', full_name: '', phone: '', company_name: '', role: 'client', city: '', address: '', domain: '', hosting: '', website: '', software: '' });
+      setAddForm({ email: '', password: '', full_name: '', phone: '', company_name: '', role: 'client', city: '', address: '' });
       fetchUsers();
     }
     setSaving(false);
@@ -353,70 +327,18 @@ export default function AdminUsers() {
               placeholder={language === 'bn' ? 'ঠিকানা লিখুন' : 'Enter address'}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>{language === 'bn' ? 'ডোমেইন নাম' : 'Domain Name'}</Label>
-              <Input
-                value={addForm.domain}
-                onChange={(e) => setAddForm({ ...addForm, domain: e.target.value })}
-                placeholder="example.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{language === 'bn' ? 'হোস্টিং প্যাকেজ' : 'Hosting Package'}</Label>
-              <Select value={addForm.hosting} onValueChange={(v) => setAddForm({ ...addForm, hosting: v })}>
-                <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{language === 'bn' ? 'নেই' : 'None'}</SelectItem>
-                  {packages.hosting.map((pkg) => (
-                    <SelectItem key={pkg.id} value={pkg.id}>
-                      {language === 'bn' ? pkg.name_bn : pkg.name_en} - ৳{pkg.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>{language === 'bn' ? 'ওয়েবসাইট প্যাকেজ' : 'Website Package'}</Label>
-              <Select value={addForm.website} onValueChange={(v) => setAddForm({ ...addForm, website: v })}>
-                <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{language === 'bn' ? 'নেই' : 'None'}</SelectItem>
-                  {packages.website.map((pkg) => (
-                    <SelectItem key={pkg.id} value={pkg.id}>
-                      {language === 'bn' ? pkg.name_bn : pkg.name_en} - ৳{pkg.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>{language === 'bn' ? 'সফটওয়্যার প্যাকেজ' : 'Software Package'}</Label>
-              <Select value={addForm.software} onValueChange={(v) => setAddForm({ ...addForm, software: v })}>
-                <SelectTrigger><SelectValue placeholder={language === 'bn' ? 'প্যাকেজ নির্বাচন করুন' : 'Select package'} /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{language === 'bn' ? 'নেই' : 'None'}</SelectItem>
-                  {packages.software.map((pkg) => (
-                    <SelectItem key={pkg.id} value={pkg.id}>
-                      {language === 'bn' ? pkg.name_bn : pkg.name_en} - ৳{pkg.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>{language === 'bn' ? 'রোল' : 'Role'}</Label>
-              <Select value={addForm.role} onValueChange={(v) => setAddForm({ ...addForm, role: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {ROLES.map((r) => (
-                    <SelectItem key={r.value} value={r.value}>
-                      {language === 'bn' ? r.label_bn : r.label_en}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label>{language === 'bn' ? 'রোল' : 'Role'}</Label>
+            <Select value={addForm.role} onValueChange={(v) => setAddForm({ ...addForm, role: v })}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {ROLES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {language === 'bn' ? r.label_bn : r.label_en}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </FormModal>
