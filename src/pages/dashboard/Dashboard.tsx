@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
-import { ShoppingCart, FileText, Globe, Server, FolderKanban, CreditCard, Rocket } from 'lucide-react';
+import { ShoppingCart, FileText, Globe, Server, FolderKanban, CreditCard, Rocket, Wallet, CalendarClock } from 'lucide-react';
 
 interface DashboardStats {
   totalOrders: number;
@@ -14,6 +14,8 @@ interface DashboardStats {
   activeDomains: number;
   activeHosting: number;
   activeProjects: number;
+  dueAmount: number;
+  nextRenewal: string | null;
 }
 
 export default function Dashboard() {
@@ -26,6 +28,8 @@ export default function Dashboard() {
     activeDomains: 0,
     activeHosting: 0,
     activeProjects: 0,
+    dueAmount: 0,
+    nextRenewal: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -39,13 +43,26 @@ export default function Dashboard() {
     if (!user) return;
 
     try {
-      const [orders, invoices, domains, hosting, projects] = await Promise.all([
+      const [orders, invoices, domains, hosting, projects, subs] = await Promise.all([
         supabase.from('orders').select('id, status').eq('user_id', user.id),
-        supabase.from('invoices').select('id, status').eq('user_id', user.id),
-        supabase.from('domains').select('id, status').eq('user_id', user.id),
-        supabase.from('hosting_accounts').select('id, status').eq('user_id', user.id),
+        supabase.from('invoices').select('id, status, due_amount').eq('user_id', user.id),
+        supabase.from('domains').select('id, status, expiry_date').eq('user_id', user.id),
+        supabase.from('hosting_accounts').select('id, status, expiry_date').eq('user_id', user.id),
         supabase.from('projects').select('id, status').eq('user_id', user.id),
+        supabase.from('subscriptions').select('id, next_billing_date').eq('user_id', user.id).eq('status', 'active'),
       ]);
+
+      // Calculate total due
+      const totalDue = (invoices.data || [])
+        .filter(i => ['unpaid', 'partial', 'overdue'].includes(i.status))
+        .reduce((sum, i) => sum + Number(i.due_amount || 0), 0);
+
+      // Find nearest renewal date
+      const allDates = [
+        ...(domains.data || []).filter(d => d.expiry_date).map(d => d.expiry_date!),
+        ...(hosting.data || []).filter(h => h.expiry_date).map(h => h.expiry_date!),
+        ...(subs.data || []).filter(s => s.next_billing_date).map(s => s.next_billing_date),
+      ].filter(d => new Date(d) > new Date()).sort();
 
       setStats({
         totalOrders: orders.data?.length || 0,
@@ -54,6 +71,8 @@ export default function Dashboard() {
         activeDomains: domains.data?.filter(d => d.status === 'active').length || 0,
         activeHosting: hosting.data?.filter(h => h.status === 'active').length || 0,
         activeProjects: projects.data?.filter(p => ['in_progress', 'review'].includes(p.status)).length || 0,
+        dueAmount: totalDue,
+        nextRenewal: allDates.length > 0 ? allDates[0] : null,
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -71,9 +90,9 @@ export default function Dashboard() {
       bgColor: 'bg-blue-500/10',
     },
     {
-      title: language === 'bn' ? 'সক্রিয় অর্ডার' : 'Active Orders',
-      value: stats.activeOrders,
-      icon: ShoppingCart,
+      title: language === 'bn' ? 'সক্রিয় সেবা' : 'Active Services',
+      value: stats.activeDomains + stats.activeHosting,
+      icon: Server,
       color: 'text-green-500',
       bgColor: 'bg-green-500/10',
     },
@@ -85,18 +104,34 @@ export default function Dashboard() {
       bgColor: 'bg-orange-500/10',
     },
     {
+      title: language === 'bn' ? 'বকেয়া পরিমাণ' : 'Due Amount',
+      value: `৳${stats.dueAmount.toLocaleString()}`,
+      icon: Wallet,
+      color: 'text-red-500',
+      bgColor: 'bg-red-500/10',
+    },
+    {
+      title: language === 'bn' ? 'পরবর্তী রিনিউয়াল' : 'Next Renewal',
+      value: stats.nextRenewal
+        ? new Date(stats.nextRenewal).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+        : (language === 'bn' ? 'নেই' : 'None'),
+      icon: CalendarClock,
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10',
+    },
+    {
       title: language === 'bn' ? 'সক্রিয় ডোমেইন' : 'Active Domains',
       value: stats.activeDomains,
       icon: Globe,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
+      color: 'text-cyan-500',
+      bgColor: 'bg-cyan-500/10',
     },
     {
       title: language === 'bn' ? 'সক্রিয় হোস্টিং' : 'Active Hosting',
       value: stats.activeHosting,
       icon: Server,
-      color: 'text-cyan-500',
-      bgColor: 'bg-cyan-500/10',
+      color: 'text-teal-500',
+      bgColor: 'bg-teal-500/10',
     },
     {
       title: language === 'bn' ? 'চলমান প্রজেক্ট' : 'Active Projects',
@@ -122,7 +157,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {statCards.map((stat, index) => (
             <Card key={index} className="glass-card">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
