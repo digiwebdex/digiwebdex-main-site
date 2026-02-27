@@ -3642,7 +3642,7 @@ export type Database = {
     }
     Enums: {
       affiliate_status: "pending" | "active" | "suspended" | "rejected"
-      app_role: "admin" | "staff" | "client" | "reseller"
+      app_role: "admin" | "staff" | "client" | "reseller" | "support"
       billing_cycle: "monthly" | "quarterly" | "yearly"
       billing_type: "one_time" | "recurring" | "milestone"
       commission_status: "pending" | "approved" | "paid" | "cancelled"
@@ -3849,7 +3849,7 @@ export const Constants = {
   public: {
     Enums: {
       affiliate_status: ["pending", "active", "suspended", "rejected"],
-      app_role: ["admin", "staff", "client", "reseller"],
+      app_role: ["admin", "staff", "client", "reseller", "support"],
       billing_cycle: ["monthly", "quarterly", "yearly"],
       billing_type: ["one_time", "recurring", "milestone"],
       commission_status: ["pending", "approved", "paid", "cancelled"],
