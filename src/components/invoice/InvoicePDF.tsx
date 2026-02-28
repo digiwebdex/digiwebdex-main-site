@@ -181,29 +181,19 @@ export function InvoicePDF({
               <tr key={i} style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: i % 2 === 0 ? '#f9fafb' : '#fff' }}>
                 <td style={{ padding: '10px 12px' }}>{i + 1}</td>
                 <td style={{ padding: '10px 12px' }}>
-                  {item.service_type && (
-                    <span style={{
-                      display: 'inline-block',
-                      marginBottom: '2px',
-                      padding: '1px 6px',
-                      borderRadius: '3px',
-                      fontSize: '10px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      backgroundColor: '#e0e7ff',
-                      color: '#3730a3',
-                      letterSpacing: '0.5px',
-                    }}>
-                      {item.service_type === 'domain' ? 'ডোমেইন' :
-                       item.service_type === 'hosting' ? 'হোস্টিং' :
-                       item.service_type === 'web_development' ? 'ওয়েব ডেভেলপমেন্ট' :
-                       item.service_type === 'software_development' ? 'সফটওয়্যার ডেভেলপমেন্ট' :
-                       item.service_type === 'digital_marketing' ? 'ডিজিটাল মার্কেটিং' :
-                       item.service_type}
-                    </span>
-                  )}
                   <div><strong>{item.description || item.package_name || 'Service'}</strong></div>
                   {item.domain && <div style={{ color: '#666', fontSize: '11px' }}>{item.domain}</div>}
+                  {item.service_type && (
+                    <div style={{ color: '#555', fontSize: '11px', marginTop: '2px' }}>
+                      {(item.service_type === 'domain' || item.service_type === 'hosting')
+                        ? 'Registration & Renewal (Yearly)'
+                        : (item.service_type === 'web_development' || item.service_type === 'software_development')
+                        ? 'One Time Payment'
+                        : item.service_type === 'digital_marketing'
+                        ? 'Digital Marketing Service'
+                        : ''}
+                    </div>
+                  )}
                 </td>
                 <td style={{ padding: '10px 12px', textAlign: 'center' }}>{item.qty}</td>
                 <td style={{ padding: '10px 12px', textAlign: 'right' }}>{fmt(item.price)}</td>
