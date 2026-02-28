@@ -1,5 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import type { Database, Json } from '@/integrations/supabase/types';
+import { invoiceTemplate, paymentTemplate, renewalTemplate, orderTemplate, welcomeTemplate, suspensionTemplate } from '@/lib/emailTemplates';
+import type { InvoiceEmailData, PaymentEmailData, RenewalEmailData, OrderEmailData, WelcomeEmailData, SuspensionEmailData } from '@/lib/emailTemplates';
 
 type Notification = Database['public']['Tables']['notifications']['Row'];
 type NotificationType = Database['public']['Enums']['notification_type'];
