@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { Menu, Moon, Sun, Globe, ChevronDown } from 'lucide-react';
+import { Menu, Moon, Sun, Globe, ChevronDown, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import logo from '@/assets/logo.png';
 import { systemSettingsService } from '@/services/settings';
@@ -108,6 +108,14 @@ export function Header() {
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
+          {/* Client Sign In - Desktop */}
+          <Button variant="outline" size="sm" asChild className="hidden md:flex items-center gap-1.5">
+            <Link to={`${basePath}/auth/login`}>
+              <LogIn className="h-4 w-4" />
+              {language === 'bn' ? 'সাইন ইন' : 'Sign In'}
+            </Link>
+          </Button>
+
           {/* CTA Button - Desktop */}
           {headerOrderButtonEnabled && (
             <Button className="hidden md:flex gradient-button">
@@ -178,9 +186,19 @@ export function Header() {
                   </div>
                 ))}
 
+                {/* Mobile Sign In */}
+                <SheetClose asChild>
+                  <Button variant="outline" asChild className="w-full gap-2">
+                    <Link to={`${basePath}/auth/login`}>
+                      <LogIn className="h-4 w-4" />
+                      {language === 'bn' ? 'ক্লায়েন্ট সাইন ইন' : 'Client Sign In'}
+                    </Link>
+                  </Button>
+                </SheetClose>
+
                 {/* Mobile CTA */}
                 {headerOrderButtonEnabled && (
-                  <Button className="mt-4 gradient-button w-full">
+                  <Button className="gradient-button w-full">
                     {t.nav.orderNow}
                   </Button>
                 )}
