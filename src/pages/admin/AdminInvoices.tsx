@@ -12,7 +12,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { Eye, Download, Trash2, Printer, Pencil, Plus, FileText } from 'lucide-react';
+import { Eye, Download, Trash2, Printer, Pencil, Plus, FileText, MessageSquare, Mail } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { format } from 'date-fns';
 import { Database } from '@/integrations/supabase/types';
 import { logAudit } from '@/lib/auditLog';
@@ -248,6 +249,85 @@ export default function AdminInvoices() {
 
   const formatCurrency = (amount: number) => new Intl.NumberFormat(language === 'bn' ? 'bn-BD' : 'en-US', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0 }).format(amount);
 
+  const [sendingReminder, setSendingReminder] = useState<string | null>(null);
+
+  const sendDueReminder = async (invoice: Invoice, channel: 'sms' | 'email') => {
+    const due = (invoice as any).due_amount || 0;
+    if (due <= 0) {
+      toast({ title: language === 'bn' ? 'কোনো বকেয়া নেই' : 'No due amount', variant: 'destructive' });
+      return;
+    }
+
+    setSendingReminder(`${invoice.id}-${channel}`);
+    try {
+      // Get customer profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name, phone')
+        .eq('user_id', invoice.user_id!)
+        .single();
+
+      if (channel === 'sms') {
+        if (!profile?.phone) {
+          toast({ title: language === 'bn' ? 'ফোন নম্বর পাওয়া যায়নি' : 'Phone number not found', variant: 'destructive' });
+          setSendingReminder(null);
+          return;
+        }
+        const message = `DigiWebDex: প্রিয় ${profile.full_name || 'Customer'}, আপনার ইনভয়েস ${invoice.invoice_number} এ ৳${due.toLocaleString()} বকেয়া আছে। ${invoice.due_date ? `বকেয়া তারিখ: ${format(new Date(invoice.due_date), 'dd MMM yyyy')}।` : ''} পেমেন্ট করুন: 01674533303`;
+        const { error } = await supabase.functions.invoke('send-sms', {
+          body: { phone: profile.phone, message, type: 'customer', metadata: { invoice_id: invoice.id } },
+        });
+        if (error) throw error;
+        toast({ title: language === 'bn' ? 'এসএমএস পাঠানো হয়েছে ✅' : 'SMS sent ✅' });
+      } else {
+        // Email reminder
+        const { data: notification } = await supabase
+          .from('notifications')
+          .select('recipient')
+          .eq('user_id', invoice.user_id!)
+          .eq('notification_type', 'email')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        const email = notification?.recipient;
+        if (!email) {
+          toast({ title: language === 'bn' ? 'ইমেইল পাওয়া যায়নি' : 'Email not found', variant: 'destructive' });
+          setSendingReminder(null);
+          return;
+        }
+
+        const html = `
+          <!DOCTYPE html><html><head><meta charset="utf-8"></head>
+          <body style="font-family:Arial,sans-serif;background:#f9fafb;padding:32px;">
+            <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;padding:32px;border:1px solid #e5e7eb;">
+              <div style="text-align:center;margin-bottom:24px;border-bottom:2px solid #0e7490;padding-bottom:16px;">
+                <img src="https://digiwebdex.com/images/email-logo.png" alt="DigiWebDex" style="height:48px;" />
+              </div>
+              <h3 style="color:#111827;">💰 পেমেন্ট রিমাইন্ডার</h3>
+              <p>প্রিয় ${profile?.full_name || 'Customer'},</p>
+              <p>আপনার ইনভয়েস <strong>${invoice.invoice_number}</strong> এ <strong style="color:#dc2626;">৳${due.toLocaleString()}</strong> বকেয়া আছে।</p>
+              ${invoice.due_date ? `<p>বকেয়া তারিখ: <strong>${format(new Date(invoice.due_date), 'dd MMM yyyy')}</strong></p>` : ''}
+              <p>অনুগ্রহ করে যত তাড়াতাড়ি সম্ভব পেমেন্ট সম্পন্ন করুন।</p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
+              <p style="color:#9ca3af;font-size:12px;text-align:center;">📞 +880 1674-533303 | 📧 digiwebdex@gmail.com</p>
+            </div>
+          </body></html>`;
+
+        const { error } = await supabase.functions.invoke('send-email', {
+          body: { to: email, subject: `পেমেন্ট রিমাইন্ডার - ${invoice.invoice_number}`, html },
+        });
+        if (error) throw error;
+        toast({ title: language === 'bn' ? 'ইমেইল পাঠানো হয়েছে ✅' : 'Email sent ✅' });
+      }
+
+      await logAudit('due_reminder', 'invoice', invoice.id, null, { channel, due_amount: due } as any);
+    } catch (err: any) {
+      toast({ title: language === 'bn' ? 'ব্যর্থ হয়েছে' : 'Failed', description: err.message, variant: 'destructive' });
+    }
+    setSendingReminder(null);
+  };
+
   const columns: Column<Invoice>[] = [
     {
       key: 'invoice_number', header: language === 'bn' ? 'ইনভয়েস নং' : 'Invoice #', sortable: true,
@@ -294,13 +374,51 @@ export default function AdminInvoices() {
     },
     {
       key: 'actions', header: language === 'bn' ? 'অ্যাকশন' : 'Actions',
-      render: (row) => (
-        <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button size="icon" variant="ghost" onClick={() => handleViewInvoice(row)}><Eye className="h-4 w-4" /></Button>
-          <Button size="icon" variant="ghost" onClick={() => navigate(`${basePath}/admin/invoices/${row.id}`)} title="Invoice PDF"><FileText className="h-4 w-4" /></Button>
-          <Button size="icon" variant="ghost" className="text-destructive" onClick={() => { setInvoiceToDelete(row); setDeleteOpen(true); }}><Trash2 className="h-4 w-4" /></Button>
-        </div>
-      ),
+      render: (row) => {
+        const due = (row as any).due_amount || 0;
+        const hasDue = due > 0;
+        return (
+          <TooltipProvider>
+            <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+              {hasDue && (
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                        disabled={sendingReminder === `${row.id}-sms`}
+                        onClick={() => sendDueReminder(row, 'sms')}
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{language === 'bn' ? 'এসএমএস রিমাইন্ডার' : 'SMS Reminder'}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        disabled={sendingReminder === `${row.id}-email`}
+                        onClick={() => sendDueReminder(row, 'email')}
+                      >
+                        <Mail className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{language === 'bn' ? 'ইমেইল রিমাইন্ডার' : 'Email Reminder'}</TooltipContent>
+                  </Tooltip>
+                </>
+              )}
+              <Button size="icon" variant="ghost" onClick={() => handleViewInvoice(row)}><Eye className="h-4 w-4" /></Button>
+              <Button size="icon" variant="ghost" onClick={() => navigate(`${basePath}/admin/invoices/${row.id}`)} title="Invoice PDF"><FileText className="h-4 w-4" /></Button>
+              <Button size="icon" variant="ghost" className="text-destructive" onClick={() => { setInvoiceToDelete(row); setDeleteOpen(true); }}><Trash2 className="h-4 w-4" /></Button>
+            </div>
+          </TooltipProvider>
+        );
+      },
     },
   ];
 
