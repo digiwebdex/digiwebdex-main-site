@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { Database } from '@/integrations/supabase/types';
 import { logAudit } from '@/lib/auditLog';
 import { printTable } from '@/lib/exportUtils';
+import { createOrderWithItems, type OrderItem } from '@/services/multiItemOrderService';
 
 type Order = Database['public']['Tables']['orders']['Row'] & {
   profiles?: { full_name: string | null; phone: string | null } | null;
@@ -169,71 +170,36 @@ export default function AdminOrders() {
     }
     setCreating(true);
     try {
-      for (const item of serviceItems) {
-        const now = new Date();
-        const yy = String(now.getFullYear()).slice(-2);
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const rand = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
-        const orderNumber = `${yy}${mm}${rand}`;
+      // Map serviceItems to OrderItem format for multi-item service
+      const orderItems: OrderItem[] = serviceItems.map(item => {
+        const svc = servicesList.find(s => s.id === item.service_id);
+        const pkg = item.package_id !== 'custom' ? packages.find(p => p.id === item.package_id) : null;
+        return {
+          type: item.service_type as Database['public']['Enums']['service_type'],
+          package: pkg ? (language === 'bn' ? pkg.name_bn : pkg.name_en) : 'Custom',
+          domain: item.domain_name || undefined,
+          description: svc ? (language === 'bn' ? svc.name_bn : svc.name_en) : undefined,
+          price: item.subtotal,
+          qty: 1,
+          renewalDate: item.renewal_date || undefined,
+        };
+      });
 
-        const isMulti = serviceItems.length > 1;
-        const proportion = createSubtotal > 0 ? item.subtotal / createSubtotal : 1;
-        const itemDiscount = isMulti ? Math.round(proportion * createDiscount) : createDiscount;
-        const itemTax = isMulti ? Math.round(proportion * createTax) : createTax;
-        const itemTotal = item.subtotal - itemDiscount + itemTax;
-        const itemAdvance = isMulti ? Math.round(proportion * createAdvancePayment) : createAdvancePayment;
+      const result = await createOrderWithItems({
+        userId: createCustomerId,
+        serviceId: serviceItems[0]?.service_id || undefined,
+        packageId: serviceItems[0]?.package_id === 'custom' ? undefined : serviceItems[0]?.package_id || undefined,
+        serviceType: serviceItems[0]?.service_type as Database['public']['Enums']['service_type'] || undefined,
+        items: orderItems,
+        discount: createDiscount,
+        tax: createTax,
+        advance: createAdvancePayment,
+        notes: createNotes || undefined,
+      });
 
-        const { error } = await supabase.from('orders').insert({
-          order_number: orderNumber,
-          user_id: createCustomerId,
-          service_id: item.service_id,
-          package_id: item.package_id === 'custom' ? null : item.package_id,
-          service_type: item.service_type as Database['public']['Enums']['service_type'],
-          billing_type: item.billing_type as Database['public']['Enums']['billing_type'],
-          subtotal: item.subtotal,
-          discount: itemDiscount,
-          tax: itemTax,
-          total: itemTotal,
-          advance_payment: itemAdvance,
-          notes: createNotes || null,
-          admin_notes: createAdminNotes || null,
-          status: 'pending' as Database['public']['Enums']['order_status'],
-        });
-        if (error) throw error;
+      await logAudit('create', 'order', result.order.id, null, { order_number: result.order.order_number } as any);
 
-        const insertedOrder = await supabase.from('orders').select('id').eq('order_number', orderNumber).single();
-        if (insertedOrder.data) {
-          const metaEntries = [
-            { order_id: insertedOrder.data.id, meta_key: 'domain_name', meta_value: item.domain_name as any },
-            { order_id: insertedOrder.data.id, meta_key: 'registration_date', meta_value: item.registration_date as any },
-            { order_id: insertedOrder.data.id, meta_key: 'renewal_date', meta_value: item.renewal_date as any },
-          ].filter(m => m.meta_value);
-          if (metaEntries.length > 0) {
-            await supabase.from('order_meta').insert(metaEntries);
-          }
-
-          // Add invoice item for the auto-generated invoice
-          const { data: autoInvoice } = await supabase.from('invoices').select('id').eq('order_id', insertedOrder.data.id).single();
-          if (autoInvoice) {
-            const svc = servicesList.find(s => s.id === item.service_id);
-            const pkg = item.package_id !== 'custom' ? packages.find(p => p.id === item.package_id) : null;
-            await supabase.from('invoice_items').insert({
-              invoice_id: autoInvoice.id,
-              service_type: item.service_type,
-              package_name: pkg ? (language === 'bn' ? pkg.name_bn : pkg.name_en) : 'Custom',
-              domain: item.domain_name || null,
-              description: svc ? (language === 'bn' ? svc.name_bn : svc.name_en) : '',
-              price: item.subtotal,
-              qty: 1,
-              total: item.subtotal,
-              renewal_date: item.renewal_date || null,
-            });
-          }
-        }
-        await logAudit('create', 'order', null as any, null, { order_number: orderNumber } as any);
-      }
-
-      toast({ title: language === 'bn' ? `✅ ${serviceItems.length}টি অর্ডার তৈরি হয়েছে` : `✅ ${serviceItems.length} Order(s) Created` });
+      toast({ title: language === 'bn' ? `✅ অর্ডার তৈরি হয়েছে (${result.order.order_number})` : `✅ Order Created (${result.order.order_number})` });
       setCreateOpen(false);
       resetCreateForm();
       fetchOrders();
