@@ -599,6 +599,105 @@ export type Database = {
         }
         Relationships: []
       }
+      bundle_discounts: {
+        Row: {
+          created_at: string
+          description: string | null
+          discount_percent: number
+          id: string
+          is_active: boolean
+          name_bn: string | null
+          name_en: string
+          service_types: string[]
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          name_bn?: string | null
+          name_en: string
+          service_types: string[]
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          name_bn?: string | null
+          name_en?: string
+          service_types?: string[]
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cart_items: {
+        Row: {
+          created_at: string
+          domain: string | null
+          id: string
+          metadata: Json | null
+          package_id: string | null
+          package_name: string | null
+          price: number
+          qty: number
+          service_id: string | null
+          service_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          metadata?: Json | null
+          package_id?: string | null
+          package_name?: string | null
+          price?: number
+          qty?: number
+          service_id?: string | null
+          service_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          metadata?: Json | null
+          package_id?: string | null
+          package_name?: string | null
+          price?: number
+          qty?: number
+          service_id?: string | null
+          service_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_items_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "service_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cart_items_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_studies: {
         Row: {
           after_pagespeed_score: number | null

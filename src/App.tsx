@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/lib/i18n";
 import { AuthProvider, ProtectedRoute } from "@/lib/auth";
+import { CartProvider } from "@/lib/cart";
 import { ScrollToTop } from "@/components/common";
+import { CartIcon, CartPanel } from "@/components/cart";
 
 // Pages
 import Home from "./pages/Home";
@@ -94,7 +96,7 @@ import AdminChatbotLogs from "./pages/admin/AdminChatbotLogs";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminPermissions from "./pages/admin/AdminPermissions";
 import AdminInvoiceView from "./pages/admin/AdminInvoiceView";
-
+import AdminBundles from "./pages/admin/AdminBundles";
 // Public Pages
 import ProposalView from "./pages/ProposalView";
 
@@ -105,7 +107,10 @@ const LanguageRoutes = () => {
   return (
     <LanguageProvider>
       <AuthProvider>
+        <CartProvider>
         <ScrollToTop />
+        <CartIcon />
+        <CartPanel />
         <Routes>
           {/* Public proposal view */}
           <Route path="/proposal/:token" element={<ProposalView />} />
@@ -207,6 +212,7 @@ const LanguageRoutes = () => {
           <Route path="/bn/admin/chatbot" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminChatbotLogs /></ProtectedRoute>} />
           <Route path="/bn/admin/customers" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminCustomers /></ProtectedRoute>} />
           <Route path="/bn/admin/permissions" element={<ProtectedRoute requiredRoles={['admin']}><AdminPermissions /></ProtectedRoute>} />
+          <Route path="/bn/admin/bundles" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBundles /></ProtectedRoute>} />
           <Route path="/bn/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* English routes */}
@@ -294,6 +300,7 @@ const LanguageRoutes = () => {
           <Route path="/en/admin/chatbot" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminChatbotLogs /></ProtectedRoute>} />
           <Route path="/en/admin/customers" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminCustomers /></ProtectedRoute>} />
           <Route path="/en/admin/permissions" element={<ProtectedRoute requiredRoles={['admin']}><AdminPermissions /></ProtectedRoute>} />
+          <Route path="/en/admin/bundles" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminBundles /></ProtectedRoute>} />
           <Route path="/en/admin/*" element={<ProtectedRoute requiredRoles={['admin', 'staff']}><AdminDashboard /></ProtectedRoute>} />
           
           {/* Dynamic Landing Pages - must be before catch-all */}
@@ -303,6 +310,7 @@ const LanguageRoutes = () => {
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </CartProvider>
       </AuthProvider>
     </LanguageProvider>
   );
