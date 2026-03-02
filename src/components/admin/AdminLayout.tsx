@@ -25,6 +25,7 @@ import {
   Settings,
   LogOut,
   Home,
+  Tag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
@@ -41,6 +42,7 @@ const menuItems = [
   { icon: CreditCard, labelEn: 'Payments', labelBn: 'পেমেন্ট', path: '/admin/payments' },
   { icon: RefreshCcw, labelEn: 'Subscriptions', labelBn: 'সাবস্ক্রিপশন', path: '/admin/subscriptions' },
   { icon: BarChart3, labelEn: 'Reports', labelBn: 'রিপোর্ট', path: '/admin/analytics' },
+  { icon: Tag, labelEn: 'Bundles', labelBn: 'বান্ডেল', path: '/admin/bundles' },
   { icon: Settings, labelEn: 'Settings', labelBn: 'সেটিংস', path: '/admin/settings' },
 ];
 
