@@ -1,2 +1,2 @@
-export { AuthProvider, useAuth } from './AuthContext';
+export { AuthProvider, useAuth } from './AuthContextMigrated';
 export { ProtectedRoute } from './ProtectedRoute';
