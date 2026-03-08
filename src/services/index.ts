@@ -5,6 +5,7 @@ export { notificationService } from './notificationService';
 export { manualPaymentService } from './manualPaymentService';
 export { domainService } from './domainService';
 export { leadService } from './leadService';
+export { contactService } from './contactService';
 export * from './hosting';
 export * from './renewal';
 export * from './analytics';
