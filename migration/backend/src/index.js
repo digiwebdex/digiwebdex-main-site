@@ -24,18 +24,35 @@ const adminRoutes = require('./routes/admin');
 const backupRoutes = require('./routes/backup');
 const healthRoutes = require('./routes/health');
 const sitemapRoutes = require('./routes/sitemap');
+const storageRoutes = require('./routes/storage');
+const dataRoutes = require('./routes/data');
+const functionsRoutes = require('./routes/functions');
 const cronJobs = require('./cron');
 
 const app = express();
 const server = http.createServer(app);
 
-// WebSocket server
+// WebSocket server for realtime
 const wss = new WebSocketServer({ server, path: '/ws' });
 const wsClients = new Map();
 
 wss.on('connection', (ws, req) => {
-  const id = require('uuid').v4();
-  wsClients.set(id, ws);
+  const id = require('crypto').randomUUID();
+  wsClients.set(id, { ws, subscriptions: [] });
+  
+  ws.on('message', (data) => {
+    try {
+      const msg = JSON.parse(data);
+      if (msg.type === 'subscribe') {
+        const client = wsClients.get(id);
+        if (client && !client.subscriptions.includes(msg.channel)) {
+          client.subscriptions.push(msg.channel);
+        }
+      }
+    } catch (e) {
+      console.error('WebSocket message error:', e);
+    }
+  });
   
   ws.on('close', () => wsClients.delete(id));
   ws.on('error', () => wsClients.delete(id));
@@ -43,9 +60,11 @@ wss.on('connection', (ws, req) => {
 
 // Broadcast to all WebSocket clients
 function broadcast(event, data) {
-  const message = JSON.stringify({ event, data, timestamp: new Date().toISOString() });
-  wsClients.forEach((ws) => {
-    if (ws.readyState === 1) ws.send(message);
+  const message = JSON.stringify({ event, ...data, timestamp: new Date().toISOString() });
+  wsClients.forEach((client) => {
+    if (client.ws.readyState === 1) {
+      client.ws.send(message);
+    }
   });
 }
 
@@ -53,7 +72,9 @@ function broadcast(event, data) {
 app.set('broadcast', broadcast);
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true,
@@ -97,6 +118,9 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/sitemap', sitemapRoutes);
+app.use('/api/storage', storageRoutes);
+app.use('/api/data', dataRoutes);
+app.use('/api/functions', functionsRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

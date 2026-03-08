@@ -1,74 +1,156 @@
-# DigiWebDex VPS Migration Guide
+# DigiWebDex VPS Deployment Guide
+
+Complete guide for deploying DigiWebDex on a self-hosted VPS (Hostinger KVM).
 
 ## Prerequisites
-- Ubuntu 22.04+ VPS (Hostinger KVM)
-- Docker & Docker Compose installed
-- Domain DNS pointing to VPS IP
+
+- Ubuntu 22.04 LTS VPS
+- Root or sudo access
+- Domain pointing to VPS IP
+- At least 2GB RAM, 20GB storage
 
 ## Quick Start
 
+### 1. Server Setup
+
 ```bash
-# 1. Upload migration folder to VPS
-scp -r migration/ user@your-vps:/opt/digiwebdex/
+# SSH into your VPS
+ssh root@your-vps-ip
 
-# 2. SSH into VPS
-ssh user@your-vps
-cd /opt/digiwebdex/migration
+# Update system
+apt update && apt upgrade -y
 
-# 3. Create environment file
-cp backend/.env.example backend/.env
-nano backend/.env  # Fill in all values
+# Install Docker
+curl -fsSL https://get.docker.com | sh
+apt install docker-compose-plugin -y
 
-# 4. Initialize database
-cat database/enums.sql database/schema.sql database/functions.sql database/triggers.sql > database/init.sql
+# Create project directory
+mkdir -p /var/www/digiwebdex
+cd /var/www/digiwebdex
+```
 
-# 5. Start services
-docker-compose up -d --build
+### 2. Upload Files
 
-# 6. Verify
+```bash
+# From your local machine
+scp -r ./migration root@your-vps-ip:/var/www/digiwebdex/
+
+# Build and upload frontend
+npm run build
+scp -r ./dist root@your-vps-ip:/var/www/digiwebdex/
+```
+
+### 3. Configure Environment
+
+```bash
+cd /var/www/digiwebdex/migration
+
+# Create .env file
+cat > .env << 'EOF'
+DB_NAME=digiwebdex
+DB_USER=digiwebdex_user
+DB_PASSWORD=YOUR_STRONG_PASSWORD
+JWT_SECRET=YOUR_JWT_SECRET_MIN_32_CHARS
+RESEND_API_KEY=re_YOUR_RESEND_KEY
+FRONTEND_URL=https://digiwebdex.com
+ADMIN_EMAIL=digiwebdex@gmail.com
+EOF
+```
+
+### 4. SSL Certificate
+
+```bash
+apt install certbot -y
+certbot certonly --standalone -d digiwebdex.com -d www.digiwebdex.com
+
+mkdir -p nginx/ssl
+cp /etc/letsencrypt/live/digiwebdex.com/fullchain.pem nginx/ssl/
+cp /etc/letsencrypt/live/digiwebdex.com/privkey.pem nginx/ssl/
+```
+
+### 5. Deploy
+
+```bash
+docker compose up -d
+
+# Verify
+docker compose ps
 curl http://localhost:3001/api/health
 ```
 
-## Database Migration
+## Data Migration
 
-To import existing data:
+### Export from Supabase
+
 ```bash
-# Export from Supabase (use their dashboard or pg_dump)
-# Then import:
-docker exec -i digiwebdex-db psql -U digiwebdex -d digiwebdex < data_export.sql
+# Set your Supabase password
+export SUPABASE_PASSWORD='your-supabase-db-password'
+
+# Run export script
+./scripts/export_supabase_data.sh
 ```
 
-## Frontend Changes Required
+### Import to VPS
 
-Update `src/lib/api.ts` to use new backend:
-```typescript
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.digiwebdex.com';
+```bash
+# Copy data files to VPS
+scp -r ./data root@your-vps-ip:/var/www/digiwebdex/migration/
+
+# Import data
+docker compose exec -T postgres psql -U digiwebdex_user -d digiwebdex < data/data_export.sql
 ```
 
-Replace all `supabase.from()` calls with fetch to `/api/*` endpoints.
+## Port Configuration
 
-## SSL Setup
+| Service | Internal | External |
+|---------|----------|----------|
+| PostgreSQL | 5432 | 5433 (localhost) |
+| Backend | 3001 | 3001 (localhost) |
+| Frontend | 80 | 8080 |
+
+## Maintenance
+
 ```bash
-apt install certbot python3-certbot-nginx
-certbot --nginx -d digiwebdex.com -d www.digiwebdex.com
+# View logs
+docker compose logs -f backend
+
+# Restart service
+docker compose restart backend
+
+# Database backup
+docker compose exec postgres pg_dump -U digiwebdex_user digiwebdex > backup_$(date +%Y%m%d).sql
+
+# Update application
+cd /var/www/digiwebdex
+git pull
+docker compose build
+docker compose up -d
 ```
 
-## API Endpoints Mapping
+## SSL Auto-Renewal
 
-| Supabase Edge Function | New Express Endpoint |
-|------------------------|---------------------|
-| send-email | POST /api/notifications/send-email |
-| send-sms | POST /api/notifications/send-sms |
-| send-otp | POST /api/auth/send-otp |
-| verify-otp | POST /api/auth/verify-otp |
-| contact-notification | POST /api/notifications/contact-notification |
-| lead-notification | POST /api/notifications/lead-notification |
-| health-check | GET /api/health |
-| daily-csv-backup | POST /api/backup/run |
-| admin-create-user | POST /api/users |
-
-## Monitoring
 ```bash
-docker-compose logs -f backend
-docker exec digiwebdex-db psql -U digiwebdex -c "SELECT COUNT(*) FROM orders;"
+crontab -e
+# Add:
+0 0 * * * certbot renew --quiet && docker compose -f /var/www/digiwebdex/migration/docker-compose.yml restart frontend
+```
+
+## Troubleshooting
+
+### Database Issues
+```bash
+docker compose logs postgres
+docker compose exec postgres psql -U digiwebdex_user -d digiwebdex -c "SELECT 1"
+```
+
+### Backend Issues
+```bash
+docker compose logs backend
+docker compose exec backend env | grep DB_
+```
+
+### Frontend 404
+```bash
+ls -la /var/www/digiwebdex/dist
+docker compose exec frontend nginx -t
 ```
