@@ -58,7 +58,7 @@ services:
       - digiwebdex_uploads:/app/uploads
       - ./logs/backend:/app/logs
     ports:
-      - "127.0.0.1:${BACKEND_PORT:-3001}:3001"  # Only localhost
+      - "127.0.0.1:${BACKEND_PORT:-3002}:3001"  # Only localhost
     depends_on:
       postgres:
         condition: service_healthy

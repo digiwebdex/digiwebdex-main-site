@@ -123,7 +123,7 @@ server {
 
     # API proxy to backend
     location /api/ {
-        proxy_pass http://127.0.0.1:3001/api/;
+        proxy_pass http://127.0.0.1:3002/api/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -138,7 +138,7 @@ server {
 
     # WebSocket proxy
     location /ws {
-        proxy_pass http://127.0.0.1:3001/ws;
+        proxy_pass http://127.0.0.1:3002/ws;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";

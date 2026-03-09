@@ -4,10 +4,10 @@
 -- Source: Lovable Cloud (Supabase)
 -- ============================================================
 
--- Disable triggers during import
+-- Disable triggers and FK checks during import
 SET session_replication_role = 'replica';
 
--- 1. USERS
+-- 1. USERS (must be first - profiles references users)
 INSERT INTO users (id, email, password_hash, email_verified, created_at, is_active) VALUES
 ('b43e1fc1-857a-4aba-b169-766211ac176c', 'digiwebdex@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-07 17:12:15+00', true),
 ('0a574a15-d015-4fa2-a5fa-740222ed1de1', 'smelitehajj@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-27 18:20:36+00', true),
@@ -155,8 +155,8 @@ INSERT INTO invoice_items (id, invoice_id, description, service_type, package_na
 ('6ac7de7f-0cfa-4296-8c94-0cfb4d06856b', '22c6a897-daf8-409f-ada0-7b6b165ce58c', 'ওয়েব ডেভেলপমেন্ট', 'web_development', 'বেসিক ওয়েবসাইট', NULL, NULL, 1, 15000, 15000)
 ON CONFLICT (id) DO NOTHING;
 
--- 10. ORDER ITEMS
-INSERT INTO order_items (id, order_id, service_type, name, description, domain, quantity, unit_price, total) VALUES
+-- 10. ORDER ITEMS (using correct column names: package_name, qty, price)
+INSERT INTO order_items (id, order_id, service_type, package_name, description, domain, qty, price, total) VALUES
 ('d5622853-39bd-4592-820f-f2cdcaef114d', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'domain', 'ডোমেইন রেজিস্ট্রেশন', 'ডোমেইন রেজিস্ট্রেশন', 'rofroftravels.com', 1, 1750, 1750),
 ('e1d91ba6-cc33-4788-bd4d-eb681f7d901b', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'rofroftravels.com', 1, 3500, 3500),
 ('04429d42-3e57-4665-bfe8-df33fa494bc7', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'web_development', 'ওয়েব ডেভেলপমেন্ট', 'ওয়েব ডেভেলপমেন্ট', NULL, 1, 15000, 15000),
@@ -224,6 +224,9 @@ ON CONFLICT (id) DO NOTHING;
 
 -- Re-enable triggers
 SET session_replication_role = 'DEFAULT';
+
+-- Set admin password
+UPDATE users SET password_hash = crypt('Iq11151000', gen_salt('bf', 12)) WHERE email = 'digiwebdex@gmail.com';
 
 -- VERIFICATION
 SELECT 'users' AS "table", COUNT(*) AS "count" FROM users
