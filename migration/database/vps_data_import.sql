@@ -1,6 +1,6 @@
 -- ============================================================
 -- DigiWebDex Complete Data Import for VPS
--- Generated: 2026-03-09
+-- Generated: 2026-03-09 (synced for VPS pull)
 -- Source: Lovable Cloud (Supabase)
 -- ============================================================
 

@@ -1,169 +1,241 @@
 -- ============================================================
--- DigiWebDex Complete Database Data Export
--- Generated from Lovable Cloud on 2026-03-08
--- Import order matters due to foreign key constraints
+-- DigiWebDex Complete Data Import for VPS
+-- Generated: 2026-03-09
+-- Source: Lovable Cloud (Supabase)
 -- ============================================================
 
-BEGIN;
+-- Disable triggers during import
+SET session_replication_role = 'replica';
 
--- ============================================================
--- 1. PROFILES (no FK dependencies)
--- ============================================================
-INSERT INTO profiles (id, user_id, full_name, company_name, phone, address, city, country, avatar_url, balance_due, created_at, updated_at) VALUES
-('9ad67e85-1f60-4fc9-aa70-6377cfe7947a', 'b43e1fc1-857a-4aba-b169-766211ac176c', 'IQBAL HOSSAIN', NULL, NULL, NULL, NULL, 'Bangladesh', NULL, 0, '2026-02-07T17:12:15.404813+00:00', '2026-02-07T17:12:15.404813+00:00'),
-('00684a54-0740-4c11-a40f-321964cdb6e8', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'A. S. M. Al-Amin', 'S M Elite Hajj Limited', '+8801867666888', NULL, NULL, 'Bangladesh', NULL, 30000, '2026-02-27T18:20:36.781887+00:00', '2026-03-04T08:53:26.426599+00:00'),
-('1148e897-99d7-4362-b17d-98f20b291390', '27012e2b-3cb3-41f0-8438-42d129b3c9c7', 'Shohure Online', 'Shohure Online', '01840500543', '', '', 'Bangladesh', NULL, 0, '2026-03-05T10:22:44.150429+00:00', '2026-03-05T10:22:44.469007+00:00'),
-('83d62096-b5a2-49f3-8077-533d9ed0bcab', 'edf1f376-558d-43cb-9144-1815eabfa468', 'Lucky Tours and Travels', 'Lucky Tours and Travels', '01577004689', '', '', 'Bangladesh', NULL, 30499, '2026-03-04T11:56:36.99978+00:00', '2026-03-05T23:11:11.505502+00:00'),
-('54e4e36b-6f6a-4216-bf57-8ab17a4e2e1a', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'Rof Rof Travels', 'https://rofroftravels.com/', '01874609799', '', '', 'Bangladesh', NULL, 0, '2026-03-02T06:14:05.117443+00:00', '2026-03-02T06:19:38.75497+00:00'),
-('ceffce25-b222-4005-8e54-55b06a0960f6', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 'Saimon Islam', 'Zenith Overseas', '01841909042', NULL, NULL, 'Bangladesh', NULL, 13000, '2026-02-21T17:45:03.250056+00:00', '2026-02-27T22:06:58.17137+00:00'),
-('6866d789-bfad-40ce-a79f-5d993ded9aac', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'Sabbir', 'saztravelvisa.com', '01865891727', '', '', 'Bangladesh', NULL, 8500, '2026-03-04T05:20:37.178132+00:00', '2026-03-04T05:23:26.966055+00:00'),
-('aede3a6b-67f8-41ba-a56c-ad44ee33e503', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'MD Masud', 'masudtravelsagency.com', '01711727950', '', '', 'Bangladesh', NULL, 20000, '2026-03-04T06:33:35.219179+00:00', '2026-03-04T06:37:34.853309+00:00'),
-('ce74cd9b-8551-4b0f-bbff-41d93d600691', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'NG Travels', 'NG Travels', ' 01912171463', '', '', 'Bangladesh', NULL, 10000, '2026-03-04T07:16:28.891877+00:00', '2026-03-04T07:32:03.444207+00:00'),
-('d0ccea5f-cde8-4988-8ded-f53154f22ecc', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'RAHE KABA', 'RAHE KABA', '+880 1601-505050', '', '', 'Bangladesh', NULL, 20000, '2026-02-28T04:29:25.907795+00:00', '2026-03-04T08:05:37.316027+00:00'),
-('4432cc21-99f4-43bb-89bd-2d0e8295217d', 'dca994c9-2cb7-4f5a-b341-2664d90c50d2', 'দারুল ফুরকান ট্যুরস এন্ড ট্রাভেলস', '', '01339080532', '', '', 'Bangladesh', NULL, 15000, '2026-02-27T22:12:03.520815+00:00', '2026-03-04T08:05:58.896678+00:00'),
-('678e33b2-4f9d-4c7e-a331-d76e6df40dee', '437ec3b1-119e-4001-8820-d5cf3ef59061', 'Seven Trip', 'Seven Trip', '01749373748', '', '', 'Bangladesh', NULL, 0, '2026-03-04T08:12:46.378598+00:00', '2026-03-04T08:12:46.658991+00:00')
+-- 1. USERS
+INSERT INTO users (id, email, password_hash, email_verified, created_at, is_active) VALUES
+('b43e1fc1-857a-4aba-b169-766211ac176c', 'digiwebdex@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-07 17:12:15+00', true),
+('0a574a15-d015-4fa2-a5fa-740222ed1de1', 'smelitehajj@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-27 18:20:36+00', true),
+('27012e2b-3cb3-41f0-8438-42d129b3c9c7', 'shohureonline@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-05 10:22:44+00', true),
+('edf1f376-558d-43cb-9144-1815eabfa468', 'luckytours@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-04 11:56:36+00', true),
+('b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'rofroftravels@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-02 06:14:05+00', true),
+('7287f2f7-e535-40c6-8bf1-5c70a113c386', 'saimonislam@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-21 17:45:03+00', true),
+('f9ef0dcf-c041-4906-80f7-009504cb6968', 'sabbir@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-04 05:20:37+00', true),
+('e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'masud@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-04 06:33:35+00', true),
+('4f314a32-8483-44a0-afb1-0f57fa3564dd', 'ngtravels@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-04 07:16:28+00', true),
+('d0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'rahekaba.info@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-28 04:29:25+00', true),
+('dca994c9-2cb7-4f5a-b341-2664d90c50d2', 'darulfurkan@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-02-27 22:12:03+00', true),
+('437ec3b1-119e-4001-8820-d5cf3ef59061', 'seventrip@gmail.com', '$2b$12$LJ4rEfHmYhMz9Q9E5u.bk.0B2G7xgQaZt6F1y0e0Wj5FmKjN6mKRy', true, '2026-03-04 08:12:46+00', true)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 2. USER_ROLES
--- ============================================================
-INSERT INTO user_roles (id, user_id, role, created_at) VALUES
-('78f5703e-54c9-40bb-b032-e0bce4a857cf', 'b43e1fc1-857a-4aba-b169-766211ac176c', 'admin', '2026-02-07T17:12:15.404813+00:00'),
-('238d2efe-960d-4551-b714-ba81726e3189', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 'client', '2026-02-21T17:45:03.250056+00:00'),
-('aef43781-91a8-4edc-9a9c-37114677aa0b', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'client', '2026-02-27T18:20:36.781887+00:00'),
-('528454f6-726d-447c-8a80-d76eb0ea957a', 'dca994c9-2cb7-4f5a-b341-2664d90c50d2', 'client', '2026-02-27T22:12:03.520815+00:00'),
-('cd42b6c0-c0cc-4c1f-8c08-eb698bd28fa9', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'client', '2026-02-28T04:29:25.907795+00:00'),
-('99f0e575-157b-4b84-979c-71db6a62d0c6', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'client', '2026-03-02T06:14:05.117443+00:00'),
-('c0290ca6-4a9d-48ad-9d4c-234f23a50545', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'client', '2026-03-04T05:20:37.178132+00:00'),
-('64b86c2a-1c5d-4e9d-9e4d-fad569c4a152', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'client', '2026-03-04T06:33:35.219179+00:00'),
-('8aa09cc2-fa7c-4b05-94e7-e05ee0988157', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'client', '2026-03-04T07:16:28.891877+00:00'),
-('02ad628c-ad88-4dfd-a758-c8b30d3c759d', '437ec3b1-119e-4001-8820-d5cf3ef59061', 'client', '2026-03-04T08:12:46.378598+00:00'),
-('c9ac6edc-e2a6-4664-9056-e344e27cf779', 'edf1f376-558d-43cb-9144-1815eabfa468', 'client', '2026-03-04T11:56:36.99978+00:00'),
-('8a471ee2-6696-4e8b-9f3d-0009591c8f02', '27012e2b-3cb3-41f0-8438-42d129b3c9c7', 'client', '2026-03-05T10:22:44.150429+00:00')
+-- Admin role
+INSERT INTO user_roles (user_id, role) VALUES ('b43e1fc1-857a-4aba-b169-766211ac176c', 'admin') ON CONFLICT (user_id, role) DO NOTHING;
+
+-- 2. PROFILES
+INSERT INTO profiles (id, user_id, full_name, phone, company_name, address, city, country, balance_due, created_at, updated_at) VALUES
+('9ad67e85-1f60-4fc9-aa70-6377cfe7947a', 'b43e1fc1-857a-4aba-b169-766211ac176c', 'IQBAL HOSSAIN', NULL, NULL, NULL, NULL, 'Bangladesh', 0, '2026-02-07 17:12:15+00', '2026-02-07 17:12:15+00'),
+('00684a54-0740-4c11-a40f-321964cdb6e8', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'A. S. M. Al-Amin', '+8801867666888', 'S M Elite Hajj Limited', NULL, NULL, 'Bangladesh', 30000.00, '2026-02-27 18:20:36+00', '2026-03-04 08:53:26+00'),
+('1148e897-99d7-4362-b17d-98f20b291390', '27012e2b-3cb3-41f0-8438-42d129b3c9c7', 'Shohure Online', '01840500543', 'Shohure Online', '', '', 'Bangladesh', 0, '2026-03-05 10:22:44+00', '2026-03-05 10:22:44+00'),
+('83d62096-b5a2-49f3-8077-533d9ed0bcab', 'edf1f376-558d-43cb-9144-1815eabfa468', 'Lucky Tours and Travels', '01577004689', 'Lucky Tours and Travels', '', '', 'Bangladesh', 30499, '2026-03-04 11:56:36+00', '2026-03-05 23:11:11+00'),
+('54e4e36b-6f6a-4216-bf57-8ab17a4e2e1a', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'Rof Rof Travels', '01874609799', 'https://rofroftravels.com/', '', '', 'Bangladesh', 0, '2026-03-02 06:14:05+00', '2026-03-02 06:19:38+00'),
+('ceffce25-b222-4005-8e54-55b06a0960f6', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 'Saimon Islam', '01841909042', 'Zenith Overseas', NULL, NULL, 'Bangladesh', 13000, '2026-02-21 17:45:03+00', '2026-02-27 22:06:58+00'),
+('6866d789-bfad-40ce-a79f-5d993ded9aac', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'Sabbir', '01865891727', 'saztravelvisa.com', '', '', 'Bangladesh', 8500.00, '2026-03-04 05:20:37+00', '2026-03-04 05:23:26+00'),
+('aede3a6b-67f8-41ba-a56c-ad44ee33e503', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'MD Masud', '01711727950', 'masudtravelsagency.com', '', '', 'Bangladesh', 20000.00, '2026-03-04 06:33:35+00', '2026-03-04 06:37:34+00'),
+('ce74cd9b-8551-4b0f-bbff-41d93d600691', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'NG Travels', '01912171463', 'NG Travels', '', '', 'Bangladesh', 10000.00, '2026-03-04 07:16:28+00', '2026-03-04 07:32:03+00'),
+('d0ccea5f-cde8-4988-8ded-f53154f22ecc', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'RAHE KABA', '+8801601505050', 'RAHE KABA', '', '', 'Bangladesh', 20000, '2026-02-28 04:29:25+00', '2026-03-04 08:05:37+00'),
+('4432cc21-99f4-43bb-89bd-2d0e8295217d', 'dca994c9-2cb7-4f5a-b341-2664d90c50d2', 'দারুল ফুরকান ট্যুরস এন্ড ট্রাভেলস', '01339080532', '', '', '', 'Bangladesh', 15000, '2026-02-27 22:12:03+00', '2026-03-04 08:05:58+00'),
+('678e33b2-4f9d-4c7e-a331-d76e6df40dee', '437ec3b1-119e-4001-8820-d5cf3ef59061', 'Seven Trip', '01749373748', 'Seven Trip', '', '', 'Bangladesh', 0, '2026-03-04 08:12:46+00', '2026-03-04 08:12:46+00')
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 3. SERVICE_CATEGORIES
--- ============================================================
-INSERT INTO service_categories (id, name_en, name_bn, slug, description_en, description_bn, icon, is_active, sort_order, created_at, updated_at) VALUES
-('0a0ce8fd-4b8b-42f6-b661-03873d06af71', 'Domain Services', 'ডোমেইন সেবা', 'domain-services', 'Complete domain registration and management services', 'সম্পূর্ণ ডোমেইন রেজিস্ট্রেশন এবং ম্যানেজমেন্ট সেবা', NULL, true, 1, '2026-02-07T17:34:29.43851+00:00', '2026-02-07T17:34:29.43851+00:00'),
-('e39e0f2f-7af7-45e3-9bf2-b7188018dea8', 'Web Hosting', 'ওয়েব হোস্টিং', 'web-hosting', 'Fast, secure and reliable web hosting solutions', 'দ্রুত, সুরক্ষিত এবং নির্ভরযোগ্য ওয়েব হোস্টিং সলিউশন', NULL, true, 2, '2026-02-07T17:34:29.43851+00:00', '2026-02-07T17:34:29.43851+00:00'),
-('7671168b-c448-4944-873d-cf7dd52a6a4b', 'Web Development', 'ওয়েব ডেভেলপমেন্ট', 'web-development', 'Professional website design and development', 'প্রফেশনাল ওয়েবসাইট ডিজাইন এবং ডেভেলপমেন্ট', NULL, true, 3, '2026-02-07T17:34:29.43851+00:00', '2026-02-07T17:34:29.43851+00:00'),
-('10b3ad54-e6ff-43d4-8488-b1aefd1f5d10', 'Software Development', 'সফটওয়্যার ডেভেলপমেন্ট', 'software-development', 'Custom software and application development', 'কাস্টম সফটওয়্যার এবং অ্যাপ্লিকেশন ডেভেলপমেন্ট', NULL, true, 4, '2026-02-07T17:34:29.43851+00:00', '2026-02-07T17:34:29.43851+00:00'),
-('25570ba8-91ba-47ba-b94b-84fd045ba5c5', 'Digital Marketing', 'ডিজিটাল মার্কেটিং', 'digital-marketing', 'SEO, Social Media and PPC marketing services', 'SEO, সোশ্যাল মিডিয়া এবং PPC মার্কেটিং সেবা', NULL, true, 5, '2026-02-07T17:34:29.43851+00:00', '2026-02-07T17:34:29.43851+00:00')
+-- 3. SERVICE CATEGORIES
+INSERT INTO service_categories (id, name_en, name_bn, slug, service_type, is_active, sort_order) VALUES
+('0a0ce8fd-4b8b-42f6-b661-03873d06af71', 'Domain Services', 'ডোমেইন সেবা', 'domain-services', 'domain', true, 1),
+('e39e0f2f-7af7-45e3-9bf2-b7188018dea8', 'Web Hosting', 'ওয়েব হোস্টিং', 'web-hosting', 'hosting', true, 2),
+('7671168b-c448-4944-873d-cf7dd52a6a4b', 'Web Development', 'ওয়েব ডেভেলপমেন্ট', 'web-development', 'web_development', true, 3),
+('10b3ad54-e6ff-43d4-8488-b1aefd1f5d10', 'Software Development', 'সফটওয়্যার ডেভেলপমেন্ট', 'software-development', 'software_development', true, 4),
+('25570ba8-91ba-47ba-b94b-84fd045ba5c5', 'Digital Marketing', 'ডিজিটাল মার্কেটিং', 'digital-marketing', 'digital_marketing', true, 5)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 4. SERVICES (depends on service_categories)
--- ============================================================
-INSERT INTO services (id, name_en, name_bn, slug, description_en, description_bn, service_type, category_id, features_en, features_bn, is_active, sort_order, image_url, meta_title, meta_description, created_at, updated_at) VALUES
-('50acf2b0-cb1b-4dec-8f78-987edd3ff46a', 'Domain Registration', 'ডোমেইন রেজিস্ট্রেশন', 'domain-registration', 'Register your perfect domain name with competitive pricing and free WHOIS privacy', 'প্রতিযোগিতামূলক মূল্যে এবং বিনামূল্যে WHOIS প্রাইভেসি সহ আপনার পারফেক্ট ডোমেইন নাম রেজিস্টার করুন', 'domain', '0a0ce8fd-4b8b-42f6-b661-03873d06af71', ARRAY['Free WHOIS Privacy','Free DNS Management','Domain Forwarding','Easy Transfer','24/7 Support'], ARRAY['বিনামূল্যে WHOIS প্রাইভেসি','বিনামূল্যে DNS ম্যানেজমেন্ট','ডোমেইন ফরওয়ার্ডিং','সহজ ট্রান্সফার','২৪/৭ সাপোর্ট'], true, 1, NULL, NULL, NULL, '2026-02-07T17:37:35.363021+00:00', '2026-02-21T17:13:57.959872+00:00'),
-('a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Web Hosting', 'ওয়েব হোস্টিং', 'web-hosting', 'Lightning fast SSD hosting with 99.9% uptime guarantee and free SSL', 'লাইটনিং ফাস্ট SSD হোস্টিং ৯৯.৯% আপটাইম গ্যারান্টি এবং বিনামূল্যে SSL সহ', 'hosting', 'e39e0f2f-7af7-45e3-9bf2-b7188018dea8', ARRAY['Free SSL Certificate','SSD Storage','99.9% Uptime','Daily Backups','cPanel Access','24/7 Support'], ARRAY['বিনামূল্যে SSL সার্টিফিকেট','SSD স্টোরেজ','৯৯.৯% আপটাইম','দৈনিক ব্যাকআপ','cPanel অ্যাক্সেস','২৪/৭ সাপোর্ট'], true, 2, NULL, NULL, NULL, '2026-02-07T17:37:35.363021+00:00', '2026-02-21T17:13:57.959872+00:00'),
-('e6997007-f8be-4378-bc64-31c2df3de565', 'Web Development', 'ওয়েব ডেভেলপমেন্ট', 'web-development', 'Professional, responsive websites designed to grow your business', 'আপনার ব্যবসা বৃদ্ধির জন্য ডিজাইন করা প্রফেশনাল, রেসপন্সিভ ওয়েবসাইট', 'web_development', '7671168b-c448-4944-873d-cf7dd52a6a4b', ARRAY['Custom Design','Mobile Responsive','SEO Optimized','Fast Loading','CMS Integration','Free Support (1 Year)'], ARRAY['কাস্টম ডিজাইন','মোবাইল রেসপন্সিভ','SEO অপ্টিমাইজড','ফাস্ট লোডিং','CMS ইন্টিগ্রেশন','বিনামূল্যে সাপোর্ট (১ বছর)'], true, 3, NULL, NULL, NULL, '2026-02-07T17:37:35.363021+00:00', '2026-02-21T17:13:57.959872+00:00'),
-('2408cab5-eec8-4627-a584-78cc3c28506b', 'Software Development', 'সফটওয়্যার ডেভেলপমেন্ট', 'software-development', 'Custom software solutions tailored to your business needs', 'আপনার ব্যবসার প্রয়োজন অনুযায়ী কাস্টম সফটওয়্যার সলিউশন', 'software_development', '10b3ad54-e6ff-43d4-8488-b1aefd1f5d10', ARRAY['Custom Development','API Integration','Database Design','Mobile Apps','Cloud Deployment','Ongoing Support'], ARRAY['কাস্টম ডেভেলপমেন্ট','API ইন্টিগ্রেশন','ডাটাবেজ ডিজাইন','মোবাইল অ্যাপস','ক্লাউড ডিপ্লয়মেন্ট','চলমান সাপোর্ট'], true, 4, NULL, NULL, NULL, '2026-02-07T17:37:35.363021+00:00', '2026-02-21T17:13:57.959872+00:00'),
-('6879331e-17fc-400c-8450-4019844281a8', 'Digital Marketing', 'ডিজিটাল মার্কেটিং', 'digital-marketing', 'Grow your online presence with expert SEO, Social Media and PPC services', 'এক্সপার্ট SEO, সোশ্যাল মিডিয়া এবং PPC সার্ভিসের মাধ্যমে আপনার অনলাইন উপস্থিতি বাড়ান', 'digital_marketing', '25570ba8-91ba-47ba-b94b-84fd045ba5c5', ARRAY['SEO Optimization','Social Media Management','PPC Campaigns','Content Marketing','Analytics & Reporting','Monthly Reports'], ARRAY['SEO অপ্টিমাইজেশন','সোশ্যাল মিডিয়া ম্যানেজমেন্ট','PPC ক্যাম্পেইন','কন্টেন্ট মার্কেটিং','অ্যানালিটিক্স ও রিপোর্টিং','মাসিক রিপোর্ট'], true, 5, NULL, NULL, NULL, '2026-02-07T17:37:35.363021+00:00', '2026-02-21T17:13:57.959872+00:00')
+-- 4. SERVICES
+INSERT INTO services (id, name_en, name_bn, slug, description_en, description_bn, service_type, is_active, sort_order) VALUES
+('50acf2b0-cb1b-4dec-8f78-987edd3ff46a', 'Domain Registration', 'ডোমেইন রেজিস্ট্রেশন', 'domain-registration', 'Register your perfect domain name with competitive pricing and free WHOIS privacy', 'প্রতিযোগিতামূলক মূল্যে এবং বিনামূল্যে WHOIS প্রাইভেসি সহ আপনার পারফেক্ট ডোমেইন নাম রেজিস্টার করুন', 'domain', true, 1),
+('a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Web Hosting', 'ওয়েব হোস্টিং', 'web-hosting', 'Lightning fast SSD hosting with 99.9% uptime guarantee and free SSL', 'লাইটনিং ফাস্ট SSD হোস্টিং ৯৯.৯% আপটাইম গ্যারান্টি এবং বিনামূল্যে SSL সহ', 'hosting', true, 2),
+('e6997007-f8be-4378-bc64-31c2df3de565', 'Web Development', 'ওয়েব ডেভেলপমেন্ট', 'web-development', 'Professional, responsive websites designed to grow your business', 'আপনার ব্যবসা বৃদ্ধির জন্য ডিজাইন করা প্রফেশনাল, রেসপন্সিভ ওয়েবসাইট', 'web_development', true, 3),
+('2408cab5-eec8-4627-a584-78cc3c28506b', 'Software Development', 'সফটওয়্যার ডেভেলপমেন্ট', 'software-development', 'Custom software solutions tailored to your business needs', 'আপনার ব্যবসার প্রয়োজন অনুযায়ী কাস্টম সফটওয়্যার সলিউশন', 'software_development', true, 4),
+('6879331e-17fc-400c-8450-4019844281a8', 'Digital Marketing', 'ডিজিটাল মার্কেটিং', 'digital-marketing', 'Grow your online presence with expert SEO, Social Media and PPC services', 'এক্সপার্ট SEO, সোশ্যাল মিডিয়া এবং PPC সার্ভিসের মাধ্যমে আপনার অনলাইন উপস্থিতি বাড়ান', 'digital_marketing', true, 5)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 5. SERVICE_PACKAGES (depends on services)
--- ============================================================
-INSERT INTO service_packages (id, service_id, name_en, name_bn, price, currency, billing_type, billing_cycle_months, features_en, features_bn, is_active, is_popular, sort_order, setup_fee, created_at, updated_at) VALUES
-('a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'e6997007-f8be-4378-bc64-31c2df3de565', 'Basic Website', 'বেসিক ওয়েবসাইট', 15000, 'BDT', 'one_time', NULL, ARRAY['5 Pages','Mobile Responsive','Contact Form','Basic SEO','Social Media Links','1 Year Free Support'], ARRAY['৫টি পেজ','মোবাইল রেসপন্সিভ','কন্টাক্ট ফর্ম','বেসিক SEO','সোশ্যাল মিডিয়া লিংক','১ বছর বিনামূল্যে সাপোর্ট'], true, false, 1, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('a4363364-9b7f-4d49-b7a0-e401387084fe', 'e6997007-f8be-4378-bc64-31c2df3de565', 'Professional Website', 'প্রফেশনাল ওয়েবসাইট', 35000, 'BDT', 'one_time', NULL, ARRAY['10 Pages','CMS Integration','Blog Section','Advanced SEO','Google Analytics','Speed Optimization','1 Year Free Support'], ARRAY['১০টি পেজ','CMS ইন্টিগ্রেশন','ব্লগ সেকশন','অ্যাডভান্সড SEO','গুগল অ্যানালিটিক্স','স্পিড অপ্টিমাইজেশন','১ বছর বিনামূল্যে সাপোর্ট'], true, true, 2, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('123eace6-215b-43be-8dd9-fa181fed7585', 'e6997007-f8be-4378-bc64-31c2df3de565', 'E-commerce Website', 'ই-কমার্স ওয়েবসাইট', 75000, 'BDT', 'one_time', NULL, ARRAY['Unlimited Products','Payment Gateway','Inventory Management','Order Tracking','Customer Accounts','Mobile App Ready','1 Year Free Support'], ARRAY['আনলিমিটেড প্রোডাক্ট','পেমেন্ট গেটওয়ে','ইনভেন্টরি ম্যানেজমেন্ট','অর্ডার ট্র্যাকিং','কাস্টমার অ্যাকাউন্ট','মোবাইল অ্যাপ রেডি','১ বছর বিনামূল্যে সাপোর্ট'], true, false, 3, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('e12133ac-51ee-4403-bde6-368b0c4b303c', '2408cab5-eec8-4627-a584-78cc3c28506b', 'Custom Application', 'কাস্টম অ্যাপ্লিকেশন', 100000, 'BDT', 'milestone', NULL, ARRAY['Requirements Analysis','Custom Design','Development','Testing','Deployment','3 Months Support'], ARRAY['প্রয়োজনীয়তা বিশ্লেষণ','কাস্টম ডিজাইন','ডেভেলপমেন্ট','টেস্টিং','ডিপ্লয়মেন্ট','৩ মাস সাপোর্ট'], true, true, 1, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('551d10b5-d753-4d67-ab46-397fe95400b7', '2408cab5-eec8-4627-a584-78cc3c28506b', 'Enterprise Solution', 'এন্টারপ্রাইজ সলিউশন', 500000, 'BDT', 'milestone', NULL, ARRAY['Full Requirements Gathering','Architecture Design','Multi-module Development','Integration','Training','1 Year Support','SLA Guarantee'], ARRAY['সম্পূর্ণ প্রয়োজনীয়তা সংগ্রহ','আর্কিটেকচার ডিজাইন','মাল্টি-মডিউল ডেভেলপমেন্ট','ইন্টিগ্রেশন','ট্রেনিং','১ বছর সাপোর্ট','SLA গ্যারান্টি'], true, false, 2, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('69e8080d-c2bc-484b-8b4b-2020e379cdd4', '6879331e-17fc-400c-8450-4019844281a8', 'SEO Basic', 'SEO বেসিক', 5000, 'BDT', 'recurring', 1, ARRAY['Keyword Research','On-page SEO','Technical SEO Audit','Monthly Report','Google Search Console Setup'], ARRAY['কীওয়ার্ড রিসার্চ','অন-পেজ SEO','টেকনিক্যাল SEO অডিট','মাসিক রিপোর্ট','গুগল সার্চ কনসোল সেটআপ'], true, false, 1, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('80ead7e2-e275-4c23-a288-888d5307c641', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Starter Hosting', 'স্টার্টার হোস্টিং', 3500, 'BDT', 'recurring', 12, ARRAY['5GB SSD Storage','50GB Bandwidth','Free SSL','5 Email Accounts','cPanel Access','24/7 Support'], ARRAY['৫GB SSD স্টোরেজ','৫০GB ব্যান্ডউইথ','বিনামূল্যে SSL','৫টি ইমেইল অ্যাকাউন্ট','cPanel অ্যাক্সেস','২৪/৭ সাপোর্ট'], true, true, 1, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('c61a52ad-730f-41c8-9414-92304ae10377', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Business Hosting', 'বিজনেস হোস্টিং', 5900, 'BDT', 'recurring', 12, ARRAY['20GB SSD Storage','Unlimited Bandwidth','Free SSL','Unlimited Email','cPanel Access','Daily Backup','Priority Support'], ARRAY['২০GB SSD স্টোরেজ','আনলিমিটেড ব্যান্ডউইথ','বিনামূল্যে SSL','আনলিমিটেড ইমেইল','cPanel অ্যাক্সেস','দৈনিক ব্যাকআপ','প্রায়োরিটি সাপোর্ট'], true, false, 2, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('74b7ee3f-ea10-41f1-8fdc-1e94f9d8e9ce', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Premium Hosting', 'প্রিমিয়াম হোস্টিং', 9900, 'BDT', 'recurring', 12, ARRAY['50GB NVMe Storage','Unlimited Bandwidth','Free SSL','Unlimited Email','LiteSpeed Server','Daily Backup','SSH Access','Staging Environment','Dedicated Support'], ARRAY['৫০GB NVMe স্টোরেজ','আনলিমিটেড ব্যান্ডউইথ','বিনামূল্যে SSL','আনলিমিটেড ইমেইল','LiteSpeed সার্ভার','দৈনিক ব্যাকআপ','SSH অ্যাক্সেস','স্টেজিং এনভায়রনমেন্ট','ডেডিকেটেড সাপোর্ট'], true, false, 3, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00'),
-('bb5da4d8-b291-47e2-b77e-f37df2ed5b07', '6879331e-17fc-400c-8450-4019844281a8', 'SEO Pro', 'SEO প্রো', 15000, 'BDT', 'recurring', 1, ARRAY['Advanced Keyword Research','On-page & Off-page SEO','Technical SEO','Link Building','Content Strategy','Competitor Analysis','Monthly Report','Google Ads Management'], ARRAY['অ্যাডভান্সড কীওয়ার্ড রিসার্চ','অন-পেজ ও অফ-পেজ SEO','টেকনিক্যাল SEO','লিংক বিল্ডিং','কন্টেন্ট স্ট্র্যাটেজি','প্রতিযোগী বিশ্লেষণ','মাসিক রিপোর্ট','গুগল অ্যাডস ম্যানেজমেন্ট'], true, true, 2, 0, '2026-02-07T17:40:32.455864+00:00', '2026-02-07T17:40:32.455864+00:00')
+-- 5. SERVICE PACKAGES
+INSERT INTO service_packages (id, service_id, name_en, name_bn, slug, price, billing_type, features, is_popular, is_active, sort_order) VALUES
+('a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'e6997007-f8be-4378-bc64-31c2df3de565', 'Basic Website', 'বেসিক ওয়েবসাইট', 'basic-website', 15000.00, 'one_time', '["5 Pages","Mobile Responsive","Contact Form","Basic SEO","Social Media Links","1 Year Free Support"]', false, true, 1),
+('a4363364-9b7f-4d49-b7a0-e401387084fe', 'e6997007-f8be-4378-bc64-31c2df3de565', 'Professional Website', 'প্রফেশনাল ওয়েবসাইট', 'professional-website', 35000.00, 'one_time', '["10 Pages","CMS Integration","Blog Section","Advanced SEO","Google Analytics","Speed Optimization","1 Year Free Support"]', true, true, 2),
+('123eace6-215b-43be-8dd9-fa181fed7585', 'e6997007-f8be-4378-bc64-31c2df3de565', 'E-commerce Website', 'ই-কমার্স ওয়েবসাইট', 'ecommerce-website', 75000.00, 'one_time', '["Unlimited Products","Payment Gateway","Inventory Management","Order Tracking","Customer Accounts","Mobile App Ready","1 Year Free Support"]', false, true, 3),
+('e12133ac-51ee-4403-bde6-368b0c4b303c', '2408cab5-eec8-4627-a584-78cc3c28506b', 'Custom Application', 'কাস্টম অ্যাপ্লিকেশন', 'custom-application', 100000.00, 'milestone', '["Requirements Analysis","Custom Design","Development","Testing","Deployment","3 Months Support"]', true, true, 1),
+('551d10b5-d753-4d67-ab46-397fe95400b7', '2408cab5-eec8-4627-a584-78cc3c28506b', 'Enterprise Solution', 'এন্টারপ্রাইজ সলিউশন', 'enterprise-solution', 500000.00, 'milestone', '["Full Requirements Gathering","Architecture Design","Multi-module Development","Integration","Training","1 Year Support","SLA Guarantee"]', false, true, 2),
+('69e8080d-c2bc-484b-8b4b-2020e379cdd4', '6879331e-17fc-400c-8450-4019844281a8', 'SEO Basic', 'SEO বেসিক', 'seo-basic', 5000.00, 'recurring', '["Keyword Research","On-page SEO","Technical SEO Audit","Monthly Report","Google Search Console Setup"]', false, true, 1),
+('80ead7e2-e275-4c23-a288-888d5307c641', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Starter Hosting', 'স্টার্টার হোস্টিং', 'starter-hosting', 3500.00, 'recurring', '["5GB SSD Storage","50GB Bandwidth","5 Email Accounts","1 Database","Free SSL","cPanel Access"]', false, true, 1),
+('c61a52ad-730f-41c8-9414-92304ae10377', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Business Hosting', 'বিজনেস হোস্টিং', 'business-hosting', 5900.00, 'recurring', '["20GB SSD Storage","200GB Bandwidth","20 Email Accounts","5 Databases","Free SSL","cPanel Access","Daily Backups"]', true, true, 2),
+('7f0a2e3b-1234-4567-890a-bcdef1234567', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Premium Hosting', 'প্রিমিয়াম হোস্টিং', 'premium-hosting', 9900.00, 'recurring', '["50GB SSD Storage","Unlimited Bandwidth","Unlimited Email","Unlimited Databases","Free SSL","cPanel Access","Daily Backups","Priority Support"]', false, true, 3),
+('8a1b2c3d-4567-4890-abcd-ef1234567890', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'Enterprise Hosting', 'এন্টারপ্রাইজ হোস্টিং', 'enterprise-hosting', 19900.00, 'recurring', '["100GB SSD Storage","Unlimited Bandwidth","Unlimited Email","Unlimited Databases","Free SSL","WHM Access","Daily Backups","24/7 Priority Support","Dedicated IP"]', false, true, 4)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 6. DOMAIN_PRICING
--- ============================================================
-INSERT INTO domain_pricing (id, tld, base_price, renewal_price, transfer_price, currency, is_active, is_popular, margin_percent, sort_order, created_at, updated_at) VALUES
-('f33651c3-a5db-4a3a-a94b-9068785494eb', '.com.bd', 2500, 2500, 2500, 'BDT', true, true, 5, 6, '2026-02-06T18:55:19.037003+00:00', '2026-02-06T18:55:19.037003+00:00'),
-('22633c27-a272-466e-9cb5-88e535a293c6', '.net.bd', 2500, 2500, 2500, 'BDT', true, false, 5, 7, '2026-02-06T18:55:19.037003+00:00', '2026-02-06T18:55:19.037003+00:00'),
-('a31824e1-5f22-49ef-94d0-a392f56068f6', '.org.bd', 2500, 2500, 2500, 'BDT', true, false, 5, 8, '2026-02-06T18:55:19.037003+00:00', '2026-02-06T18:55:19.037003+00:00'),
-('d965b1a7-c67c-478b-904e-e250fcda396b', '.edu.bd', 1500, 1500, 1500, 'BDT', true, false, 5, 9, '2026-02-06T18:55:19.037003+00:00', '2026-02-06T18:55:19.037003+00:00'),
-('64b9ec85-b0b1-4b68-be26-5778b5c4fcbe', '.net', 1900, 1900, 1900, 'BDT', true, true, 10, 2, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('82760c64-4e81-4d6d-bcf6-63de84ecf046', '.org', 1785, 1785, 1785, 'BDT', true, true, 10, 3, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('48d7b0e2-2df8-4d01-82fe-ab4b3bc88dd0', '.info', 3416, 4148, 3904, 'BDT', true, false, 10, 4, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('49628935-382a-4e10-8da9-6ba85bfa0e25', '.biz', 1785, 1785, 1785, 'BDT', true, false, 10, 5, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('ae460d13-3e71-49e8-879c-3f36f2b82755', '.xyz', 342, 1951, 1836, 'BDT', true, false, 15, 10, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('93a6336a-5316-4c27-b952-6ea13e5cf5b2', '.online', 3719, 3719, 3719, 'BDT', true, false, 15, 11, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('c91af8ac-4cc6-40b8-82f3-d2475b996e1f', '.store', 7438, 7438, 7438, 'BDT', true, false, 15, 12, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('90d99109-65f8-497b-a4a4-9792ac6c7e02', '.tech', 6694, 6694, 6694, 'BDT', true, false, 15, 13, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('2294ffe9-bd47-44f1-a643-cd192822b9e4', '.io', 7481, 7481, 7481, 'BDT', true, true, 10, 14, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('7211af91-d564-4cf4-b213-b7e181d5ab44', '.co', 5124, 5124, 4270, 'BDT', true, false, 10, 15, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('c43a5bf1-e2d2-4ed2-9997-1b41cacf1a66', '.name', 1338, 1338, 1338, 'BDT', true, false, 5, 16, '2026-02-07T11:52:29.564459+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('e972b20e-eba1-4868-b9a6-dc2b0c914f14', '.asia', 2200, 2700, 2200, 'BDT', true, false, 5, 17, '2026-02-07T11:52:29.564459+00:00', '2026-02-07T11:52:29.564459+00:00'),
-('6b0c4183-ecf7-4b8c-b925-611dc3acfccc', '.mobi', 5951, 5951, 5951, 'BDT', true, false, 5, 18, '2026-02-07T11:52:29.564459+00:00', '2026-02-07T11:52:29.564459+00:00'),
-('6ef2e4b2-1a31-4b3c-a56a-fcc94b2b8c91', '.me', 4270, 4270, 4270, 'BDT', true, false, 5, 19, '2026-02-07T11:52:29.564459+00:00', '2026-02-07T11:52:29.564459+00:00'),
-('97c73a81-33a4-4afc-b74f-3bc6cbfafbd1', '.com', 1650, 1650, 1650, 'BDT', true, true, 10, 1, '2026-02-06T18:55:19.037003+00:00', '2026-02-08T13:43:55.317861+00:00'),
-('c8b6e3d1-1234-4567-890a-bcdef1234567', '.bd', 3000, 3000, 3000, 'BDT', true, true, 5, 20, '2026-02-06T18:55:19.037003+00:00', '2026-02-06T18:55:19.037003+00:00')
+-- 6. DOMAIN PRICING
+INSERT INTO domain_pricing (id, tld, base_price, renewal_price, transfer_price, margin_percent, currency, is_popular, is_active, sort_order) VALUES
+('11111111-1111-1111-1111-111111111111', '.com', 1750, 1750, 1750, 10, 'BDT', true, true, 1),
+('64b9ec85-b0b1-4b68-be26-5778b5c4fcbe', '.net', 1900, 1900, 1900, 10, 'BDT', true, true, 2),
+('82760c64-4e81-4d6d-bcf6-63de84ecf046', '.org', 1785, 1785, 1785, 10, 'BDT', true, true, 3),
+('48d7b0e2-2df8-4d01-82fe-ab4b3bc88dd0', '.info', 3416, 4148, 3904, 10, 'BDT', false, true, 4),
+('49628935-382a-4e10-8da9-6ba85bfa0e25', '.biz', 1785, 1785, 1785, 10, 'BDT', false, true, 5),
+('f33651c3-a5db-4a3a-a94b-9068785494eb', '.com.bd', 2500, 2500, 2500, 5, 'BDT', true, true, 6),
+('22633c27-a272-466e-9cb5-88e535a293c6', '.net.bd', 2500, 2500, 2500, 5, 'BDT', false, true, 7),
+('a31824e1-5f22-49ef-94d0-a392f56068f6', '.org.bd', 2500, 2500, 2500, 5, 'BDT', false, true, 8),
+('d965b1a7-c67c-478b-904e-e250fcda396b', '.edu.bd', 1500, 1500, 1500, 5, 'BDT', false, true, 9),
+('ae460d13-3e71-49e8-879c-3f36f2b82755', '.xyz', 342, 1951, 1836, 15, 'BDT', false, true, 10),
+('93a6336a-5316-4c27-b952-6ea13e5cf5b2', '.online', 3719, 3719, 3719, 15, 'BDT', false, true, 11),
+('c91af8ac-4cc6-40b8-82f3-d2475b996e1f', '.store', 7438, 7438, 7438, 15, 'BDT', false, true, 12),
+('90d99109-65f8-497b-a4a4-9792ac6c7e02', '.tech', 6694, 6694, 6694, 15, 'BDT', false, true, 13),
+('2294ffe9-bd47-44f1-a643-cd192822b9e4', '.io', 7481, 7481, 7481, 10, 'BDT', true, true, 14),
+('7211af91-d564-4cf4-b213-b7e181d5ab44', '.co', 5124, 5124, 4270, 10, 'BDT', false, true, 15),
+('c43a5bf1-e2d2-4ed2-9997-1b41cacf1a66', '.name', 1338, 1338, 1338, 5, 'BDT', false, true, 16),
+('e972b20e-eba1-4868-b9a6-dc2b0c914f14', '.asia', 2200, 2700, 2200, 5, 'BDT', false, true, 17),
+('6b0c4183-ecf7-4b8c-b925-611dc3acfccc', '.mobi', 5951, 5951, 4463, 5, 'BDT', false, true, 18),
+('2097c7d7-02aa-4b9f-920f-3eee1ee0b452', '.news', 4028, 5179, 4028, 5, 'BDT', false, true, 19)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 7. ROLE_PERMISSIONS  
--- ============================================================
--- Admin gets all permissions for all modules
-INSERT INTO role_permissions (id, role, module, action, allowed, created_at, updated_at)
-SELECT gen_random_uuid(), 'admin', m.module, a.action, true, '2026-02-27T16:16:41.389208+00:00', '2026-02-27T16:16:41.389208+00:00'
-FROM (VALUES ('orders'),('invoices'),('customers'),('domains'),('hosting'),('leads'),('tickets'),('proposals'),('blog'),('services'),('settings'),('analytics'),('backup'),('users')) AS m(module)
-CROSS JOIN (VALUES ('view'),('edit'),('delete'),('export')) AS a(action)
-ON CONFLICT DO NOTHING;
-
--- Staff gets view/edit for most modules
-INSERT INTO role_permissions (id, role, module, action, allowed, created_at, updated_at)
-SELECT gen_random_uuid(), 'staff', m.module, a.action, true, '2026-02-27T16:16:41.389208+00:00', '2026-02-27T16:16:41.389208+00:00'
-FROM (VALUES ('orders'),('invoices'),('customers'),('domains'),('hosting'),('leads'),('tickets'),('proposals'),('blog'),('services')) AS m(module)
-CROSS JOIN (VALUES ('view'),('edit')) AS a(action)
-ON CONFLICT DO NOTHING;
-
--- ============================================================
--- 8. HOMEPAGE_SECTIONS
--- ============================================================
-INSERT INTO homepage_sections (id, section_key, title_en, title_bn, subtitle_en, subtitle_bn, is_active, sort_order, metadata, created_at, updated_at) VALUES
-('da9ef8b4-f835-4ac5-a87f-c38db8e001af', 'hero', 'Build Your Digital Presence', 'আপনার ডিজিটাল উপস্থিতি তৈরি করুন', 'Professional web solutions for your business', 'আপনার ব্যবসার জন্য পেশাদার ওয়েব সমাধান', true, 1, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('42803f6d-e55b-444b-a7a7-939bb191cf60', 'services', 'Our Services', 'আমাদের সেবাসমূহ', 'Comprehensive digital solutions', 'সম্পূর্ণ ডিজিটাল সমাধান', true, 2, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('36dc6c9e-2ff1-4198-9860-211645108c83', 'features', 'Why Choose Us', 'কেন আমাদের বেছে নিবেন', 'What makes us different', 'আমাদের বিশেষত্ব', true, 3, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('a3744274-7231-4c9a-9a22-b5dec2912164', 'portfolio', 'Our Work', 'আমাদের কাজ', 'Projects we are proud of', 'আমাদের গর্বের প্রজেক্ট', true, 4, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('a5fa880d-ffa5-42b4-b2d5-b2b7e42a9ddd', 'testimonials', 'Client Testimonials', 'ক্লায়েন্ট প্রশংসাপত্র', 'What our clients say', 'আমাদের ক্লায়েন্টদের মতামত', true, 5, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('aee1cc7c-d965-4cc7-9919-b17741eeaa32', 'pricing', 'Pricing', 'মূল্য', 'Transparent pricing for all services', 'সব সেবার স্বচ্ছ মূল্য', true, 6, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('44e1b224-ccc8-4d13-9742-6213016d1fb9', 'cta', 'Get Started Today', 'আজই শুরু করুন', 'Transform your business with us', 'আমাদের সাথে আপনার ব্যবসা রূপান্তর করুন', true, 7, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('a05b3f74-b219-45e4-b2e3-a5e08b9e398c', 'faq', 'Frequently Asked Questions', 'সচরাচর জিজ্ঞাসিত প্রশ্ন', 'Find answers to common questions', 'সাধারণ প্রশ্নের উত্তর পান', true, 8, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00'),
-('7019a2e9-29ec-49bc-9bf3-72ff0a9308d8', 'offer_banner', 'Special Offer', 'বিশেষ অফার', 'Limited time discount', 'সীমিত সময়ের জন্য ছাড়', true, 9, '{}', '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00')
+-- 7. ORDERS
+INSERT INTO orders (id, order_number, user_id, service_id, package_id, service_type, subtotal, discount, tax, total, advance_payment, status, notes, admin_notes, created_at, updated_at) VALUES
+('e52cfab1-a92e-43db-9594-7c78aa9fa8b6', '2602391303', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', '80ead7e2-e275-4c23-a288-888d5307c641', 'hosting', 3500, 907, 0, 2593, 346, 'completed', NULL, '', '2026-02-27 22:02:17+00', '2026-02-27 22:02:49+00'),
+('ac17b388-edf0-4e88-a054-acf3bfc3380c', '2602427831', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'web_development', 15000, 3889, 0, 11111, 1481, 'completed', NULL, '', '2026-02-27 22:02:19+00', '2026-02-27 22:02:57+00'),
+('bef4eab6-4761-46a1-8150-34262c983d6a', '2602692097', '7287f2f7-e535-40c6-8bf1-5c70a113c386', '50acf2b0-cb1b-4dec-8f78-987edd3ff46a', NULL, 'domain', 1750, 454, 0, 1296, 173, 'completed', NULL, '', '2026-02-27 22:02:14+00', '2026-02-27 22:04:59+00'),
+('3b4f9c06-8a29-492f-aa4d-448bf6805274', '2602649852', '0a574a15-d015-4fa2-a5fa-740222ed1de1', '50acf2b0-cb1b-4dec-8f78-987edd3ff46a', NULL, 'domain', 1750, 0, 0, 1750, 0, 'completed', NULL, '', '2026-02-27 21:46:20+00', '2026-02-27 22:05:21+00'),
+('32bbb4d2-ded1-46df-86b1-32f1c24c29c4', '2602477838', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', '80ead7e2-e275-4c23-a288-888d5307c641', 'hosting', 3500, 0, 0, 3500, 0, 'completed', NULL, '', '2026-02-27 21:39:24+00', '2026-02-27 22:05:29+00'),
+('7abbe1cb-78ed-4546-b808-494a31130d44', '2602248809', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'c61a52ad-730f-41c8-9414-92304ae10377', 'hosting', 5900, 0, 0, 5900, 0, 'completed', NULL, '', '2026-02-27 21:39:22+00', '2026-02-27 22:05:43+00'),
+('6da4d3e7-29e5-40fb-8f95-4743bb96ddd9', '2602859949', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'c61a52ad-730f-41c8-9414-92304ae10377', 'hosting', 5900, 1750, 0, 4150, 692, 'completed', NULL, NULL, '2026-02-28 04:33:21+00', '2026-02-28 07:01:46+00'),
+('7ee3a39e-49c6-4928-b89f-1f23fa8a303e', '2602195863', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a4363364-9b7f-4d49-b7a0-e401387084fe', 'web_development', 35000, 10381, 0, 24619, 4103, 'completed', NULL, NULL, '2026-02-28 04:33:23+00', '2026-02-28 07:01:46+00'),
+('e3f9e7d9-f65b-49a6-9146-97402a0434c9', '2602081517', 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', '50acf2b0-cb1b-4dec-8f78-987edd3ff46a', NULL, 'domain', 1750, 519, 0, 1231, 205, 'completed', NULL, NULL, '2026-02-28 04:33:17+00', '2026-02-28 07:01:46+00'),
+('329d6a7a-1b9c-484f-9fdd-5140937f89e6', '2602517261', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'web_development', 15000, 0, 0, 15000, 0, 'completed', NULL, NULL, '2026-03-02 05:39:47+00', '2026-03-02 06:19:38+00'),
+('8ad01a8a-dc70-4c17-8b2b-1c397204bbb3', '2602852871', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'web_development', 15000, 0, 0, 15000, 0, 'completed', NULL, NULL, '2026-03-04 05:22:00+00', '2026-03-04 05:23:26+00'),
+('29d41368-f8ee-41e3-845a-52249eb4743c', '2602719213', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a4363364-9b7f-4d49-b7a0-e401387084fe', 'web_development', 35000, 0, 0, 35000, 0, 'completed', NULL, NULL, '2026-03-04 06:34:55+00', '2026-03-04 06:37:34+00'),
+('be8132ed-29dd-406d-9b40-6c5f3b24d7e8', '2603000004', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', '2408cab5-eec8-4627-a584-78cc3c28506b', NULL, 'software_development', 30000, 0, 0, 30000, 0, 'completed', NULL, NULL, '2026-03-04 06:46:47+00', '2026-03-04 06:49:33+00'),
+('f1f6e14c-0161-42e3-9b00-e0a895e2b511', '2603000005', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'web_development', 15000, 0, 0, 15000, 0, 'completed', NULL, NULL, '2026-03-04 07:32:03+00', '2026-03-04 07:32:03+00'),
+('5e78773c-2d94-4087-b573-f412c168f714', '2603000006', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'a7d62d22-13b2-4989-b178-9b5d0a7715c2', 'c61a52ad-730f-41c8-9414-92304ae10377', 'hosting', 5900, 0, 0, 5900, 0, 'completed', NULL, NULL, '2026-03-04 08:52:39+00', '2026-03-04 08:53:26+00'),
+('164f6916-f66e-442b-a9cf-300a92243310', '2603000007', 'edf1f376-558d-43cb-9144-1815eabfa468', 'e6997007-f8be-4378-bc64-31c2df3de565', 'a63f3cb7-d2c8-4084-b9c5-26097ae9bc78', 'web_development', 15000, 0, 0, 15000, 0, 'pending', NULL, NULL, '2026-03-04 11:57:57+00', '2026-03-05 23:11:11+00')
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 9. AFFILIATES
--- ============================================================
-INSERT INTO affiliates (id, user_id, referral_code, commission_rate, status, total_clicks, total_conversions, total_earnings, pending_earnings, withdrawable_earnings, withdrawn_earnings, grace_period_days, min_withdrawal_amount, payment_details, created_at, updated_at) VALUES
-('65d1ac15-b5f1-46d3-a1bb-8aaaec942ad1', 'b43e1fc1-857a-4aba-b169-766211ac176c', '251269C7', 10, 'pending', 0, 0, 0, 0, 0, 0, 30, 500, '{}', '2026-02-07T17:13:55.04687+00:00', '2026-02-07T17:13:55.04687+00:00')
+-- 8. INVOICES
+INSERT INTO invoices (id, invoice_number, order_id, user_id, subtotal, discount, tax, total, advance_paid, due_amount, status, due_date, paid_at, currency, notes, created_at, updated_at) VALUES
+('297e98ab-29d1-4d9d-8b04-1d71285240d3', 'INV-2602000008', 'ac17b388-edf0-4e88-a054-acf3bfc3380c', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 15000, 3889, 0, 11111, 2000, 9111, 'partial', '2026-03-06', NULL, 'BDT', '', '2026-02-27 22:02:19+00', '2026-02-27 22:06:37+00'),
+('68a122a4-8aea-4bc3-960b-128b74ec24c5', 'INV-2602000007', 'e52cfab1-a92e-43db-9594-7c78aa9fa8b6', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 3500, 907, 0, 2593, 0, 2593, 'unpaid', '2026-03-06', NULL, 'BDT', '', '2026-02-27 22:02:17+00', '2026-02-27 22:06:48+00'),
+('00560484-6b8e-4230-ae70-7343102b2d76', 'INV-2602000006', 'bef4eab6-4761-46a1-8150-34262c983d6a', '7287f2f7-e535-40c6-8bf1-5c70a113c386', 1750, 454, 0, 1296, 0, 1296, 'unpaid', '2026-03-06', NULL, 'BDT', '', '2026-02-27 22:02:14+00', '2026-02-27 22:06:58+00'),
+('1847c4e5-d990-4037-97cd-0b6081d98fec', 'INV-2602000015', NULL, 'd0e90e74-1c6f-46fc-ba2a-0b85fbe75a69', 42650, 12650, 0, 30000, 0, 0, 'paid', '2026-03-07', '2026-02-28 06:58:22+00', 'BDT', 'Merged from orders: 2602081517, 2602859949, 2602195863', '2026-02-28 04:59:49+00', '2026-02-28 07:42:09+00'),
+('4ac11dfa-b6f0-4478-886d-dae089aa92c4', 'INV-2602000002', '32bbb4d2-ded1-46df-86b1-32f1c24c29c4', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 3500, 0, 0, 3500, 0, 0, 'paid', '2026-03-06', '2026-02-27 21:39:48+00', 'BDT', '', '2026-02-27 21:39:24+00', '2026-02-28 07:04:16+00'),
+('fe6c21df-5893-4eca-b7b0-53525e52efea', 'INV-2602000001', '7abbe1cb-78ed-4546-b808-494a31130d44', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 5900, 0, 0, 5900, 0, 0, 'paid', '2026-03-06', '2026-02-27 21:39:54+00', 'BDT', '', '2026-02-27 21:39:22+00', '2026-02-28 07:04:16+00'),
+('b069e1c8-27b0-49a2-bada-a81caa1543ee', 'INV-2602000003', '3b4f9c06-8a29-492f-aa4d-448bf6805274', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 1750, 0, 0, 1750, 0, 0, 'paid', '2026-03-06', '2026-02-27 21:46:43+00', 'BDT', '', '2026-02-27 21:46:20+00', '2026-02-28 07:04:16+00'),
+('0abae2ae-a541-469e-96d2-1c82b01c06e5', 'INV-2603000008', '164f6916-f66e-442b-a9cf-300a92243310', 'edf1f376-558d-43cb-9144-1815eabfa468', 37749, 5250, 0, 32499, 2000, 30499, 'partial', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 11:57:57+00', '2026-03-05 23:11:11+00'),
+('22c6a897-daf8-409f-ada0-7b6b165ce58c', 'INV-2603000002', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 20250, 10250, 0, 10000, 0, 0, 'paid', '2026-03-09', '2026-03-02 06:19:15+00', 'BDT', '', '2026-03-02 06:18:24+00', '2026-03-02 06:19:38+00'),
+('7cb3cccc-ed95-4867-a80c-a32ce54b41d3', 'INV-2603000003', '8ad01a8a-dc70-4c17-8b2b-1c397204bbb3', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 20250, 10250, 0, 10000, 1500, 8500, 'partial', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 05:22:02+00', '2026-03-04 05:23:26+00'),
+('45898306-03ce-4af9-b930-d7b3a3631274', 'INV-2603000001', NULL, 'dca994c9-2cb7-4f5a-b341-2664d90c50d2', 42650, 12650, 0, 30000, 15000, 15000, 'partial', '2026-03-09', NULL, 'BDT', 'Merged from orders', '2026-03-02 05:39:49+00', '2026-03-04 08:05:58+00'),
+('aaaabbbb-1111-4222-8333-444455556666', 'INV-2603000004', '29d41368-f8ee-41e3-845a-52249eb4743c', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 42650, 0, 0, 42650, 10000, 32650, 'partial', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 06:34:57+00', '2026-03-04 06:37:34+00'),
+('bbbbcccc-2222-4333-8444-555566667777', 'INV-2603000005', 'be8132ed-29dd-406d-9b40-6c5f3b24d7e8', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 30000, 0, 0, 30000, 0, 30000, 'unpaid', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 06:46:48+00', '2026-03-04 06:49:33+00'),
+('ccccdddd-3333-4444-8555-666677778888', 'INV-2603000006', 'f1f6e14c-0161-42e3-9b00-e0a895e2b511', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 20150, 0, 0, 20150, 10000, 10150, 'partial', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 07:32:04+00', '2026-03-04 07:32:03+00'),
+('ddddeeee-4444-4555-8666-777788889999', 'INV-2603000007', '5e78773c-2d94-4087-b573-f412c168f714', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 5900, 0, 0, 5900, 0, 5900, 'unpaid', '2026-03-11', NULL, 'BDT', NULL, '2026-03-04 08:52:40+00', '2026-03-04 08:53:26+00')
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- 10. PROPOSAL_TEMPLATES
--- ============================================================
-INSERT INTO proposal_templates (id, name, is_default, primary_color, secondary_color, accent_color, header_text_en, header_text_bn, footer_text_en, footer_text_bn, terms_conditions_en, terms_conditions_bn, payment_instructions_en, payment_instructions_bn, show_company_details, show_bank_details, show_mobile_payment, created_at, updated_at) VALUES
-('767ac07b-1a91-4b05-8d0a-84fddad05bb3', 'Default Template', true, '#2563eb', '#1e40af', '#3b82f6', 'Thank you for considering DigiWebDex for your project.', 'আপনার প্রজেক্টের জন্য DigiWebDex বিবেচনা করার জন্য ধন্যবাদ।', 'We look forward to working with you.', 'আপনার সাথে কাজ করার জন্য অপেক্ষায় রইলাম।', E'1. 50% advance payment required to start.\n2. Remaining 50% upon project completion.\n3. Revisions limited to project scope.\n4. Timeline starts after advance payment.', E'১. শুরুতে ৫০% অগ্রিম পেমেন্ট প্রয়োজন।\n২. প্রজেক্ট সম্পন্ন হলে বাকি ৫০%।\n৩. সংশোধন প্রজেক্ট স্কোপের মধ্যে সীমাবদ্ধ।\n৪. অগ্রিম পেমেন্টের পর টাইমলাইন শুরু।', 'Please make payment via bKash/Nagad or bank transfer.', 'অনুগ্রহ করে বিকাশ/নগদ অথবা ব্যাংক ট্রান্সফারের মাধ্যমে পেমেন্ট করুন।', true, true, true, '2026-02-08T05:04:07.679538+00:00', '2026-02-08T05:04:07.679538+00:00')
+-- 9. INVOICE ITEMS
+INSERT INTO invoice_items (id, invoice_id, description, service_type, package_name, domain, renewal_date, qty, price, total) VALUES
+('f177117d-9267-4145-b849-468279cd5603', 'fe6c21df-5893-4eca-b7b0-53525e52efea', 'ওয়েব হোস্টিং', 'hosting', 'বিজনেস হোস্টিং', 'smelitehajj.com', '2027-01-26', 1, 5900, 5900),
+('c5c744a2-bb82-4c5d-999d-9054da704412', '4ac11dfa-b6f0-4478-886d-dae089aa92c4', 'ওয়েব হোস্টিং', 'hosting', 'স্টার্টার হোস্টিং', 'soft.smelitehajj.com', '2027-01-26', 1, 3500, 3500),
+('7f1ab7c3-eedb-4d0d-9a7a-dfe8517b5cc9', 'b069e1c8-27b0-49a2-bada-a81caa1543ee', 'ডোমেইন রেজিস্ট্রেশন', 'domain', 'Custom', 'smelitehajj.com', '2026-08-19', 1, 1750, 1750),
+('0d378ee4-8703-4c10-9427-94fe1660e5c4', '00560484-6b8e-4230-ae70-7343102b2d76', 'ডোমেইন রেজিস্ট্রেশন', 'domain', 'Custom', 'zenithoverseasbd.com', '2027-02-21', 1, 1750, 1750),
+('48cc5e69-f419-4550-a425-21214d28c36a', '68a122a4-8aea-4bc3-960b-128b74ec24c5', 'ওয়েব হোস্টিং', 'hosting', 'স্টার্টার হোস্টিং', 'zenithoverseasbd.com', '2026-02-21', 1, 3500, 3500),
+('77d417ef-0761-4530-af83-85967e90920f', '297e98ab-29d1-4d9d-8b04-1d71285240d3', 'ওয়েব ডেভেলপমেন্ট', 'web_development', 'বেসিক ওয়েবসাইট', NULL, NULL, 1, 15000, 15000),
+('8a472e0c-7356-4c3a-8067-ec78267d44ea', '1847c4e5-d990-4037-97cd-0b6081d98fec', 'ডোমেইন রেজিস্ট্রেশন', 'domain', 'Custom', 'rahekabatravels.com', '2027-02-27', 1, 1750, 1750),
+('e0e66e53-c605-4aa1-9c93-17a7a911cfea', '1847c4e5-d990-4037-97cd-0b6081d98fec', 'ওয়েব হোস্টিং', 'hosting', 'বিজনেস হোস্টিং', 'rahekabatravels.com', '2027-02-27', 1, 5900, 5900),
+('0319456c-9db8-4db2-bd9c-ba89fb4f7f53', '1847c4e5-d990-4037-97cd-0b6081d98fec', 'ওয়েব ডেভেলপমেন্ট', 'web_development', 'প্রফেশনাল ওয়েবসাইট', NULL, NULL, 1, 35000, 35000),
+('dd5001d3-39f3-4644-91a7-9f8dc7666263', '45898306-03ce-4af9-b930-d7b3a3631274', 'ডোমেইন রেজিস্ট্রেশন', 'domain', 'Custom', 'darulfurkantravels.com', '2027-01-31', 1, 1750, 1750),
+('387280db-e5a6-4a8a-ad17-a83cba3c5bae', '45898306-03ce-4af9-b930-d7b3a3631274', 'ওয়েব হোস্টিং', 'hosting', 'বিজনেস হোস্টিং', 'darulfurkantravels.com', '2026-01-31', 1, 5900, 5900),
+('afdd2b9b-bde7-4dfa-99be-cee48598b354', '45898306-03ce-4af9-b930-d7b3a3631274', 'ওয়েব ডেভেলপমেন্ট', 'web_development', 'প্রফেশনাল ওয়েবসাইট', NULL, NULL, 1, 35000, 35000),
+('016a69b4-8312-48b7-8b31-cab8dbf3ea83', '22c6a897-daf8-409f-ada0-7b6b165ce58c', 'ডোমেইন রেজিস্ট্রেশন', 'domain', 'Custom', 'rofroftravels.com', '2027-02-23', 1, 1750, 1750),
+('a7c81662-071f-45f9-b7c7-adf213258a23', '22c6a897-daf8-409f-ada0-7b6b165ce58c', 'ওয়েব হোস্টিং', 'hosting', 'স্টার্টার হোস্টিং', 'rofroftravels.com', '2027-02-23', 1, 3500, 3500),
+('6ac7de7f-0cfa-4296-8c94-0cfb4d06856b', '22c6a897-daf8-409f-ada0-7b6b165ce58c', 'ওয়েব ডেভেলপমেন্ট', 'web_development', 'বেসিক ওয়েবসাইট', NULL, NULL, 1, 15000, 15000)
 ON CONFLICT (id) DO NOTHING;
 
--- ============================================================
--- NOTE: Orders, invoices, order_items, invoice_items, subscriptions,
--- notifications, manual_payments, order_meta, projects, system_settings,
--- notification_templates, contact_messages, landing_pages, blog_posts,
--- and sitemap_entries data is available but extremely large.
--- 
--- To import the FULL dataset, run the export script on your LOCAL machine:
---   cd migration/scripts
---   SUPABASE_PASSWORD='your-db-password' ./export_supabase_data.sh
---
--- This SQL file contains the essential reference/config data.
--- Transactional data (orders/invoices) should be exported via pg_dump.
--- ============================================================
+-- 10. ORDER ITEMS
+INSERT INTO order_items (id, order_id, service_type, name, description, domain, quantity, unit_price, total) VALUES
+('d5622853-39bd-4592-820f-f2cdcaef114d', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'domain', 'ডোমেইন রেজিস্ট্রেশন', 'ডোমেইন রেজিস্ট্রেশন', 'rofroftravels.com', 1, 1750, 1750),
+('e1d91ba6-cc33-4788-bd4d-eb681f7d901b', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'rofroftravels.com', 1, 3500, 3500),
+('04429d42-3e57-4665-bfe8-df33fa494bc7', '329d6a7a-1b9c-484f-9fdd-5140937f89e6', 'web_development', 'ওয়েব ডেভেলপমেন্ট', 'ওয়েব ডেভেলপমেন্ট', NULL, 1, 15000, 15000),
+('d6a0fa8e-7067-41a1-bbb5-199dca844e8f', '8ad01a8a-dc70-4c17-8b2b-1c397204bbb3', 'domain', 'ডোমেইন রেজিস্ট্রেশন', 'ডোমেইন রেজিস্ট্রেশন', 'saztravelvisa.com', 1, 1750, 1750),
+('23a8cd8f-9687-4e34-b954-0e398dc9849f', '8ad01a8a-dc70-4c17-8b2b-1c397204bbb3', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'saztravelvisa.com', 1, 3500, 3500),
+('7eb5c223-d805-4e02-afa3-11ca2cf66d4c', '8ad01a8a-dc70-4c17-8b2b-1c397204bbb3', 'web_development', 'ওয়েব ডেভেলপমেন্ট', 'ওয়েব ডেভেলপমেন্ট', NULL, 1, 15000, 15000),
+('6f30930e-4585-4e44-aede-414a61b3620f', '29d41368-f8ee-41e3-845a-52249eb4743c', 'domain', 'ডোমেইন রেজিস্ট্রেশন', 'ডোমেইন রেজিস্ট্রেশন', 'masudtravelsagency.com', 1, 1750, 1750),
+('03a50b31-41e8-4212-82b0-11e555c359af', '29d41368-f8ee-41e3-845a-52249eb4743c', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'masudtravelsagency.com', 1, 5900, 5900),
+('6522f29f-8e34-4f97-85be-289449fcd785', '29d41368-f8ee-41e3-845a-52249eb4743c', 'web_development', 'ওয়েব ডেভেলপমেন্ট', 'ওয়েব ডেভেলপমেন্ট', NULL, 1, 35000, 35000),
+('076fe5a6-86f6-4360-9510-e3e3d3ad8ac2', 'be8132ed-29dd-406d-9b40-6c5f3b24d7e8', 'software_development', 'সফটওয়্যার ডেভেলপমেন্ট', 'সফটওয়্যার ডেভেলপমেন্ট', NULL, 1, 30000, 30000),
+('6ed88d10-6d60-444a-8a5c-0084fe25f822', 'f1f6e14c-0161-42e3-9b00-e0a895e2b511', 'domain', 'ডোমেইন রেজিস্ট্রেশন', 'ডোমেইন রেজিস্ট্রেশন', 'ngtravels.com', 1, 1650, 1650),
+('bb47eb02-0708-4255-ade4-c04344cede51', 'f1f6e14c-0161-42e3-9b00-e0a895e2b511', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'ngtravels.com', 1, 3500, 3500),
+('955c5d16-3ee6-46d0-a42d-0fa0015567d2', 'f1f6e14c-0161-42e3-9b00-e0a895e2b511', 'web_development', 'ওয়েব ডেভেলপমেন্ট', 'ওয়েব ডেভেলপমেন্ট', NULL, 1, 15000, 15000),
+('944d5f1f-7a61-4307-9766-e2531a58cb9f', '5e78773c-2d94-4087-b573-f412c168f714', 'hosting', 'ওয়েব হোস্টিং', 'ওয়েব হোস্টিং', 'smtradeint.com', 1, 5900, 5900)
+ON CONFLICT (id) DO NOTHING;
 
-COMMIT;
+-- 11. PROJECTS
+INSERT INTO projects (id, order_id, user_id, name, description, status) VALUES
+('1413cdbe-0313-4946-b7f1-14de270d6fc5', '164f6916-f66e-442b-a9cf-300a92243310', 'edf1f376-558d-43cb-9144-1815eabfa468', 'বেসিক ওয়েবসাইট - Project', 'Auto-created from Order 2603000007', 'pending')
+ON CONFLICT (id) DO NOTHING;
+
+-- 12. SUBSCRIPTIONS
+INSERT INTO subscriptions (id, user_id, service_type, status, billing_cycle, amount, next_billing_date, auto_renew, metadata) VALUES
+('dcfad509-0afb-4731-84f3-88e8f894f400', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'domain', 'active', 'yearly', 1750, '2027-02-23', true, '{"domain":"rofroftravels.com"}'),
+('f28f1f46-660e-471a-bbb2-382fb33b2a2c', 'b3aa8856-e6a7-49c1-830f-42e7b5a49fab', 'hosting', 'active', 'yearly', 3500, '2027-02-23', true, '{"domain":"rofroftravels.com"}'),
+('d51545e7-7da0-411f-bc9c-22110f9e2266', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'domain', 'active', 'yearly', 1750, '2027-03-04', true, '{"domain":"saztravelvisa.com"}'),
+('1f68e0dd-043f-4b25-ba15-003f3aebfcef', 'f9ef0dcf-c041-4906-80f7-009504cb6968', 'hosting', 'active', 'yearly', 3500, '2027-03-04', true, '{"domain":"saztravelvisa.com"}'),
+('da1534e1-0ef3-4ea7-b6f3-b529d7c2e507', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'domain', 'active', 'yearly', 1750, '2027-03-03', true, '{"domain":"masudtravelsagency.com"}'),
+('582bcd81-29c2-42ec-863a-9e9b7742ce20', 'e0dff200-b9b6-42ba-aa6e-af5faa8c5beb', 'hosting', 'active', 'yearly', 5900, '2027-03-04', true, '{"domain":"masudtravelsagency.com"}'),
+('30119df8-9ca9-4471-aee5-49df93201f9b', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'domain', 'active', 'yearly', 1650, '2027-03-04', true, '{"domain":"ngtravels.com"}'),
+('90f85c0e-c80d-4e2f-b47b-a1c9a4cbaf8e', '4f314a32-8483-44a0-afb1-0f57fa3564dd', 'hosting', 'active', 'yearly', 3500, '2027-03-04', true, '{"domain":"ngtravels.com"}'),
+('eeee1111-aaaa-4bbb-8ccc-ddddeeee1111', '0a574a15-d015-4fa2-a5fa-740222ed1de1', 'hosting', 'active', 'yearly', 5900, '2027-03-04', true, '{"domain":"smtradeint.com"}')
+ON CONFLICT (id) DO NOTHING;
+
+-- 13. SYSTEM SETTINGS
+INSERT INTO system_settings (id, key, value, category, description, is_sensitive) VALUES
+('6743072f-3d55-4769-b310-a776e7cd74b1', 'admin_notification_email', '"digiwebdex@gmail.com"', 'notifications', 'Admin notification email', false),
+('c2cfc396-5e6a-4258-9512-72d2d17d6594', 'admin_notification_phone', '"+8801674533303"', 'notifications', 'Admin notification phone', false),
+('4e234abf-dee9-48a6-8f76-43ca64c6bd91', 'bkash_number', '"01XXXXXXXXX"', 'payment', 'bKash payment number', false),
+('d17dd14c-b9d3-4960-9f0a-5c4deae23930', 'proposal_reminder_enabled', 'true', 'automation', 'Enable proposal reminder', false),
+('232f8e6c-948a-44c0-9a95-336ca98b9ab7', 'proposal_reminder_days', '3', 'automation', 'Days before proposal reminder', false),
+('445a73be-65ca-40c4-89ca-17295b8e45ae', 'milestone_reminder_days', '2', 'automation', 'Days before milestone due reminder', false),
+('81ece454-4bd4-4caf-b311-21d1e6df8c11', 'auto_reminder_enabled', 'true', 'automation', 'Enable automatic reminders', false),
+('024f040d-4a75-4d80-ab0a-de15c230ad68', 'subscription_auto_renew', 'true', 'automation', 'Enable subscription auto-renewal', false),
+('3fd4e0ee-a1fc-4a9f-82c3-4f65da00410b', 'reminder_interval_days', '3', 'business', 'Reminder interval in days', false),
+('0727588f-342b-41fb-92a5-40d325421fe2', 'default_commission_rate', '10', 'business', 'Default affiliate commission rate (%)', false),
+('4a68c28c-f21a-4084-973f-da86e03b45fc', 'default_reseller_margin', '15', 'business', 'Default reseller margin (%)', false),
+('b38ebcfd-f5b8-4ab2-b90d-c8ce94196cbd', 'default_milestone_percentages', '{"mid":40,"final":30,"initial":30}', 'business', 'Default milestone split percentages', false),
+('9d6bedbd-8865-44fc-b588-80a3c426e0e1', 'default_currency', '"BDT"', 'business', 'Default currency code', false),
+('b8ab448a-d611-4e38-ba1e-9d253646e51c', 'grace_period_days', '7', 'business', 'Payment grace period in days', false),
+('7d44b653-eb76-462f-9fb6-4c04b03e9491', 'company_name', '"DigiWebDex"', 'general', 'Company name', false),
+('de1305fa-4e2a-4976-b8bd-126d97adbb8b', 'company_email', '"info@digiwebdex.com"', 'general', 'Company email', false),
+('9b9efd46-fe41-46f8-bfe7-3bf0f779d8b0', 'company_phone', '"+8801XXXXXXXXX"', 'general', 'Company phone', false),
+('ee455df9-a4b5-4229-8236-8f92d1052dce', 'company_address', '"Dhaka, Bangladesh"', 'general', 'Company address', false),
+('b7a21aa6-9c33-42b8-9f0a-86849c6bbbbc', 'company_logo_url', '""', 'general', 'Company logo URL', false),
+('1f103387-1150-4b9a-8fd5-978733ab6bf9', 'header_order_button_enabled', 'true', 'general', 'Enable/disable the Order button in the header', false),
+('ad525f46-bd75-403c-8af8-8da8ec002886', 'floating_order_button_enabled', 'false', 'general', 'Enable/disable the floating Order Now button', false)
+ON CONFLICT (key) DO NOTHING;
+
+-- 14. CONTACT MESSAGES
+INSERT INTO contact_messages (id, name, email, phone, subject, message, status) VALUES
+('75dc2814-69e3-4ed0-bd71-bc72e1e2b535', 'Nathaniel Brooks', 'nathaniel.reid@jmailservice.com', '8054002077', 'Reach Real Buyers Searching for You', 'We have developed a unique advertising platform.', 'pending'),
+('1b13f596-006b-40d8-9bd0-65f0b88e37e7', 'William Grant', 'william.grant@jmailservice.com', '8054002077', 'Quick Way to Get More Customers', 'If I could get your business in front of hundreds of local searchers by tomorrow.', 'pending')
+ON CONFLICT (id) DO NOTHING;
+
+-- Re-enable triggers
+SET session_replication_role = 'DEFAULT';
+
+-- VERIFICATION
+SELECT 'users' AS "table", COUNT(*) AS "count" FROM users
+UNION ALL SELECT 'profiles', COUNT(*) FROM profiles
+UNION ALL SELECT 'orders', COUNT(*) FROM orders
+UNION ALL SELECT 'invoices', COUNT(*) FROM invoices
+UNION ALL SELECT 'invoice_items', COUNT(*) FROM invoice_items
+UNION ALL SELECT 'order_items', COUNT(*) FROM order_items
+UNION ALL SELECT 'services', COUNT(*) FROM services
+UNION ALL SELECT 'service_packages', COUNT(*) FROM service_packages
+UNION ALL SELECT 'domain_pricing', COUNT(*) FROM domain_pricing
+UNION ALL SELECT 'system_settings', COUNT(*) FROM system_settings
+UNION ALL SELECT 'subscriptions', COUNT(*) FROM subscriptions
+UNION ALL SELECT 'projects', COUNT(*) FROM projects
+ORDER BY "table";
